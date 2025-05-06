@@ -7,12 +7,18 @@ import Inlogning from "./inlogning/inlogning";
 import Registering from "./inlogning/registrering";
 
 function App() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/User")
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }, [data]);
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="/login" element={<Inlogning />} />
+            <Route path="/login" element={<Inlogning data={data} />} />
             <Route path="/register" element={<Registering />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
