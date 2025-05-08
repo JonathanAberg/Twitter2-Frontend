@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Inlogning = ({ data }) => {
+const Inlogning = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("http://localhost:5000/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -15,7 +15,8 @@ const Inlogning = ({ data }) => {
       if (!res.ok) {
         alert("incorrect email or password ");
       }
-      const user = res.json();
+      const user = await res.json();
+      localStorage.setItem("token", user.token);
       navigate(`/home/${user._id}`);
       console.log("good ");
     } catch (err) {
