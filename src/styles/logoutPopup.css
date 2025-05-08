@@ -1,0 +1,41 @@
+.logout-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px;
+  width: 240px;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 24px;
+}
+
+.logo-label {
+  height: 48px;
+  width: 100%;
+}
+
+.logout-wrapper img {
+  height: 100%;
+  width: 100%;
+}
+
+.logout-select {
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logout-btn {
+  border-radius: 24px;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 8px;
+}
+
+.cancel-btn {
+  border-radius: 24px;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8px;
+  border: 1px solid #000000;
+}

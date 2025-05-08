@@ -1,0 +1,9 @@
+header {
+  background-color: #ffffff;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 2rem;
+  margin: auto;
+}
