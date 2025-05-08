@@ -1,5 +1,7 @@
 import "../styles/tweetssection.css";
 
+import dixie from "../assets/dixie.png";
+
 export function TweetsSection({ children }) {
   return (
     <div className="tweetsection-wrapper">
