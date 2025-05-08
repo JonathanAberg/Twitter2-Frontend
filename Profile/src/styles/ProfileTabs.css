@@ -1,0 +1,23 @@
+.profile-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-bg-color);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 15px 0;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.tab:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.tab.active {
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
