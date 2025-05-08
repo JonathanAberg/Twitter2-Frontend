@@ -5,6 +5,7 @@ import { About } from `./components/About`;
 import "./styles/general.css";
 import Inlogning from "./inlogning/inlogning";
 import Registering from "./inlogning/registering";
+import React,{useState,useEffect} from "react";
 
 function App() {
   const [data, setData] = useState([]);
