@@ -1,0 +1,58 @@
+.search-wrapper {
+padding: 1rem;
+background-color: #f1f1f1;
+border-radius: 24px;
+border: none;
+display: flex;
+}
+
+#search-field {
+    background-color: #f1f1f1;
+    font-size: 1.15rem;
+    margin-left: 1rem;
+    border: none;
+    outline: none;
+    }
+
+.tweets-amount {
+    color: rgba(0, 0, 0, 0.6) 
+}
+
+.trends-aside-wrapper {
+    width: 480px;
+    height: 100vh;
+    background-color: #ffffff;
+    margin: 0 1rem;
+    padding: 8px;
+}
+
+.trends {
+    padding: 1rem;
+    border-radius: 1rem;
+    margin: 1rem 0;
+    background-color: #f1f1f1;
+}
+
+.topic-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0 0 1.5rem;
+}
+
+.topic {
+    font-size: 1.25rem;
+}
+
+.trends-aside-title {
+    margin-bottom: 1.25rem;
+}
+
+.trend-description {
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.topic-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
