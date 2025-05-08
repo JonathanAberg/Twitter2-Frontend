@@ -27,24 +27,24 @@ const Inlogning = () => {
     <>
       <h1>Log in</h1>
       <form onSubmit={handleSubmit}>
-        <p>
-          email{" "}
+        <label htmlFor="email">
+          Email{" "}
           <input
             type="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </p>
-        <p>
-          password{" "}
+        </label>
+        <label htmlFor="password">
+          Password{" "}
           <input
             type="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </p>
+        </label>
         <input type="submit" value={"log in"} />
       </form>
     </>
