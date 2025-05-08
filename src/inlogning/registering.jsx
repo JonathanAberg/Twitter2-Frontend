@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 const Registering = () => {
   const navigate = useNavigate();
 
@@ -15,8 +15,10 @@ const Registering = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newUser),
-    }).then((res) => res.json());
-    alert("correct");
+    })
+      .then((res) => res.json())
+      .then((data) => navigate(`/home/${data._id}`));
+    console.log("good");
     setEmail("");
     setName("");
     setPassword("");
