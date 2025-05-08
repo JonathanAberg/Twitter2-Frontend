@@ -1,17 +1,25 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 const Inlogning = ({ data }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = data?.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
-      alert("correct");
-    } else {
-      alert("incorrect");
+    try {
+      const res = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        alert("incorrect email or password ");
+      }
+      const user = res.json();
+      navigate(`/home/${user._id}`);
+      console.log("good ");
+    } catch (err) {
+      alert("Login failed. Try again.");
     }
   };
   return (
