@@ -1,0 +1,42 @@
+.tweetsection-wrapper {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  width: 100%;
+  min-height: 120px;
+}
+
+.profile-pic {
+  height: 64px;
+  width: 64px;
+}
+
+.profile-pic img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.profile-info {
+  width: 90%;
+  display: flex;
+  gap: 4px;
+}
+
+.user-desc {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.profile-label {
+  gap: 4px;
+  display: flex;
+}
+
+.column-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
