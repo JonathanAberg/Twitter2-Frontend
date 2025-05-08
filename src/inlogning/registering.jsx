@@ -18,6 +18,7 @@ const Registering = () => {
     })
       .then((res) => res.json())
       .then((data) => navigate(`/home/${data._id}`));
+    localStorage.setItem("token", user.token);
     console.log("good");
     setEmail("");
     setName("");
