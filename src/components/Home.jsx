@@ -2,6 +2,8 @@ import "../styles/home.css";
 import { Tweetbox } from `./Tweetbox`;
 import { TweetsSection } from "./TweetsSection";
 import { LogoutPopup } from "./LogoutPopup";
+import Inlogning from "../inlogning/inlogning";
+import Inlogningsval from "../inlogning/inlogningsval";
 
 
 export function Home() {
@@ -18,8 +20,8 @@ export function Home() {
       </TweetsSection>
       <TweetsSection>Hej hopp, kaffekopp!</TweetsSection>
       <LogoutPopup />
-      <Login />
-      <LoginSelection />
+    <Inlogning/>
+     <Inlogningsval/>
     </>
   );
 }
