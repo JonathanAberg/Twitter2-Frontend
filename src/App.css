@@ -1,0 +1,66 @@
+.app {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.app-header {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--header-bg-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  color: var(--header-text-color);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.app-content {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 80px);
+  background-color: var(--background-color);
+}
+
+/* Add debugging styles */
+.no-tweets {
+  padding: 30px;
+  text-align: center;
+  color: var(--secondary-text-color);
+  background-color: var(--card-bg-color);
+  border-radius: 5px;
+  margin: 20px;
+  border: 1px solid var(--border-color);
+  font-size: 16px;
+}
+
+/* Debug styling to make components more visible */
+.profile-page {
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--card-bg-color);
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+/* Add a notification for debug mode */
+.debug-mode {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1000;
+}
