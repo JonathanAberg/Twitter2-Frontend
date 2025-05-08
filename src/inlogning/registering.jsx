@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 const Registering = () => {
   const navigate = useNavigate();
 
@@ -15,8 +15,11 @@ const Registering = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newUser),
-    }).then((res) => res.json());
-    alert("correct");
+    })
+      .then((res) => res.json())
+      .then((data) => navigate(`/home/${data._id}`));
+    localStorage.setItem("token", user.token);
+    console.log("good");
     setEmail("");
     setName("");
     setPassword("");
@@ -59,7 +62,7 @@ const Registering = () => {
         <button type="submit">Sign Up </button>
       </form>
       <p>
-        Alreday have a account? <Link to={"/inlogning"}>Log in </Link>
+        Already have a account? <Link to={"/login"}>Log in </Link>
       </p>
     </>
   );

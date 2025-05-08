@@ -1,13 +1,14 @@
 import "../styles/tweetbox.css";
-
-import profileLinus from "../assets/linus.jpg";
-
+import React from "react";
 export function Tweetbox() {
   return (
     <div className="tweetbox-wrapper">
       <div className="tweetbox-top-layer">
         <div className="user-pic">
-          <img src={profileLinus} alt="Profile Picture" />
+          <img
+            src={"https://source.unsplash.com/random"}
+            alt="Profile Picture"
+          />
         </div>
         <input
           id="post-tweet-text-field"

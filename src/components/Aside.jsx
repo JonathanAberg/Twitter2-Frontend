@@ -1,5 +1,5 @@
 import "../styles/aside.css";
-
+import React from "react";
 export function Aside() {
   return (
     <div className="trends-aside-wrapper">
