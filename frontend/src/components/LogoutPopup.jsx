@@ -3,7 +3,7 @@ import '../styles/logoutPopup.css'
 
 export function LogoutPopup() {
     return (
-        <div className="logout-wrapper">
+        <div className="logout-wrapper hide">
             <div className="logo-container">
                 <img src={TwitterLogo} alt="Twitter Logo" />
             </div>
