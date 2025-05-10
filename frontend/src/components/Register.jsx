@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-const Registering = () => {
+const Register = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -64,4 +64,4 @@ const Registering = () => {
     </>
   );
 };
-export default Registering;
+export default Register;

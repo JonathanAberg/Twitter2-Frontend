@@ -1,13 +1,13 @@
 import '../styles/tweetbox.css'
 
-import profileLinus from '../assets/linus.jpg'
+import profilePlaceholder from '../assets/profile-placeholder.jpg'
 
 export function Tweetbox() {
     return (
         <div className="tweetbox-wrapper">
             <div className="tweetbox-top-layer">
             <div className="user-pic">
-                <img src={profileLinus} alt="Profile Picture" />
+                <img src={profilePlaceholder} alt="Profile Picture" />
             </div>
             <input id="post-tweet-text-field" placeholder="What's happening?" type="text" />
             </div>

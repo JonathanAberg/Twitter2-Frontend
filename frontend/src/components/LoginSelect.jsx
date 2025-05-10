@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-const Inlogningsval = () => {
+import { Link } from "react-router-dom";
+const LoginSelect = () => {
   return (
     <>
       <h1>Welcome</h1>
@@ -13,4 +13,4 @@ const Inlogningsval = () => {
     </>
   );
 };
-export default Inlogningsval;
+export default LoginSelect;

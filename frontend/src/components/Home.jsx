@@ -2,8 +2,8 @@ import '../styles/home.css'
 import { Tweetbox } from './Tweetbox'
 import { TweetsSection } from './TweetsSection'
 import { LogoutPopup } from './LogoutPopup'
-import { Login } from './Login'
-import { LoginSelection } from './LoginSelection'
+import Login from './Login'
+import LoginSelect from './LoginSelect'
 
 export function Home() {
     return (
@@ -20,7 +20,7 @@ export function Home() {
         </TweetsSection>
         <LogoutPopup />
         <Login />
-        <LoginSelection />
+        <LoginSelect />
         </>
     )
 }

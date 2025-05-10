@@ -1,12 +1,10 @@
 import '../styles/tweetssection.css'
 
-import dixie from '../assets/dixie.png'
-
 export function TweetsSection({ children }) {
     return (
         <div className="tweetsection-wrapper">
                        <div className="profile-pic">
-                           <img src={dixie} alt="Profile Picture" />
+                           <img src="https://picsum.photos/200/300" alt="Profile Picture" />
                        </div>
                        <div className="profile-info">
                         <div className="column-content">

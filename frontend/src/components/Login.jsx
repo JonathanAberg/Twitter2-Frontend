@@ -1,5 +1,7 @@
+import { useState } from "react";
 import React from "react";
-const Inlogning = ({ data }) => {
+
+const Login = ({ data }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (e) => {
@@ -41,4 +43,4 @@ const Inlogning = ({ data }) => {
     </>
   );
 };
-export default Inlogning;
+export default Login;

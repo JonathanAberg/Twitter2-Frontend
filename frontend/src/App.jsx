@@ -1,10 +1,14 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
 import { About } from "./components/About";
+import Login from './components/Login'
+import LoginSelect from './components/LoginSelect'
+import Register from './components/Register'
+
 import "./styles/general.css";
-import Inlogning from "./inlogning/inlogning";
-import Registering from "./inlogning/registrering";
 
 function App() {
   const [data, setData] = useState([]);
@@ -18,8 +22,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route path="/login" element={<Inlogning data={data} />} />
-            <Route path="/register" element={<Registering />} />
+            <Route path="/login" element={<Login data={data} />} />
+            <Route path="/loginselect" index element={<LoginSelect />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
           </Route>
