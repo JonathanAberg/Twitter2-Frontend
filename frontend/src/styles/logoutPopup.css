@@ -2,17 +2,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 280px;
-    width: 240px;
-    border: 1px solid rgb(0, 0, 0, 0.3);
+    height: 240px;
+    width: 220px;
+    border: 1px solid rgb(0, 0, 0, 0.1);
     padding: 1rem;
     border-radius: 24px;
-}
-
-.logo-label {
-    height: 48px;
-    width: 100%;
-}
+    position: absolute;
+    top: -260px;
+    left: 170px;
+    }
 
 .logout-wrapper img {
     height: 100%;
@@ -40,7 +38,12 @@
     border: 1px solid #000000;
 }
 
-.hide {
-    display: none;
-    position: absolute;
+.logo-container {
+    height: 48px;
+}
+
+.btn-wrapper {
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
 }
