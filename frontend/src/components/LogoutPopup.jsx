@@ -1,8 +1,7 @@
 import TwitterLogo from '../assets/twitter-logo.svg'
 import '../styles/logoutPopup.css'
 
-export function LogoutPopup() {
-
+export function LogoutPopup({ onCancel }) {
      return (
         <div className="logout-wrapper">
             <div className="logo-container">
@@ -13,7 +12,7 @@ export function LogoutPopup() {
                 <button className="logout-btn">
                 Log out
                 </button >
-                <button className="cancel-btn">
+                <button onClick={onCancel} className="cancel-btn">
                 Cancel    
                 </button>
             </div>

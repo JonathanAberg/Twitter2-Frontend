@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="logout-select-box">
             <button className="logout-select" onClick={togglePopup}>...</button>
             <div className={showPopup ? "popup" : "hide"}>
-              <LogoutPopup />
+              <LogoutPopup onCancel={() => setShowPopup(false) } />
             </div>
           </div>
           </footer>
