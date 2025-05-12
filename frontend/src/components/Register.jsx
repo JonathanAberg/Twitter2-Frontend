@@ -1,6 +1,6 @@
-import '../styles/register.css'
+import '../styles/formsandinput.css'
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
