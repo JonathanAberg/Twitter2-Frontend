@@ -4,11 +4,10 @@ import { Navigate } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
-import { Profile } from "./components/Profile";
+import ProfilePage from "./components/ProfilePage";
 import Login from './components/Login'
 import LoginSelect from './components/LoginSelect'
 import Register from './components/Register'
-import { ProfileDetails } from "./components/ProfileDetails";
 
 import "./styles/general.css";
 
@@ -29,8 +28,7 @@ function App() {
             <Route path="/loginselect" index element={<LoginSelect />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/profile/:id" element={<ProfileDetails />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

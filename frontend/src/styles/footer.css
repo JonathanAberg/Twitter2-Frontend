@@ -25,9 +25,11 @@ footer {
     color: #000000;
     border: none;
     background-color: inherit;
+    cursor: pointer;
     }
 
     .logout-select-box {
         margin: auto 0;
         height: 40px;
+        
         }
