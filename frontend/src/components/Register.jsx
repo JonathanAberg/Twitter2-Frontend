@@ -1,3 +1,5 @@
+import '../styles/register.css'
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
@@ -23,12 +25,13 @@ const Register = () => {
   };
   return (
     <>
+      <div className="signup-column">
       <h1>Sign up</h1>
-
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">
-          Name
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <label htmlFor="name" >
           <input
+            className="highlight-input"
+            placeholder="Name"
             type="text"
             value={name}
             name="name"
@@ -37,8 +40,9 @@ const Register = () => {
           />
         </label>
         <label htmlFor="email">
-          Email
           <input
+            className="highlight-input"
+            placeholder="E-mail"
             type="email"
             name="email"
             value={email}
@@ -47,20 +51,33 @@ const Register = () => {
           />
         </label>
         <label htmlFor="password">
-          Password
           <input
+            className="highlight-input"
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={8}
           />
         </label>
-        <button type="submit">Sign Up </button>
+          <label htmlFor="connfirm-password">
+          <input
+            className="highlight-input"
+            type="password"
+            placeholder="Confirm your password.."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={8}
+          />
+        </label>
+        <button className="signup-btn" type="submit">Sign Up </button>
       </form>
       <p>
-        Alreday have a account? <Link to={"/inlogning"}>Log in </Link>
+        Alreday have a account? <Link to={"/login"}>Log in </Link>
       </p>
+      </div>
     </>
   );
 };
