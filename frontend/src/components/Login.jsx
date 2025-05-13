@@ -1,5 +1,5 @@
 import { useState } from "react";
-import '../styles/formsandinput.css'
+import "../styles/formsandinput.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +12,7 @@ const Login = () => {
 
     if (user) {
       alert("correct");
+      localStorage.setItem("token", user.token);
     } else {
       alert("incorrect");
     }
