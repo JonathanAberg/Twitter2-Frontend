@@ -23,6 +23,7 @@ const Login = () => {
       }
       const user = await res.json();
       localStorage.setItem("token", user.token);
+      localStorage.setItem("userId", user._id);
       goHome(user._id);
       console.log("good ");
     } catch (err) {
