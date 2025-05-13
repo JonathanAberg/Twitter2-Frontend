@@ -1,14 +1,33 @@
 import { Link } from "react-router-dom";
+
+import TwitterLogo from '../assets/twitter-logo.svg'
+
+import '../styles/loginselect.css'
+
 const LoginSelect = () => {
   return (
     <>
-      <h1>Welcome</h1>
-      <Link to={"inlogning"}>
-        <input type="button" value={"Log in"} />
+    <div className="loginselect-wrapper">
+      <div>
+      <div className="image-container">
+      <img src={TwitterLogo} alt="Twitter Logo" />
+      </div>
+      <h1>Logga in på Twitter</h1>
+      </div>
+      <form className="loginselect-navigation">
+        <input className="userdetails-input" type="text" placeholder="Mobil, E-postadress eller användarnamn" />
+      <Link to={"register"}>
+        <button className="next-btn" value={"Sign up"}>Nästa</button>
       </Link>
-      <Link to={"registering"}>
-        <input type="button" value={"sign up"} />
-      </Link>
+        <button className="forgot-password" value={"Forgot password"}>Har du glömt lösenordet?</button>
+    <div className="no-account">
+    <p>Har du inget konto? &nbsp;</p>
+    <Link to={"register"}>
+    Registrera dig
+    </Link>
+    </div>
+    </form>
+    </div>
     </>
   );
 };
