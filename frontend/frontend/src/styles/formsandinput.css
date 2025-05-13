@@ -1,0 +1,32 @@
+.signup-column {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    text-align: center;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.highlight-input {
+    border: 2px solid #1DA1F2;
+    border-radius: 4px;
+    padding: 0.75rem;
+    width: 378px;
+}
+
+.signup-btn {
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #1DA1F2;
+    padding: 1rem;
+    border-radius: 24px;
+    border: none;
+    margin: auto;
+    width: 120px;
+}

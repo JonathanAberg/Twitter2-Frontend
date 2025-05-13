@@ -1,0 +1,66 @@
+.tweetbox-wrapper {
+border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+border-left: 1px solid rgba(0, 0, 0, 0.15);
+border-right: 1px solid rgba(0, 0, 0, 0.15);
+height: 160px;
+padding: 1rem;
+width: 100%;
+}
+
+.user-pic {
+    height: 64px;
+    width: 64px;
+
+}
+
+.user-pic img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.tweetbox-top-layer {
+    display: flex;
+    gap: 8px;
+}
+
+.post-tweet-btn {
+        background-color: #1DA1F2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      
+      .post-tweet-btn:hover {
+        background-color: #0d8ddb;
+      }
+
+      #post-tweet-text-field {
+        font-size: 18px;
+        border: none;
+        outline: none;
+        height: 48px;
+        margin: auto 0.5rem;
+      }
+
+      #post-tweet-text-field::placeholder {
+        font-size: 18px;
+      }
+
+      .tweetbox-bottom-container {
+        display: flex;
+        margin: 0.5rem;
+        flex-direction: row-reverse;
+        margin-top: 28px;
+      }
+
+      .messages-stats {
+        margin-top: 0.5rem;
+        display: flex;
+        color: rgba(0, 0,0, 0.6);
+              }
