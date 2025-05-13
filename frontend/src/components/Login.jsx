@@ -1,7 +1,12 @@
 import { useState } from "react";
 import "../styles/formsandinput.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const goHome = (id) => {
+    navigate(`/home/${id}`);
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
@@ -17,7 +22,7 @@ const Login = () => {
       }
       const user = await res.json();
       localStorage.setItem("token", user.token);
-
+      goHome(user._id);
       console.log("good ");
     } catch (err) {
       alert("Login failed. Try again.");
@@ -28,7 +33,7 @@ const Login = () => {
       <h1>Log in</h1>
       <form onSubmit={handleSubmit}>
         <p>
-          email{" "}
+          Email{" "}
           <input
             type="email"
             name="email"
@@ -37,7 +42,7 @@ const Login = () => {
           />
         </p>
         <p>
-          password{" "}
+          Password{" "}
           <input
             type="password"
             name="password"
@@ -45,7 +50,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </p>
-        <input type="submit" value={"log in"} />
+        <input type="submit" value="login" />
       </form>
     </>
   );

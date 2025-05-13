@@ -5,9 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
 import ProfilePage from "./components/ProfilePage";
-import Login from './components/Login'
-import LoginSelect from './components/LoginSelect'
-import Register from './components/Register'
+import Login from "./components/Login";
+import LoginSelect from "./components/LoginSelect";
+import Register from "./components/Register";
 
 import "./styles/general.css";
 
@@ -27,7 +27,7 @@ function App() {
             <Route path="/" element={<Navigate to="/loginselect" replace />} />
             <Route path="/loginselect" index element={<LoginSelect />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/home/:id" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>
