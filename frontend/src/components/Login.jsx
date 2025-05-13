@@ -19,6 +19,7 @@ const Login = () => {
       });
       if (!res.ok) {
         alert("incorrect email or password ");
+        return;
       }
       const user = await res.json();
       localStorage.setItem("token", user.token);
