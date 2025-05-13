@@ -1,0 +1,50 @@
+.loginselect-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    height: 300px;
+    width: 360px;
+    text-align: center;
+    margin: 0.5rem;
+    justify-content: space-between;
+}
+
+.image-container {
+    margin: 0 auto;
+    height: 48px;
+    width: 48px;
+}
+
+.image-container img {
+    height: 100%;
+    width: 100%;
+}
+
+.userdetails-input {
+    outline: none;
+    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.next-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 24px;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.forgot-password {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 24px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.3)
+}
+
+.inline {
+    display: inline-block;
+}
