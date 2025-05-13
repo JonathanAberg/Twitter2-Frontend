@@ -1,7 +1,12 @@
 import { useState } from "react";
 import "../styles/formsandinput.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const goHome = (id) => {
+    navigate(`/home/${id}`);
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
@@ -17,7 +22,7 @@ const Login = () => {
       }
       const user = await res.json();
       localStorage.setItem("token", user.token);
-
+      goHome(user._id);
       console.log("good ");
     } catch (err) {
       alert("Login failed. Try again.");
