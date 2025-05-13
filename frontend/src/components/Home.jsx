@@ -3,14 +3,14 @@ import { TweetsSection } from "./TweetsSection";
 import Footer from "./Footer.jsx";
 import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export function Home() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   useEffect(() => {
-    const userId = id || localStorage.getItem("token");
+    const userId = id;
     if (!userId) return;
     fetch(`http://localhost:5000/user/${userId}`)
       .then((res) => res.json())
