@@ -22,7 +22,7 @@ export function Home() {
       <h1>{user ? user.name : "loading"}</h1>
       <div className="content-frame">
         <div className="content-column">
-          <Tweetbox />
+          <Tweetbox user={user} setUser={setUser} id={id} />
           <TweetsSection>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
             commodi, eveniet sint repellendus saepe, repellat consequuntur
