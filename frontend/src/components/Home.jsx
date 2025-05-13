@@ -19,6 +19,7 @@ export function Home() {
 
   return (
     <>
+      <h1>{user ? user.name : "loading"}</h1>
       <div className="content-frame">
         <div className="content-column">
           <Tweetbox />
