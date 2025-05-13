@@ -4,17 +4,23 @@ import "../styles/formsandinput.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = data?.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
-      alert("correct");
+    try {
+      const res = await fetch("http://localhost:5000/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        alert("incorrect email or password ");
+      }
+      const user = await res.json();
       localStorage.setItem("token", user.token);
-    } else {
-      alert("incorrect");
+
+      console.log("good ");
+    } catch (err) {
+      alert("Login failed. Try again.");
     }
   };
   return (
