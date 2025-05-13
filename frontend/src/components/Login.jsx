@@ -28,7 +28,7 @@ const Login = () => {
       <h1>Log in</h1>
       <form onSubmit={handleSubmit}>
         <p>
-          email{" "}
+          Email{" "}
           <input
             type="email"
             name="email"
@@ -37,7 +37,7 @@ const Login = () => {
           />
         </p>
         <p>
-          password{" "}
+          Password{" "}
           <input
             type="password"
             name="password"
