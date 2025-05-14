@@ -10,11 +10,12 @@ export function Home() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   useEffect(() => {
-    const userId = id;
+    const userId = id || localStorage.getItem("userId");
     if (!userId) return;
     fetch(`http://localhost:5000/user/${userId}`)
       .then((res) => res.json())
-      .then((data) => setUser(data));
+      .then((data) => setUser(data))
+      .catch((err) => console.error("Failed to load user:", err));
   }, [id]);
 
   return (
@@ -22,7 +23,7 @@ export function Home() {
       <h1>{user ? user.name : "loading"}</h1>
       <div className="content-frame">
         <div className="content-column">
-          <Tweetbox />
+          <Tweetbox user={user} setUser={setUser} id={id} />
           <TweetsSection>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
             commodi, eveniet sint repellendus saepe, repellat consequuntur
