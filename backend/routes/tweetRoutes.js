@@ -23,7 +23,7 @@ router.get("/user/:userId", tweetController.getUserTweets);
 
 router.get("/hashtag/:tag", tweetController.getHashtagTweets);
 
-router.post("/:id/like", protected, tweetController.likeTweet);
+router.post("/:id/like", protect, tweetController.likeTweet);
 router.post("/:id/unlike", protect, tweetController.unLikeTweet);
 
 module.exports = router;
