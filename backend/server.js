@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
+const tweetRoutes = require("./routes/tweetRoutes");
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ mongoose
   .catch((err) => console.error("Kunde inte ansluta till MongoDB", err));
 
 app.use("/user", userRoutes);
+app.use("/api/tweets", tweetRoutes);
 
 app.get("/", (req, res) => {
   res.send("Twitter API is running");
