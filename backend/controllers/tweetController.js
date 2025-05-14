@@ -13,7 +13,7 @@ const extractHashtags = (content) => {
   return hashtags;
 };
 
-exports.createTweet = async (req, res) => {
+const createTweet = async (req, res) => {
   try {
     const { content } = req.body;
 
@@ -43,7 +43,7 @@ exports.createTweet = async (req, res) => {
   }
 };
 
-exports.getTweets = async (req, res) => {
+const getTweets = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const following = user.following;
@@ -61,7 +61,7 @@ exports.getTweets = async (req, res) => {
   }
 };
 
-exports.getTweetById = async (req, res) => {
+const getTweetById = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id).populate(
       "user",
@@ -78,7 +78,7 @@ exports.getTweetById = async (req, res) => {
   }
 };
 
-exports.getUserTweets = async (req, res) => {
+const getUserTweets = async (req, res) => {
   try {
     const tweets = await Tweet.find({ user: req.params.userId })
       .sort({ createdAt: -1 })
@@ -90,7 +90,7 @@ exports.getUserTweets = async (req, res) => {
   }
 };
 
-exports.likeTweet = async (req, res) => {
+const likeTweet = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id);
 
@@ -112,7 +112,7 @@ exports.likeTweet = async (req, res) => {
   }
 };
 
-exports.unlikeTweet = async (req, res) => {
+const unlikeTweet = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id);
 
@@ -132,4 +132,13 @@ exports.unlikeTweet = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
+};
+
+module.exports = {
+  createTweet,
+  getTweets,
+  getTweetedById,
+  getUserTweets,
+  likeTweet,
+  unlikeTweet,
 };
