@@ -6,6 +6,6 @@
   color: var(--text-color);
 }
 
-.tweets-container {
+.profile-page .tweets-container {
   padding-bottom: 20px;
 }

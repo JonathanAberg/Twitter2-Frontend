@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import "../styles/ProfilePage.css";
-import Tweet from "../components//Tweet";
-import ProfileHeader from "../components/ProfileHeader";
-import ProfileTabs from "../components/ProfileTabs";
+import Tweet from "./Tweet";
+import ProfileHeader from "./ProfileHeader";
+import ProfileTabs from "./ProfileTabs";
 import { mockUserData, mockTweets } from "../mockData";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("tweets");
   const [filteredTweets, setFilteredTweets] = useState([]);
   const [userData, setUserData] = useState(mockUserData);
-
 
   useEffect(() => {
     console.log("ProfilePage: Filtering tweets for tab:", activeTab);
@@ -49,12 +48,11 @@ const ProfilePage = () => {
 
     console.log("ProfilePage: Filtered tweets:", tweets);
     setFilteredTweets(tweets);
-  }, [activeTab, userData.id]);
+  }, [activeTab, userData.id, userData.likes]);
 
   const handleProfileUpdate = (updatedProfile) => {
     console.log("ProfilePage: Updating profile with:", updatedProfile);
 
- 
     setUserData({
       ...userData,
       name: updatedProfile.name,
