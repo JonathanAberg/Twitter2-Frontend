@@ -3,6 +3,7 @@ import "../styles/profilepage.css";
 import Tweet from "./Tweet";
 import ProfileHeader from "./ProfileHeader";
 import ProfileTabs from "./ProfileTabs";
+import { Aside } from "../components/Aside.jsx";
 import { mockUserData, mockTweets } from "../mockData";
 
 const ProfilePage = () => {
@@ -68,6 +69,7 @@ const ProfilePage = () => {
   console.log("ProfilePage: Rendering component");
 
   return (
+    <div className="horizontal-content">
     <div className="profile-page">
       <ProfileHeader user={userData} onProfileUpdate={handleProfileUpdate} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -82,6 +84,8 @@ const ProfilePage = () => {
       </div>
       <div className="debug-mode">Debug Mode: Active</div>
     </div>
+        <Aside />
+        </div>
   );
 };
 
