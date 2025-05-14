@@ -20,7 +20,7 @@ export function Home() {
 
   return (
     <>
-      <h1>{user ? user.name : "loading"}</h1>
+      <h1>{user ? user.name : "Loading.."}</h1>
       <div className="content-frame">
         <div className="content-column">
           <Tweetbox user={user} setUser={setUser} id={id} />
