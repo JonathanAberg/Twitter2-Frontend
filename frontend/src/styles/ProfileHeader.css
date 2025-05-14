@@ -9,7 +9,7 @@
   background-color: var(--primary-color);
 }
 
-.profile-info {
+.profile-header .profile-info {
   padding: 0 15px 15px;
   position: relative;
   background-color: var(--card-bg-color);
