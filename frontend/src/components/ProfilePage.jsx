@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../styles/ProfilePage.css";
+import "../styles/profilepage.css";
 import Tweet from "./Tweet";
 import ProfileHeader from "./ProfileHeader";
 import ProfileTabs from "./ProfileTabs";
