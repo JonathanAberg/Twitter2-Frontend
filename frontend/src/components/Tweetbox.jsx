@@ -4,11 +4,6 @@ import profilePlaceholder from "../assets/profile-placeholder.jpg";
 import { useState } from "react";
 
 export function Tweetbox({ user, setUser, id }) {
-  const [post, setPost] = useState("");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch(``);
-  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="tweetbox-wrapper">
