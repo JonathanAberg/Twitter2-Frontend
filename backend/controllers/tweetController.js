@@ -137,7 +137,7 @@ const unlikeTweet = async (req, res) => {
 module.exports = {
   createTweet,
   getTweets,
-  getTweetedById,
+  getTweetById,
   getUserTweets,
   likeTweet,
   unlikeTweet,
