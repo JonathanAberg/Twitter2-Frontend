@@ -31,7 +31,7 @@ mongoose
       useUnifiedTopology: true,
     }
   )
-  .then(() => console.log("Ansluten till MongoDB"))
+  .then(() => console.log("Ansluten till MongoDB!"))
   .catch((err) => console.error("Kunde inte ansluta till MongoDB", err));
 
 app.use("/user", userRoutes);
