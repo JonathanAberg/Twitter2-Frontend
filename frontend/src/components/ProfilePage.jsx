@@ -9,7 +9,18 @@ const ProfilePage = () => {
   const { id } = useParams(); // USER ID FROM URL
   const [activeTab, setActiveTab] = useState("tweets");
   const [filteredTweets, setFilteredTweets] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    id: null,
+    name: "",
+    username: "",
+    bio: "",
+    profileImage: "",
+    coverImage: "",
+    following: 0,
+    followers: 0,
+    joinDate: "",
+    likes: [],
+  });
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +35,7 @@ const ProfilePage = () => {
           return;
         }
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:5000/user/${userId}`, {
+        const response = await fetch(`http://localhost:5001/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +75,7 @@ const ProfilePage = () => {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:5000/api/tweets/user/${userData.id}`,
+          `http://localhost:5001/api/tweets/user/${userData.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -109,7 +120,7 @@ const ProfilePage = () => {
         case "likes":
           setFilteredTweets(
             tweets.filter(
-              (tweet) => userData.likes && userData.likes.includes(tweet.id)
+              (tweet) => userData?.likes && userData.likes.includes(tweet.id)
             )
           );
           break;
@@ -128,7 +139,7 @@ const ProfilePage = () => {
       const token = localStorage.getItem("token");
       const userId = userData.id;
 
-      const response = await fetch(`http://localhost:5000/user/${userId}`, {
+      const response = await fetch(`http://localhost:5001/user/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

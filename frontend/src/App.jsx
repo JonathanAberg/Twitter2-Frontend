@@ -13,7 +13,7 @@ import "./styles/general.css";
 
 // const [data, setData] = useState([]);
 // useEffect(() => {
-//   fetch("http://localhost:5000/User")
+//   fetch("http://localhost:5001/User")
 //     .then((res) => res.json())
 //     .then((data) => setData(data));
 // }, []);

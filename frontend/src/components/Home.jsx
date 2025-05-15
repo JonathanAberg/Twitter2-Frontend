@@ -12,7 +12,7 @@ export function Home() {
   useEffect(() => {
     const userId = id || localStorage.getItem("userId");
     if (!userId) return;
-    fetch(`http://localhost:5000/user/${userId}`)
+    fetch(`http://localhost:5001/user/${userId}`)
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch((err) => console.error("Failed to load user:", err));
