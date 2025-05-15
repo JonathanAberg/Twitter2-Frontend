@@ -3,27 +3,25 @@ import { TweetsSection } from "./TweetsSection";
 import Footer from "./Footer.jsx";
 import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export function Home() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   useEffect(() => {
-    const userId = id || localStorage.getItem("userId");
+    const userId = id || localStorage.getItem("token");
     if (!userId) return;
     fetch(`http://localhost:5000/user/${userId}`)
       .then((res) => res.json())
-      .then((data) => setUser(data))
-      .catch((err) => console.error("Failed to load user:", err));
+      .then((data) => setUser(data));
   }, [id]);
 
   return (
     <>
-      <h1>{user ? user.name : "Loading.."}</h1>
       <div className="content-frame">
         <div className="content-column">
-          <Tweetbox user={user} setUser={setUser} id={id} />
+          <Tweetbox />
           <TweetsSection>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
             commodi, eveniet sint repellendus saepe, repellat consequuntur
