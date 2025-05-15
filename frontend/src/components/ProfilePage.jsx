@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/ProfilePage.css";
 import Tweet from "../components/Tweet";
