@@ -5,7 +5,7 @@ const { protect } = require("../middleware/authMiddleware");
 const {
   createTweet,
   getTweets,
-  getTweetedById,
+  getTweetById,
   getUserTweets,
   likeTweet,
   unlikeTweet,
