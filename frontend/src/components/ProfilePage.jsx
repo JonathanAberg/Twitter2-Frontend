@@ -10,7 +10,6 @@ const ProfilePage = () => {
   const [filteredTweets, setFilteredTweets] = useState([]);
   const [userData, setUserData] = useState(mockUserData);
 
-
   useEffect(() => {
     console.log("ProfilePage: Filtering tweets for tab:", activeTab);
     console.log("ProfilePage: Available tweets:", mockTweets);
@@ -49,12 +48,11 @@ const ProfilePage = () => {
 
     console.log("ProfilePage: Filtered tweets:", tweets);
     setFilteredTweets(tweets);
-  }, [activeTab, userData.id]);
+  }, [activeTab, userData.id, userData.likes]);
 
   const handleProfileUpdate = (updatedProfile) => {
     console.log("ProfilePage: Updating profile with:", updatedProfile);
 
- 
     setUserData({
       ...userData,
       name: updatedProfile.name,
