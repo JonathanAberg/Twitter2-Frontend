@@ -9,6 +9,8 @@
     "test": "jest --runInBand"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "mongoose": "^7.5.0",
     "node": "^24.0.1",
