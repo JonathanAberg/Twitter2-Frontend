@@ -1,0 +1,82 @@
+.theme-toggle-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 56px;
+  height: 28px;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.toggle-track {
+  background-color: #1da1f2;
+  border-radius: 14px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s;
+}
+
+.dark .toggle-track {
+  background-color: #15202b;
+}
+
+.toggle-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1;
+  margin: 0 5px;
+}
+
+.toggle-thumb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  left: 2px;
+  top: 2px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .toggle-thumb {
+  transform: translateX(28px);
+}
+
+/* Animation for icons */
+.toggle-icon {
+  transition: opacity 0.3s;
+}
+
+.light .toggle-icon.light {
+  opacity: 1;
+}
+
+.light .toggle-icon.dark {
+  opacity: 0.5;
+}
+
+.dark .toggle-icon.light {
+  opacity: 0.5;
+}
+
+.dark .toggle-icon.dark {
+  opacity: 1;
+}

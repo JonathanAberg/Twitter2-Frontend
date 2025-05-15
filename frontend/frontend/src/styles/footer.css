@@ -1,0 +1,35 @@
+footer {
+    gap: 1rem;
+    display: flex;
+    width: 100%;
+    height: 100px;
+    background-color: #e9e9e9;
+    position: relative;
+    padding: 1rem;
+}
+
+.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: 0.15s ease-in;
+}
+
+.profileinfo-wrapper {
+    display: flex;
+    gap: 8px;
+    }
+
+.logout-select {
+    font-size: 1.65rem;
+    color: #000000;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    }
+
+    .logout-select-box {
+        margin: auto 0;
+        height: 40px;
+        
+        }

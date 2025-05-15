@@ -5,8 +5,7 @@ import { useState } from "react";
 
 export function Tweetbox({ user, setUser, id }) {
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="tweetbox-wrapper">
+    <form className="tweetbox-wrapper" onSubmit={handleSubmit}>
         <div className="tweetbox-top-layer">
           <div className="user-pic">
             <img src={profilePlaceholder} alt="Profile Picture" />
@@ -24,7 +23,6 @@ export function Tweetbox({ user, setUser, id }) {
             Tweet
           </button>
         </div>
-      </div>
     </form>
   );
 }
