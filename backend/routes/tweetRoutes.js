@@ -2,14 +2,6 @@ const express = require("express");
 const router = express.Router();
 const tweetController = require("../controllers/tweetController");
 const { protect } = require("../middleware/authMiddleware");
-const {
-  createTweet,
-  getTweets,
-  getTweetById,
-  getUserTweets,
-  likeTweet,
-  unlikeTweet,
-} = require("../controllers/tweetController");
 
 router.post("/", protect, tweetController.createTweet);
 
