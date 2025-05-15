@@ -11,13 +11,13 @@ import Register from "./components/Register";
 
 import "./styles/general.css";
 
+// const [data, setData] = useState([]);
+// useEffect(() => {
+//   fetch("http://localhost:5001/User")
+//     .then((res) => res.json())
+//     .then((data) => setData(data));
+// }, []);
 function App() {
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   fetch("http://localhost:5000/User")
-  //     .then((res) => res.json())
-  //     .then((data) => setData(data));
-  // }, []);
   return (
     <>
       <BrowserRouter>
@@ -29,6 +29,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/home/:id" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:id" element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

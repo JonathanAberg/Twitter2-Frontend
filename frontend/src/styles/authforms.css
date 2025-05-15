@@ -1,0 +1,38 @@
+jonathanaberg/Developer/Grupparbete/Twitter2-Frontend/frontend/src/styles/auth-forms.css
+  .auth-form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #cfd9de;
+  font-size: 16px;
+  transition: border 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border: 1px solid #1da1f2;
+  box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.2);
+}
+
+.error-message {
+  color: #e0245e;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: rgba(224, 36, 94, 0.1);
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Use Twitter-style buttons that are already defined in loginselect.css */
