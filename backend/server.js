@@ -47,4 +47,10 @@ app.listen(PORT, () => {
   console.log(`Server är igång på port ${PORT}`);
 });
 
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log("Server är igång på port ${PORT}");
+  });
+}
+
 module.exports = app;
