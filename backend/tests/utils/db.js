@@ -5,7 +5,7 @@ let mongoServer;
 
 const connectDB = async () => {
   if (mongoose.connection.readyState !== 0) {
-    return;
+    await mongoose.disconnect();
   }
 
   mongoServer = await MongoMemoryServer.create();
