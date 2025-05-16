@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = require("../../server");
 const User = require("../../models/userModel");
-const { connectDB, clearDatabase, cloneDatabase } = require("../utils/db");
+const { connectDB, clearDatabase, closeDatabase } = require("../utils/db");
 
 const testUser = {
   name: "Test User",
@@ -71,7 +71,7 @@ describe("User API Routes", () => {
 
     it("ska neka inloggning med fel lösenord", async () => {
       const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(testUser.password, salt);
+      const hashedPassword = await bcrypt.hash(testUser.password, salt);
 
       await User.create({
         ...testUser,
@@ -83,7 +83,7 @@ describe("User API Routes", () => {
         password: "whrongpassword",
       });
 
-      expect(res.statuscode).toBe(401);
+      expect(res.statusCode).toBe(401);
       expect(res.body).toHaveProperty("message");
     });
   });
@@ -92,7 +92,7 @@ describe("User API Routes", () => {
     it("ska hämta användarprofil med giltigt ID", async () => {
       const user = await User.create(testUser);
 
-      const res = await request(app).get("/user/${user._id}");
+      const res = await request(app).get(`/user/${user._id}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("_id");
@@ -103,7 +103,7 @@ describe("User API Routes", () => {
 
     it("ska returnera 404 för ogiltigt ID", async () => {
       const fakeId = new mongoose.Types.ObjectId();
-      const res = await request(app).get("/user/${fakeId");
+      const res = await request(app).get(`/user/${fakeId}`);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty("message");
@@ -131,8 +131,8 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post("/user/${user2._id}/follow")
-        .set("Authorization", "Bearer ${token}");
+        .post(`/user/${user2._id}/follow`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
@@ -170,8 +170,8 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post("/user/${user2._id}/unfollow")
-        .set("Authorization", "Bearer ${token}");
+        .post(`/user/${user2._id}/unfollow`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 

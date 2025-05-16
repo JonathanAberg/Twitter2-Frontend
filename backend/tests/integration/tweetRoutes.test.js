@@ -1,7 +1,7 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const app = require("..(../server");
+const app = require("../../server");
 const User = require("../../models/userModel");
 const Tweet = require("../../models/tweetModel");
 const { connectDB, clearDatabase, closeDatabase } = require("../utils/db");
@@ -40,7 +40,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send(tweetData);
 
       expect(res.statusCode).toBe(201);
@@ -53,7 +53,7 @@ describe("Tweet API Routes", () => {
     it("ska neka tweet utan content", async () => {
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send({});
 
       expect(res.statusCode).toBe(400);
@@ -65,7 +65,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send({ content: longContent });
 
       expect(res.statusCode).toBe(400);
@@ -108,7 +108,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .get("/api/tweets")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
@@ -145,7 +145,7 @@ describe("Tweet API Routes", () => {
         user: otherUser._id,
       });
 
-      const res = await request(app).get("/api/tweets/user/${testUser._id");
+      const res = await request(app).get(`/api/tweets/user/${testUser._id}`);
 
       expect(res.statusCode).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
@@ -202,8 +202,8 @@ describe("Tweet API Routes", () => {
 
     it("ska tillåta en användare att gilla en tweet", async () => {
       const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/like")
-        .set("Authorization", "Bearer ${token}");
+        .post(`/api/tweets/${testTweet._id}/like`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
@@ -216,22 +216,8 @@ describe("Tweet API Routes", () => {
       await testTweet.save();
 
       const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/unlike")
-        .set("Authorization", "Bearer ${token}");
-
-      expect(res.statusCode).toBe(200);
-
-      const updatedTweet = await Tweet.findById(testTweet._id);
-      expect(updatedTweet.likes).toContainEqual(testUser._id);
-    });
-
-    id("ska tillåta en användare att ta bort sin like", async () => {
-      testTweet.likes.push(testUser._id);
-      await testTweet.save();
-
-      const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/unlike")
-        .set("Authorization", "Bearer ${token}");
+        .post(`/api/tweets/${testTweet._id}/unlike`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
