@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = require("../../server");
 const User = require("../../models/userModel");
-const { connectDB, clearDatabase, cloneDatabase } = require("../utils/db");
+const { connectDB, clearDatabase, closeDatabase } = require("../utils/db");
 
 const testUser = {
   name: "Test User",
