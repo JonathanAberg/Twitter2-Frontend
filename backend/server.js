@@ -24,16 +24,28 @@ console.log("Environment variables:", {
   MONGODB_URI: process.env.MONGODB_URI ? "URI exists" : "URI missing",
 });
 
-mongoose
-  .connect(
-    "mongodb+srv://remanrada8:1RIWudunt0PZsMhz@twitter.zc9flxu.mongodb.net/?retryWrites=true&w=majority&appName=Twitter",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+const connectDB = async () => {
+  try {
+    if (process.env.NODE_ENV === "test") {
+      console.log("Test environment - skipping real DB connection");
+      return;
     }
-  )
-  .then(() => console.log("Ansluten till MongoDB!"))
-  .catch((err) => console.error("Kunde inte ansluta till MongoDB", err));
+
+    await mongoose.connect(
+      "mongodb+srv://remanrada8:1RIWudunt0PZsMhz@twitter.zc9flxu.mongodb.net/?retryWrites=true&w=majority&appName=Twitter",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    console.log("Ansluten till MongoDB!");
+  } catch (err) {
+    console.error("Kunde inte ansluta till MongoDB", err);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 app.use("/user", userRoutes);
 app.use("/api/tweets", tweetRoutes);
