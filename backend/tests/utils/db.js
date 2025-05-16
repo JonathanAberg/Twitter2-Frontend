@@ -4,9 +4,12 @@ const { MongoMemoryServer } = require("mongodb-memory-server");
 let mongoServer;
 
 const connectDB = async () => {
+  if (mongoose.connection.readyState !== 0) {
+    return;
+  }
+
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
-
   await mongoose.connect(uri);
 };
 
