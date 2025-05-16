@@ -1,7 +1,7 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const app = require("..(../server");
+const app = require("../../server");
 const User = require("../../models/userModel");
 const Tweet = require("../../models/tweetModel");
 const { connectDB, clearDatabase, closeDatabase } = require("../utils/db");
