@@ -40,7 +40,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send(tweetData);
 
       expect(res.statusCode).toBe(201);
@@ -53,7 +53,7 @@ describe("Tweet API Routes", () => {
     it("ska neka tweet utan content", async () => {
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send({});
 
       expect(res.statusCode).toBe(400);
@@ -65,7 +65,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets")
-        .set("Authorization", "Bearer ${token}")
+        .set("Authorization", `Bearer ${token}`)
         .send({ content: longContent });
 
       expect(res.statusCode).toBe(400);
@@ -108,7 +108,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .get("/api/tweets")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
@@ -203,7 +203,7 @@ describe("Tweet API Routes", () => {
     it("ska tillåta en användare att gilla en tweet", async () => {
       const res = await request(app)
         .post("/api/tweets/${testTweet._id}/like")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
@@ -217,7 +217,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets/${testTweet._id}/unlike")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
@@ -231,7 +231,7 @@ describe("Tweet API Routes", () => {
 
       const res = await request(app)
         .post("/api/tweets/${testTweet._id}/unlike")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 

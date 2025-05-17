@@ -132,7 +132,7 @@ describe("User API Routes", () => {
 
       const res = await request(app)
         .post("/user/${user2._id}/follow")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
@@ -171,7 +171,7 @@ describe("User API Routes", () => {
 
       const res = await request(app)
         .post("/user/${user2._id}/unfollow")
-        .set("Authorization", "Bearer ${token}");
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
 
