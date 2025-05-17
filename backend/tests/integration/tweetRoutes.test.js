@@ -202,7 +202,7 @@ describe("Tweet API Routes", () => {
 
     it("ska tillåta en användare att gilla en tweet", async () => {
       const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/like")
+        .post(`/api/tweets/${testTweet._id}/like`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -216,7 +216,7 @@ describe("Tweet API Routes", () => {
       await testTweet.save();
 
       const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/unlike")
+        .post(`/api/tweets/${testTweet._id}/unlike`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -225,12 +225,12 @@ describe("Tweet API Routes", () => {
       expect(updatedTweet.likes).toContainEqual(testUser._id);
     });
 
-    id("ska tillåta en användare att ta bort sin like", async () => {
+    it("ska tillåta en användare att ta bort sin like", async () => {
       testTweet.likes.push(testUser._id);
       await testTweet.save();
 
       const res = await request(app)
-        .post("/api/tweets/${testTweet._id}/unlike")
+        .post(`/api/tweets/${testTweet._id}/unlike`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);

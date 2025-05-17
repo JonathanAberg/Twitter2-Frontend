@@ -75,7 +75,7 @@ describe("User API Routes", () => {
 
       await User.create({
         ...testUser,
-        password: hashedPassword,
+        password: hashPassword,
       });
 
       const res = await request(app).post("/user/login").send({
@@ -83,7 +83,7 @@ describe("User API Routes", () => {
         password: "whrongpassword",
       });
 
-      expect(res.statuscode).toBe(401);
+      expect(res.statusCode).toBe(401);
       expect(res.body).toHaveProperty("message");
     });
   });
@@ -92,7 +92,7 @@ describe("User API Routes", () => {
     it("ska hämta användarprofil med giltigt ID", async () => {
       const user = await User.create(testUser);
 
-      const res = await request(app).get("/user/${user._id}");
+      const res = await request(app).get(`/user/${user._id}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("_id");
@@ -103,7 +103,7 @@ describe("User API Routes", () => {
 
     it("ska returnera 404 för ogiltigt ID", async () => {
       const fakeId = new mongoose.Types.ObjectId();
-      const res = await request(app).get("/user/${fakeId");
+      const res = await request(app).get(`/user/${fakeId}`);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty("message");
@@ -131,7 +131,7 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post("/user/${user2._id}/follow")
+        .post(`/user/${user2._id}/follow`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -170,7 +170,7 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post("/user/${user2._id}/unfollow")
+        .post(`/user/${user2._id}/unfollow`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
