@@ -140,7 +140,9 @@ describe("User API Routes", () => {
       const updatedUser2 = await User.findById(user2._id);
 
       expect(updatedUser1.following).toContainEqual(user2._id);
-      expect(updatedUser2.following).toContainEqual(user1._id);
+      expect(updatedUser2.followers.map((id) => id.toString())).toContain(
+        user1._id.toString()
+      );
     });
 
     it("ska tillåta en användare att avfölja en annan", async () => {
@@ -179,7 +181,9 @@ describe("User API Routes", () => {
       const updatedUser2 = await User.findById(user2._id);
 
       expect(updatedUser1.following).not.toContainEqual(user2._id);
-      expect(updatedUser2.following).not.toContainEqual(user1._id);
+      expect(updatedUser2.followers.map((id) => id.toString())).not.toContain(
+        user1._id.toString()
+      );
     });
   });
 });

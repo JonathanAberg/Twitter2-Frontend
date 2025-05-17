@@ -145,7 +145,7 @@ describe("Tweet API Routes", () => {
         user: otherUser._id,
       });
 
-      const res = await request(app).get("/api/tweets/user/${testUser._id");
+      const res = await request(app).get(`/api/tweets/user/${testUser._id}`);
 
       expect(res.statusCode).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
@@ -222,7 +222,7 @@ describe("Tweet API Routes", () => {
       expect(res.statusCode).toBe(200);
 
       const updatedTweet = await Tweet.findById(testTweet._id);
-      expect(updatedTweet.likes).toContainEqual(testUser._id);
+      expect(updatedTweet.likes.includes(testUser._id.toString())).toBe(true);
     });
 
     it("ska tillåta en användare att ta bort sin like", async () => {
@@ -236,7 +236,7 @@ describe("Tweet API Routes", () => {
       expect(res.statusCode).toBe(200);
 
       const updatedTweet = await Tweet.findById(testTweet._id);
-      expect(updatedTweet.likes).not.toContainEqual(testUser._id);
+      expect(updatedTweet.likes.includes(testUser._id.toString())).toBe(false);
     });
   });
 });
