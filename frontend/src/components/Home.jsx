@@ -5,7 +5,7 @@ import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { Sidebar } from '../components/Sidebar.jsx'
 export function Home() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
@@ -22,6 +22,7 @@ export function Home() {
     <>
       <h1>{user ? user.name : "Loading.."}</h1>
       <div className="content-frame">
+      <Sidebar />
         <div className="content-column">
           <Tweetbox user={user} setUser={setUser} id={id} />
           <TweetsSection>
