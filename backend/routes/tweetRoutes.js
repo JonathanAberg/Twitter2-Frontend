@@ -5,7 +5,7 @@ const { protect } = require("../middleware/authMiddleware");
 
 router.post("/", protect, tweetController.createTweet);
 
-router.get("/", protect, tweetController.getTweetById);
+router.get("/", protect, tweetController.getTweets);
 
 router.get("/:id", tweetController.getTweetById);
 
