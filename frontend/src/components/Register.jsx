@@ -11,6 +11,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -51,6 +52,61 @@ const Register = () => {
   };
 
   return (
+    <>
+      <div className="signup-column">
+        <h1>Sign up</h1>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <label htmlFor="name">
+            <input
+              className="highlight-input"
+              placeholder="Name"
+              type="text"
+              value={name}
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </label>
+          <label htmlFor="email">
+            <input
+              className="highlight-input"
+              placeholder="E-mail"
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label htmlFor="password">
+            <input
+              className="highlight-input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+            />
+          </label>
+          <label htmlFor="connfirm-password">
+            <input
+              className="highlight-input"
+              type="password"
+              placeholder="Confirm your password.."
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={8}
+            />
+          </label>
+          <button className="signup-btn" type="submit">
+            Sign Up{" "}
+          </button>
+        </form>
+        <p>
+          Alreday have a account? <Link to={"/login"}>Log in </Link>
+        </p>
     <div className="loginselect-wrapper">
       <div className="image-container">
         <img src={TwitterLogo} alt="Twitter Logo" />
