@@ -8,6 +8,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newUser = { name, email, password };
@@ -67,8 +68,8 @@ const Register = () => {
               className="highlight-input"
               type="password"
               placeholder="Confirm your password.."
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
               minLength={8}
             />
