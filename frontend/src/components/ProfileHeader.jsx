@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/profileheader.css";
+import "../styles/ProfileHeader.css";
 import ProfileEditModal from "./ProfileEditModal";
 
 const ProfileHeader = ({ user, onProfileUpdate }) => {

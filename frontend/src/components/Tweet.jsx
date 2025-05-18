@@ -1,79 +1,77 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Tweet.css";
-import { mockUserData } from "../mockData";
-import {
-  FaComment,
-  FaRetweet,
-  FaHeart,
-  FaRegHeart,
-  FaShareAlt,
-} from "react-icons/fa";
+import profilePlaceholder from "../assets/default.jpg";
 
 const Tweet = ({ tweet }) => {
-  const [likes, setLikes] = useState(tweet.likes);
-  const [isLiked, setIsLiked] = useState(false);
-  const [retweets, setRetweets] = useState(tweet.retweets);
-  const [isRetweeted, setIsRetweeted] = useState(false);
+  const [isLiked, setIsLiked] = useState(
+    tweet.likes?.includes(localStorage.getItem("userId")) || false
+  );
+  const [likesCount, setLikesCount] = useState(tweet.likes?.length || 0);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
-    }
-    setIsLiked(!isLiked);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  const handleRetweet = () => {
-    if (isRetweeted) {
-      setRetweets(retweets - 1);
-    } else {
-      setRetweets(retweets + 1);
-    }
-    setIsRetweeted(!isRetweeted);
-  };
+  const handleLike = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const endpoint = isLiked
+        ? `http://localhost:5001/api/tweets/${tweet._id}/unlike`
+        : `http://localhost:5001/api/tweets/${tweet._id}/like`;
 
-  console.log("Rendering Tweet:", tweet.id);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setIsLiked(!isLiked);
+        setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
+      }
+    } catch (error) {
+      console.error("Error liking/unliking tweet:", error);
+    }
+  };
 
   return (
     <div className="tweet">
       <div className="tweet-avatar">
-        <img src={tweet.userImage || mockUserData.profileImage} alt="Profile" />
+        <img
+          src={tweet.user?.profileImage || profilePlaceholder}
+          alt={`${tweet.user?.name}'s avatar`}
+        />
       </div>
       <div className="tweet-content">
         <div className="tweet-header">
-          <span className="tweet-name">{tweet.userName}</span>
-          <span className="tweet-username">@{tweet.userHandle}</span>
-          <span className="tweet-time">{tweet.time}</span>
+          <Link to={`/profile/${tweet.user?._id}`} className="tweet-name">
+            {tweet.user?.name || "Unknown User"}
+          </Link>
+          <span className="tweet-username">
+            @{tweet.user?.nickname || "unknown"}
+          </span>
+          <span className="tweet-date">· {formatDate(tweet.createdAt)}</span>
         </div>
         <div className="tweet-text">{tweet.content}</div>
-        {tweet.media && (
-          <div className="tweet-media">
-            <img src={tweet.media} alt="Tweet media" />
-          </div>
-        )}
         <div className="tweet-actions">
-          <div className="tweet-action">
-            <FaComment />
-            <span>{tweet.comments}</span>
-          </div>
-          <div
-            className={`tweet-action ${isRetweeted ? "retweeted" : ""}`}
-            onClick={handleRetweet}
-          >
-            <FaRetweet />
-            <span>{retweets}</span>
-          </div>
-          <div
-            className={`tweet-action ${isLiked ? "liked" : ""}`}
+          <button className="tweet-action reply">
+            <i className="fa fa-comment"></i>
+            <span>{tweet.replies?.length || 0}</span>
+          </button>
+          <button className="tweet-action retweet">
+            <i className="fa fa-retweet"></i>
+            <span>{tweet.retweets?.length || 0}</span>
+          </button>
+          <button
+            className={`tweet-action like ${isLiked ? "liked" : ""}`}
             onClick={handleLike}
           >
-            {isLiked ? <FaHeart /> : <FaRegHeart />}
-            <span>{likes}</span>
-          </div>
-          <div className="tweet-action">
-            <FaShareAlt />
-          </div>
+            <i className={`fa ${isLiked ? "fa-heart" : "fa-heart-o"}`}></i>
+            <span>{likesCount}</span>
+          </button>
         </div>
       </div>
     </div>

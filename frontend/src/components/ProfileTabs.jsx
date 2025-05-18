@@ -1,4 +1,4 @@
-import "../styles/profiletabs.css";
+import "../styles/ProfileTabs.css";
 
 const ProfileTabs = ({ activeTab, setActiveTab }) => {
   const tabs = [

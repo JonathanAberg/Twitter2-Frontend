@@ -1,18 +1,5 @@
-:root {
-  --border-color: #eee;
-  --card-bg-color: #fff;
-  --text-color: #000;
-  --secondary-text-color: #536471;
-  --primary-color: #1da1f2;
-  --primary-hover-color: rgba(29, 161, 242, 0.1);
-  --hover-bg-color: rgba(0, 0, 0, 0.03);
-  --shadow-color: rgba(0, 0, 0, 0.2);
-  --like-color: #e0245e;
-  --retweet-color: #17bf63;
-}
-
 * {
-  box-sizing: border-box;
-  margin: 0;
-  font-family: Roboto, Arial, sans-serif;
-}
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Roboto, Arial, sans-serif;
+  }

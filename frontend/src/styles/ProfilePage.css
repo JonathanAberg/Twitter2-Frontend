@@ -1,16 +1,11 @@
 .profile-page {
+  max-width: 600px;
   margin: 0 auto;
-  min-width: 600px;
   border: 1px solid var(--border-color);
   background-color: var(--card-bg-color);
   color: var(--text-color);
 }
 
-.profile-page .tweets-container {
+.tweets-container {
   padding-bottom: 20px;
-}
-
-.horizontal-content {
-  display: flex;
-  gap: 2rem;
 }

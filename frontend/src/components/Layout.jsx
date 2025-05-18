@@ -1,13 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom'
 
-import "../styles/layout.css";
+import '../styles/layout.css'
 
 export function Layout() {
-  return (
+return (
     <>
-      <main>
+    <main>
         <Outlet />
-      </main>
+    </main>
     </>
-  );
+)
 }
