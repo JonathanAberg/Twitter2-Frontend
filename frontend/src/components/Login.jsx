@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/formsandinput.css";
 import { useNavigate } from "react-router-dom";
+import TwitterLogo from '../assets/twitter-logo.svg'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +35,9 @@ const Login = () => {
     <>
       <div className="login-column">
       <form className="login-form" onSubmit={handleSubmit}>
-      <h1>Log in</h1>
+      <img className="logo-container" src={TwitterLogo} alt="Twitter Logo" />
+      <h1>Log in to Twitter 2</h1>
+      <div className="input-details">
           <strong>E-mail</strong>{" "}
           <input
             className="highlight-input"
@@ -53,7 +56,9 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          </div>
         <input className="login-btn" type="submit" value="Login" />
+        <input className="nopassword-btn" type="button" value="Forgot your password?" />
       </form>
       </div>
     </>
