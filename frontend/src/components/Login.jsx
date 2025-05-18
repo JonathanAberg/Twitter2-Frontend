@@ -32,28 +32,30 @@ const Login = () => {
   };
   return (
     <>
+      <div className="login-column">
+      <form className="login-form" onSubmit={handleSubmit}>
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit}>
-        <p>
-          Email{" "}
+          <strong>E-mail</strong>{" "}
           <input
+            className="highlight-input"
+            placeholder="Enter your E-mail address.."
             type="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </p>
-        <p>
-          Password{" "}
+          <strong>Password</strong>{" "}
           <input
+            className="highlight-input"
+            placeholder="Enter your password details.."
             type="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </p>
-        <input type="submit" value="login" />
+        <input className="login-btn" type="submit" value="Login" />
       </form>
+      </div>
     </>
   );
 };
