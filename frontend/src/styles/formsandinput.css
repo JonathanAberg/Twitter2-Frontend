@@ -38,9 +38,8 @@
     padding: 0.75rem;
     border-radius: 24px;
     border: none;
-    margin: auto;
+    margin: 0 auto;
     font-weight: 700;
-    width: 120px;
 }
 
 .login-column {
@@ -54,17 +53,35 @@
 }
 
 .login-form {
+    height: 536px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     justify-content: space-between;
-    padding: 3rem;
+    padding: 2rem 3rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 24px;
 }
 
-
-.login-form h1 {
-  margin-bottom: 1rem;
+.logo-container {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
 }
+
+.nopassword-btn {
+    font-size: 1rem;
+    color: #000000;
+    background-color: #ffffff;
+    padding: 0.75rem;
+    border-radius: 24px;
+    border: 1px solid #000000;
+    font-weight: 700;
+    }
+
+    .input-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
