@@ -92,7 +92,9 @@ describe("User API Routes", () => {
     it("ska hämta användarprofil med giltigt ID", async () => {
       const user = await User.create(testUser);
 
-      const res = await request(app).get(`/user/${user._id}`);
+      const res = await request(app)
+        .get(`/user/${user._id}`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("_id");
@@ -103,7 +105,9 @@ describe("User API Routes", () => {
 
     it("ska returnera 404 för ogiltigt ID", async () => {
       const fakeId = new mongoose.Types.ObjectId();
-      const res = await request(app).get(`/user/${fakeId}`);
+      const res = await request(app)
+        .get(`/user/${fakeId}`)
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty("message");
