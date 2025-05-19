@@ -9,6 +9,8 @@ dotenv.config();
 
 const app = express();
 
+const PORT = process.env.PORT || 5001;
+
 app.use(
   cors({
     origin: "*",
@@ -54,11 +56,9 @@ app.get("/", (req, res) => {
   res.send("Twitter API is running");
 });
 
-const PORT = process.env.PORT || 5000;
-
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
-    console.log("Server är igång på port ${PORT}");
+    console.log(`Server är igång på port ${PORT}`);
   });
 }
 

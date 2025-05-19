@@ -16,6 +16,17 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
+=======
+    const newUser = { name, email, password };
+    const response = await fetch("http://localhost:5001/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    }).then((res) => res.json());
+>>>>>>> Jonathan
 
     // Check if passwords match
     if (password !== confirmPassword) {
