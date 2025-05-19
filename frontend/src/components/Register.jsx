@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TwitterLogo from "../assets/twitter-logo.svg";
 import "../styles/formsandinput.css";
-import "../styles/loginselect.css"; // For consistent styling with login page
+import "../styles/loginselect.css";
 import "../styles/authforms.css";
 
 const Register = () => {
@@ -11,24 +11,11 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-=======
-    const newUser = { name, email, password };
-    const response = await fetch("http://localhost:5001/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    }).then((res) => res.json());
->>>>>>> Jonathan
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       return;
@@ -57,67 +44,12 @@ const Register = () => {
       setPassword("");
       setConfirmPassword("");
       navigate("/login");
-    } catch (err) {
+    } catch (_err) {
       setError("Registration failed. Please try again.");
     }
   };
 
   return (
-    <>
-      <div className="signup-column">
-        <h1>Sign up</h1>
-        <form className="signup-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">
-            <input
-              className="highlight-input"
-              placeholder="Name"
-              type="text"
-              value={name}
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </label>
-          <label htmlFor="email">
-            <input
-              className="highlight-input"
-              placeholder="E-mail"
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label htmlFor="password">
-            <input
-              className="highlight-input"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-            />
-          </label>
-          <label htmlFor="connfirm-password">
-            <input
-              className="highlight-input"
-              type="password"
-              placeholder="Confirm your password.."
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={8}
-            />
-          </label>
-          <button className="signup-btn" type="submit">
-            Sign Up{" "}
-          </button>
-        </form>
-        <p>
-          Alreday have a account? <Link to={"/login"}>Log in </Link>
-        </p>
     <div className="loginselect-wrapper">
       <div className="image-container">
         <img src={TwitterLogo} alt="Twitter Logo" />
