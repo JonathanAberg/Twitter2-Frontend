@@ -12,7 +12,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newUser = { name, email, password };
-    const response = await fetch("http://localhost:5000/user", {
+    const response = await fetch("http://localhost:5001/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

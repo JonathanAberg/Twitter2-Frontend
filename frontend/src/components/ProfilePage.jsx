@@ -24,7 +24,7 @@ const ProfilePage = () => {
           return;
         }
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:5000/user/${userId}`, {
+        const response = await fetch(`http://localhost:5001/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +64,7 @@ const ProfilePage = () => {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:5000/api/tweets/user/${userData.id}`,
+          `http://localhost:5001/api/tweets/user/${userData.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -128,7 +128,7 @@ const ProfilePage = () => {
       const token = localStorage.getItem("token");
       const userId = userData.id;
 
-      const response = await fetch(`http://localhost:5000/user/${userId}`, {
+      const response = await fetch(`http://localhost:5001/user/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

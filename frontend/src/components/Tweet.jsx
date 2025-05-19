@@ -18,8 +18,8 @@ const Tweet = ({ tweet }) => {
     try {
       const token = localStorage.getItem("token");
       const endpoint = isLiked
-        ? `http://localhost:5000/api/tweets/${tweet._id}/unlike`
-        : `http://localhost:5000/api/tweets/${tweet._id}/like`;
+        ? `http://localhost:5001/api/tweets/${tweet._id}/unlike`
+        : `http://localhost:5001/api/tweets/${tweet._id}/like`;
 
       const response = await fetch(endpoint, {
         method: "POST",
