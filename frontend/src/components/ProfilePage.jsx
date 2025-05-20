@@ -49,11 +49,14 @@ const ProfilePage = ({ id: propId }) => {
           token.substring(0, 10) + "..."
         );
 
-        const response = await fetch(`http://localhost:5001/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:5001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 401) {
           console.log("Auth token ogiltig, omdirigerar till inloggning");
@@ -207,11 +210,15 @@ const ProfilePage = ({ id: propId }) => {
   if (!userData) return <div className="error">User not found</div>;
 
   return (
-    <div className="profile-page">
+    <div className="twitter-profile">
       <ProfileHeader user={userData} onProfileUpdate={handleProfileUpdate} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="tweets-container">
-        {filteredTweets && filteredTweets.length > 0 ? (
+        {loading ? (
+          <div className="loading">Loading profile...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : filteredTweets && filteredTweets.length > 0 ? (
           filteredTweets.map((tweet) => <Tweet key={tweet.id} tweet={tweet} />)
         ) : (
           <div className="no-tweets">

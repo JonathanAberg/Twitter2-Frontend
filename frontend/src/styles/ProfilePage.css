@@ -1,11 +1,28 @@
-.profile-page {
+.twitter-profile {
   max-width: 600px;
   margin: 0 auto;
-  border: 1px solid var(--border-color);
-  background-color: var(--card-bg-color);
-  color: var(--text-color);
+  border: 1px solid var(--border-color, #e1e8ed);
+  background-color: var(--card-bg-color, #ffffff);
+  color: var(--text-color, #14171a);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.tweets-container {
-  padding-bottom: 20px;
+.twitter-profile .tweets-container {
+  padding: 0 15px 20px;
+}
+
+.twitter-profile .no-tweets {
+  padding: 30px;
+  text-align: center;
+  color: var(--secondary-text-color, #657786);
+}
+
+.twitter-profile .loading,
+.twitter-profile .error {
+  padding: 30px;
+  text-align: center;
+  font-size: 18px;
+  color: var(--secondary-text-color, #657786);
 }

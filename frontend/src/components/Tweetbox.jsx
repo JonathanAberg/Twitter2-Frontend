@@ -13,7 +13,7 @@ export function Tweetbox({ user, setUser, id }) {
     setIsPosting(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/tweets", {
+      const response = await fetch("http://localhost:5001/api/tweets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
