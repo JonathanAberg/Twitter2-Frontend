@@ -1,23 +1,23 @@
-.profile-tabs {
+.twitter-profile .profile-tabs {
   display: flex;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--card-bg-color);
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
+  background-color: var(--card-bg-color, #ffffff);
 }
 
-.tab {
+.twitter-profile .tab {
   flex: 1;
   text-align: center;
   padding: 15px 0;
   font-weight: bold;
   cursor: pointer;
-  color: var(--text-color);
+  color: var(--secondary-text-color, #657786);
 }
 
-.tab:hover {
-  background-color: var(--primary-hover-color);
+.twitter-profile .tab:hover {
+  background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.03));
 }
 
-.tab.active {
-  border-bottom: 2px solid var(--primary-color);
-  color: var(--primary-color);
+.twitter-profile .tab.active {
+  border-bottom: 2px solid var(--primary-color, #1da1f2);
+  color: var(--primary-color, #1da1f2);
 }

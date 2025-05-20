@@ -1,93 +1,102 @@
-.profile-header {
+.twitter-profile .profile-header {
   position: relative;
+  border-bottom: 1px solid var(--border-color, #e1e8ed);
 }
 
-.cover-photo {
+.twitter-profile .cover-photo {
   height: 200px;
   background-size: cover;
   background-position: center;
-  background-color: var(--primary-color);
+  background-color: var(--primary-color, #1da1f2);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
-.profile-info {
+.twitter-profile .profile-info {
+  display: flex;
+  flex-wrap: wrap;
   padding: 0 15px 15px;
   position: relative;
-  background-color: var(--card-bg-color);
-  color: var(--text-color);
+  background-color: #ffffff;
+  color: #14171a;
 }
 
-.avatar-container {
+.twitter-profile .avatar-container {
   position: absolute;
   top: -75px;
+  left: 15px;
 }
 
-.profile-avatar {
+.twitter-profile .profile-avatar {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 4px solid var(--card-bg-color);
-  background-color: var(--card-bg-color);
+  border: 4px solid var(--card-bg-color, #ffffff);
+  background-color: var(--card-bg-color, #ffffff);
+  object-fit: cover;
 }
 
-.user-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 60px;
+.twitter-profile .user-actions {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  z-index: 2;
 }
 
-.edit-profile-btn {
+.twitter-profile .edit-profile-btn {
   margin-top: 15px;
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: bold;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
+  border: 1px solid var(--primary-color, #1da1f2);
+  color: var(--primary-color, #1da1f2);
   background-color: transparent;
   cursor: pointer;
 }
 
-.edit-profile-btn:hover {
-  background-color: var(--primary-hover-color);
+.twitter-profile .edit-profile-btn:hover {
+  background-color: var(--primary-hover-color, rgba(29, 161, 242, 0.1));
 }
 
-.user-details {
-  margin-top: 10px;
+.twitter-profile .user-details {
+  margin-top: 20px;
+  padding-top: 60px;
 }
 
-.user-name {
+.twitter-profile .user-name {
   font-size: 20px;
   font-weight: bold;
   margin: 0;
-  color: var(--text-color);
+  color: var(--text-color, #14171a);
 }
 
-.user-handle {
-  color: var(--secondary-text-color);
+.twitter-profile .user-handle {
+  color: var(--secondary-text-color, #657786);
   margin: 0;
   margin-bottom: 10px;
 }
 
-.user-bio {
+.twitter-profile .user-bio {
   margin: 10px 0;
-  color: var(--text-color);
+  color: var(--text-color, #14171a);
 }
 
-.user-metadata {
+.twitter-profile .user-metadata {
   display: flex;
-  color: var(--secondary-text-color);
+  color: var(--secondary-text-color, #657786);
   margin: 10px 0;
 }
 
-.user-metadata p {
+.twitter-profile .user-metadata p {
   margin: 0 15px 0 0;
 }
 
-.follow-stats {
+.twitter-profile .follow-stats {
   display: flex;
   gap: 20px;
-  color: var(--secondary-text-color);
+  color: var(--secondary-text-color, #657786);
 }
 
-.follow-stats strong {
-  color: var(--text-color);
+.twitter-profile .follow-stats strong {
+  color: var(--text-color, #14171a);
 }
