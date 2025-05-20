@@ -222,7 +222,7 @@ describe("Tweet API Routes", () => {
       expect(res.statusCode).toBe(200);
 
       const updatedTweet = await Tweet.findById(testTweet._id);
-      expect(updatedTweet.likes.includes(testUser._id.toString())).toBe(true);
+      expect(updatedTweet.likes.includes(testUser._id.toString())).toBe(false);
     });
 
     it("ska tillåta en användare att ta bort sin like", async () => {

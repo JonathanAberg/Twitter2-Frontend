@@ -9,11 +9,11 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "*",
+    originf: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -33,13 +33,10 @@ const connectDB = async () => {
       return;
     }
 
-    await mongoose.connect(
-      "mongodb+srv://remanrada8:1RIWudunt0PZsMhz@twitter.zc9flxu.mongodb.net/?retryWrites=true&w=majority&appName=Twitter",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Ansluten till MongoDB!");
   } catch (err) {
     console.error("Kunde inte ansluta till MongoDB", err);
@@ -49,7 +46,7 @@ const connectDB = async () => {
 
 connectDB();
 
-app.use("/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/tweets", tweetRoutes);
 
 app.get("/", (req, res) => {

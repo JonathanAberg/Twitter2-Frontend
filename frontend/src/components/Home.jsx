@@ -6,8 +6,11 @@ import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Sidebar } from "../components/Sidebar.jsx";
+<<<<<<< HEAD
 
 // Missing component declaration
+=======
+>>>>>>> origin/main
 export function Home() {
   // Missing state declarations
   const [user, setUser] = useState(null);
@@ -16,6 +19,7 @@ export function Home() {
   const { id } = useParams();
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchUserData = async () => {
       try {
         const userId = id || localStorage.getItem("userId");
@@ -53,6 +57,19 @@ export function Home() {
     };
 
     fetchUserData();
+=======
+    const userId = id || localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId) return;
+    fetch(`http://localhost:5001/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setUser(data))
+      .catch((err) => console.error("Failed to load user:", err));
+>>>>>>> origin/main
   }, [id]);
 
   return (
