@@ -49,11 +49,14 @@ const ProfilePage = ({ id: propId }) => {
           token.substring(0, 10) + "..."
         );
 
-        const response = await fetch(`http://localhost:5001/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:5001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 401) {
           console.log("Auth token ogiltig, omdirigerar till inloggning");
