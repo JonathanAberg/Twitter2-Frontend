@@ -24,7 +24,7 @@ export function Tweetbox({ user, setUser, id }) {
 
       if (response.ok) {
         setPost("");
-        // if the Home component has a function to refresh the tweets, call it here @Linus
+        if (onTweetPosted) onTweetPosted();
       } else {
         console.error("Failed to post tweet:", await response.text());
       }

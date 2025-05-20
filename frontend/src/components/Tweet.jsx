@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Tweet.css";
-import profilePlaceholder from "../assets/default.jpg";
+import profilePlaceholder from "../assets/profile-placeholder.jpg";
 
 const Tweet = ({ tweet }) => {
   const [isLiked, setIsLiked] = useState(
