@@ -23,7 +23,7 @@ const Register = () => {
 
     try {
       const newUser = { name, email, password };
-      const response = await fetch("http://localhost:5001/user", {
+      const response = await fetch("http://localhost:5001/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
