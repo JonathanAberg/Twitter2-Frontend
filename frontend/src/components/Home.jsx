@@ -12,6 +12,7 @@ export function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const [shouldRefreshTweets, setShouldRefreshTweets] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -30,11 +31,14 @@ export function Home() {
           return;
         }
 
-        const response = await fetch(`http://localhost:5001/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:5001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Failed to fetch user data: ${response.status}`);
@@ -86,14 +90,16 @@ export function Home() {
       <div className="content-frame">
         <Sidebar />
         <div className="content-column">
-          <Tweetbox user={user} setUser={setUser} id={id} />
-          <TweetsSection>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
-            commodi, eveniet sint repellendus saepe, repellat consequuntur
-            dolorum dolores vel quasi hic cumque laborum debitis quia porro
-            facere culpa placeat ex?
-          </TweetsSection>
-          <TweetsSection>Hej hopp, kaffekopp!</TweetsSection>
+          <Tweetbox
+            user={user}
+            setUser={setUser}
+            id={id}
+            onTweetPosted={() => setShouldRefreshTweets(true)}
+          />
+          <TweetsSection
+            shouldRefresh={shouldRefreshTweets}
+            setShouldRefresh={setShouldRefreshTweets}
+          />
         </div>
         <Aside />
       </div>
