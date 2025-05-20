@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import TwitterLogo from "../assets/twitter-logo.svg";
 import "../styles/formsandinput.css";
-import "../styles/loginselect.css"; // For consistent styling with login page
+import "../styles/loginselect.css";
 import "../styles/authforms.css";
 
 const Register = () => {
@@ -16,7 +16,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       return;
@@ -45,7 +44,7 @@ const Register = () => {
       setPassword("");
       setConfirmPassword("");
       navigate("/login");
-    } catch (err) {
+    } catch (_err) {
       setError("Registration failed. Please try again.");
     }
   };
