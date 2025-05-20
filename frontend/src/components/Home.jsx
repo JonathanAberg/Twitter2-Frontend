@@ -5,14 +5,19 @@ import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Sidebar } from '../components/Sidebar.jsx'
+import { Sidebar } from "../components/Sidebar.jsx";
 export function Home() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   useEffect(() => {
     const userId = id || localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     if (!userId) return;
-    fetch(`http://localhost:5001/user/${userId}`)
+    fetch(`http://localhost:5001/api/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch((err) => console.error("Failed to load user:", err));
@@ -22,7 +27,7 @@ export function Home() {
     <>
       <h1>{user ? user.name : "Loading.."}</h1>
       <div className="content-frame">
-      <Sidebar />
+        <Sidebar />
         <div className="content-column">
           <Tweetbox user={user} setUser={setUser} id={id} />
           <TweetsSection>
