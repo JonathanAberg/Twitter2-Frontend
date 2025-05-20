@@ -1,32 +1,16 @@
-import { useState } from "react";
-import "../styles/ProfileHeader.css";
+import React, { useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 
 const ProfileHeader = ({ user, onProfileUpdate }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log("ProfileHeader: Rendering with user:", user);
-
-  if (!user) {
-    console.error("ProfileHeader: No user data provided");
-    return (
-      <div className="profile-header-error">Error: No user data available</div>
-    );
-  }
 
   const handleEditProfile = () => {
     setIsModalOpen(true);
   };
 
   const handleSaveProfile = (updatedProfile) => {
-    // Call the parent component's update function with the new data
-    if (onProfileUpdate) {
-      onProfileUpdate(updatedProfile);
-    } else {
-      console.log(
-        "Profile update function not provided. Updated data:",
-        updatedProfile
-      );
-    }
+    onProfileUpdate(updatedProfile);
+    setIsModalOpen(false);
   };
 
   return (
@@ -34,15 +18,24 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       <div
         className="cover-photo"
         style={{
-          backgroundImage: `url(${user.coverImage || user.coverPhoto})`,
+          backgroundImage: `url(${
+            user.coverPhoto ||
+            user.coverImage ||
+            "/src/assets/default-cover.jpg"
+          })`,
         }}
       ></div>
       <div className="profile-info">
         <div className="avatar-container">
           <img
-            src={user.profileImage}
-            alt={user.name}
+            src={user.profileImage || "https://placehold.co/150x150"}
+            alt={user.name || "User"}
             className="profile-avatar"
+            onError={(e) => {
+              e.target.onerror = null; // Prevent infinite loop
+              e.target.src =
+                "https://placehold.co/150x150/gray/white?text=User";
+            }}
           />
         </div>
         <div className="user-actions">
@@ -51,23 +44,32 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           </button>
         </div>
         <div className="user-details">
-          <h2 className="user-name">{user.name}</h2>
-          <p className="user-handle">@{user.username}</p>
-          <p className="user-bio">{user.bio}</p>
+          <h2 className="user-name">{user.name || "User"}</h2>
+          <p className="user-handle">
+            @
+            {user.username ||
+              user.name?.toLowerCase().replace(/\s/g, "") ||
+              "user"}
+          </p>
+          <p className="user-bio">
+            {user.bio || user.about || "No bio available"}
+          </p>
           <div className="user-metadata">
             <p className="location">
-              <i className="icon-location"></i> {user.location}
+              <i className="icon-location"></i>{" "}
+              {user.location || user.hometown || "Unknown location"}
             </p>
             <p className="join-date">
-              <i className="icon-calendar"></i> Joined {user.joinDate}
+              <i className="icon-calendar"></i> Joined{" "}
+              {user.joinDate || new Date().toLocaleDateString()}
             </p>
           </div>
           <div className="follow-stats">
             <span>
-              <strong>{user.following}</strong> Following
+              <strong>{user.following || 0}</strong> Following
             </span>
             <span>
-              <strong>{user.followers}</strong> Followers
+              <strong>{user.followers || 0}</strong> Followers
             </span>
           </div>
         </div>
