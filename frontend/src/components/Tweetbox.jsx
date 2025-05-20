@@ -1,8 +1,8 @@
 import "../styles/tweetbox.css";
-import profilePlaceholder from "../assets/profile-placeholder.jpg";
 import { useState } from "react";
+import profilePlaceholder from "../assets/profile-placeholder.jpg";
 
-export function Tweetbox({ user, setUser, id }) {
+export function Tweetbox({ user, setUser, id, onTweetPosted }) {
   const [post, setPost] = useState("");
   const [isPosting, setIsPosting] = useState(false);
 
