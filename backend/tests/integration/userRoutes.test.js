@@ -28,7 +28,7 @@ describe("User API Routes", () => {
 
   describe("POST /user", () => {
     it("ska registrera en ny användare och returnera token", async () => {
-      const res = await request(app).post("/user").send(testUser);
+      const res = await request(app).post("/api/users").send(testUser);
 
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty("token");
@@ -40,7 +40,7 @@ describe("User API Routes", () => {
     it("ska inte tillåta registrering med befintlig email", async () => {
       await User.create(testUser);
 
-      const res = await request(app).post("/user").send(testUser);
+      const res = await request(app).post("/api/users").send(testUser);
 
       expect(res.statusCode).toBe(400);
       expect(res.body).toHaveProperty("message");
@@ -58,7 +58,7 @@ describe("User API Routes", () => {
         password: hashedPassword,
       });
 
-      const res = await request(app).post("/user/login").send({
+      const res = await request(app).post("/api/users/login").send({
         email: testUser.email,
         password: testUser.password,
       });
@@ -78,7 +78,7 @@ describe("User API Routes", () => {
         password: hashPassword,
       });
 
-      const res = await request(app).post("/user/login").send({
+      const res = await request(app).post("/api/users/login").send({
         email: testUser.email,
         password: "whrongpassword",
       });
@@ -92,8 +92,14 @@ describe("User API Routes", () => {
     it("ska hämta användarprofil med giltigt ID", async () => {
       const user = await User.create(testUser);
 
+      const token = jwt.sign(
+        { id: user._id },
+        process.env.JWT_SECRET || "testjwtsecret",
+        { expiresIn: "1h" }
+      );
+
       const res = await request(app)
-        .get(`/user/${user._id}`)
+        .get(`/api/users/${user._id}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -104,9 +110,16 @@ describe("User API Routes", () => {
     });
 
     it("ska returnera 404 för ogiltigt ID", async () => {
+      const user = await User.create(testUser);
+      const token = jwt.sign(
+        { id: user._id },
+        process.env.JWT_SECRET || "testjwtsecret",
+        { expiresIn: "1h" }
+      );
+
       const fakeId = new mongoose.Types.ObjectId();
       const res = await request(app)
-        .get(`/user/${fakeId}`)
+        .get(`/api/users/${fakeId}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(404);
@@ -135,7 +148,7 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post(`/user/${user2._id}/follow`)
+        .post(`/api/users/${user2._id}/follow`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -176,7 +189,7 @@ describe("User API Routes", () => {
       );
 
       const res = await request(app)
-        .post(`/user/${user2._id}/unfollow`)
+        .post(`/api/users/${user2._id}/unfollow`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
