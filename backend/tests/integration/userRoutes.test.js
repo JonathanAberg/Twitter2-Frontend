@@ -50,13 +50,7 @@ describe("User API Routes", () => {
 
   describe("POST /user/login", () => {
     it("ska logga in användare med korrekta uppgifter", async () => {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(testUser.password, salt);
-
-      await User.create({
-        ...testUser,
-        password: hashedPassword,
-      });
+      const user = await User.create(testUser);
 
       const res = await request(app).post("/api/users/login").send({
         email: testUser.email,
