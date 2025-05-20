@@ -22,31 +22,31 @@ export function Sidebar() {
       <ul>
         <li>
           <FaHome />
-          Hem
+          Home
         </li>
         <li>
           <FaSearch />
-          Utforska
+          Search
         </li>
         <li>
           <FaBell />
-          Notiser
+          Notification
         </li>
         <li>
           <FaEnvelope />
-          Meddelanden
+          Messages
         </li>
         <li>
           <FaBookmark />
-          Bokmärken
+          Bookmarks
         </li>
         <li onClick={() => goToProfile()}>
           <FaUser />
-          Profil
+          Profile
         </li>
         <li>
           <FaEllipsisH />
-          Mer
+          More
         </li>
       </ul>
     </div>
