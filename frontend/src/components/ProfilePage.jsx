@@ -171,20 +171,23 @@ const ProfilePage = ({ id: propId }) => {
       const token = localStorage.getItem("token");
       const userId = userData.id;
 
-      const response = await fetch(`http://localhost:5001/user/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: updatedProfile.name,
-          about: updatedProfile.bio,
-          hometown: updatedProfile.location,
-          profileImage: updatedProfile.profileImage,
-          coverImage: updatedProfile.coverPhoto,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5001/api/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: updatedProfile.name,
+            about: updatedProfile.bio,
+            hometown: updatedProfile.location,
+            profileImage: updatedProfile.profileImage,
+            coverImage: updatedProfile.coverPhoto,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update profile");

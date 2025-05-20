@@ -8,10 +8,17 @@ import { useEffect, useState } from "react";
 import { Sidebar } from "../components/Sidebar.jsx";
 
 export function Home() {
+  const [tweets, setTweets] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+
+  const fetchTweets = () => {
+    fetch(`http://localhost:5001/api/tweets`)
+      .then((res) => res.json())
+      .then((data) => setTweets(data));
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -30,11 +37,14 @@ export function Home() {
           return;
         }
 
-        const response = await fetch(`http://localhost:5001/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:5001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Failed to fetch user data: ${response.status}`);
@@ -86,13 +96,14 @@ export function Home() {
       <div className="content-frame">
         <Sidebar />
         <div className="content-column">
-          <Tweetbox user={user} setUser={setUser} id={id} />
-          <TweetsSection>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque
-            commodi, eveniet sint repellendus saepe, repellat consequuntur
-            dolorum dolores vel quasi hic cumque laborum debitis quia porro
-            facere culpa placeat ex?
-          </TweetsSection>
+          <Tweetbox user={user} />
+          {tweets && tweets.length > 0 ? (
+            tweets.map((tweet) => (
+              <TweetsSection key={tweet._id}>{tweet.content}</TweetsSection>
+            ))
+          ) : (
+            <p>No tweets found</p>
+          )}
           <TweetsSection>Hej hopp, kaffekopp!</TweetsSection>
         </div>
         <Aside />
