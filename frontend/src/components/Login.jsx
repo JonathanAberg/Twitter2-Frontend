@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/formsandinput.css";
 import { useNavigate } from "react-router-dom";
+import TwitterLogo from '../assets/twitter-logo.svg'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/user/login", {
+      const res = await fetch("http://localhost:5001/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -27,33 +28,39 @@ const Login = () => {
       goHome(user._id);
       console.log("good ");
     } catch (err) {
-      alert("Login failed. Try again.");
+      alert("Login failed. Try again.", err);
     }
   };
   return (
     <>
-      <h1>Log in</h1>
-      <form onSubmit={handleSubmit}>
-        <p>
-          Email{" "}
+      <div className="login-column">
+      <form className="login-form" onSubmit={handleSubmit}>
+      <img className="logo-container" src={TwitterLogo} alt="Twitter Logo" />
+      <h1>Log in to Twitter 2</h1>
+      <div className="input-details">
+          <strong>E-mail</strong>{" "}
           <input
+            className="highlight-input"
+            placeholder="Enter your E-mail address.."
             type="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </p>
-        <p>
-          Password{" "}
+          <strong>Password</strong>{" "}
           <input
+            className="highlight-input"
+            placeholder="Enter your password details.."
             type="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </p>
-        <input type="submit" value="login" />
+          </div>
+        <input className="login-btn" type="submit" value="Login" />
+        <input className="nopassword-btn" type="button" value="Forgot your password?" />
       </form>
+      </div>
     </>
   );
 };

@@ -2,8 +2,7 @@
   display: flex;
   padding: 15px;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--card-bg-color);
-  color: var(--text-color);
+  transition: background-color 0.2s;
 }
 
 .tweet:hover {
@@ -11,13 +10,14 @@
 }
 
 .tweet-avatar {
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 .tweet-avatar img {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .tweet-content {
@@ -25,56 +25,57 @@
 }
 
 .tweet-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .tweet-name {
   font-weight: bold;
-  margin-right: 5px;
   color: var(--text-color);
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.tweet-name:hover {
+  text-decoration: underline;
 }
 
 .tweet-username,
-.tweet-time {
+.tweet-date {
   color: var(--secondary-text-color);
-  margin-right: 5px;
+  font-size: 15px;
 }
 
 .tweet-text {
-  margin-bottom: 10px;
-  line-height: 1.4;
+  margin-bottom: 12px;
+  word-wrap: break-word;
   color: var(--text-color);
-}
-
-.tweet-media {
-  margin-bottom: 10px;
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-.tweet-media img {
-  width: 100%;
-  height: auto;
 }
 
 .tweet-actions {
   display: flex;
   justify-content: space-between;
-  max-width: 80%;
-  margin-top: 10px;
+  max-width: 425px;
 }
 
 .tweet-action {
   display: flex;
   align-items: center;
   color: var(--secondary-text-color);
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.tweet-action i {
-  margin-right: 5px;
+.tweet-action:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.tweet-action span {
+  margin-left: 4px;
+  font-size: 13px;
 }
 
 .tweet-action.liked {

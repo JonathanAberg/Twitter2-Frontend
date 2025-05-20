@@ -90,6 +90,21 @@ const getUserTweets = async (req, res) => {
   }
 };
 
+const getHashtagTweets = async (req, res) => {
+  try {
+    const hashtag = req.params.tag.toLowerCase();
+
+    const tweets = await Tweet.find({ hashtags: hashtag })
+      .sort({ createdAt: -1 })
+      .populate("user", "name nickname")
+      .limit(50);
+
+    res.json(tweets);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 const likeTweet = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id);
@@ -137,8 +152,9 @@ const unlikeTweet = async (req, res) => {
 module.exports = {
   createTweet,
   getTweets,
-  getTweetedById,
+  getTweetById,
   getUserTweets,
+  getHashtagTweets,
   likeTweet,
   unlikeTweet,
 };
