@@ -5,8 +5,9 @@ import Tweet from "../components/Tweet";
 import ProfileHeader from "../components/ProfileHeader";
 import ProfileTabs from "../components/ProfileTabs";
 
-const ProfilePage = () => {
-  const { id } = useParams(); // USER ID FROM URL
+const ProfilePage = ({ id: propId }) => {
+  const { id: urlId } = useParams();
+  const userId = propId || urlId || localStorage.getItem("userId");
   const [activeTab, setActiveTab] = useState("tweets");
   const [filteredTweets, setFilteredTweets] = useState([]);
   const [userData, setUserData] = useState({
@@ -28,36 +29,64 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = id || localStorage.getItem("userId");
         if (!userId) {
           setError("No user ID provided");
           setLoading(false);
           return;
         }
         const token = localStorage.getItem("token");
+
+        if (!token) {
+          setError("Authentication required. Please log in.");
+          setLoading(false);
+          return;
+        }
+
+        console.log(
+          "Fetching user data for ID:",
+          userId,
+          "with token:",
+          token.substring(0, 10) + "..."
+        );
+
         const response = await fetch(`http://localhost:5001/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (response.status === 401) {
+          console.log("Auth token ogiltig, omdirigerar till inloggning");
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          setError("Din session har gått ut. Vänligen logga in igen.");
+
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
+          return;
+        }
+
         if (!response.ok) {
-          throw new Error("Failed to fetch user data");
+          throw new Error(`Failed to fetch user data: ${response.status}`);
         }
 
         const data = await response.json();
+
         setUserData({
           id: data._id,
           name: data.name,
           username: data.nickname || data.name,
           bio: data.about || "",
-          profileImage: data.profileImage || "./assets/default.png",
-          coverImage: data.coverImage || "./assets/default-cover.png",
+          profileImage: data.profileImage || "https://placehold.co/150x150",
+          coverImage: data.coverImage || "/src/assets/default-cover.jpg",
           following: data.following?.length || 0,
           followers: data.followers?.length || 0,
           joinDate: new Date(data.createdAt).toLocaleDateString("en-US", {
             month: "long",
             year: "numeric",
           }),
+          likes: data.likes || [],
         });
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -66,7 +95,7 @@ const ProfilePage = () => {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [userId]);
 
   useEffect(() => {
     const fetchTweets = async () => {
