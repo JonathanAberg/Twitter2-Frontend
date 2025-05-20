@@ -6,20 +6,14 @@ import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Sidebar } from "../components/Sidebar.jsx";
-<<<<<<< HEAD
 
-// Missing component declaration
-=======
->>>>>>> origin/main
 export function Home() {
-  // Missing state declarations
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
-<<<<<<< HEAD
     const fetchUserData = async () => {
       try {
         const userId = id || localStorage.getItem("userId");
@@ -57,7 +51,7 @@ export function Home() {
     };
 
     fetchUserData();
-=======
+
     const userId = id || localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId) return;
@@ -69,7 +63,6 @@ export function Home() {
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch((err) => console.error("Failed to load user:", err));
->>>>>>> origin/main
   }, [id]);
 
   return (
