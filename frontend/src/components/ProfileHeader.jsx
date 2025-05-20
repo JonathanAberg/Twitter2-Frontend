@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
+import "../styles/ProfileHeader.css";
 
 const ProfileHeader = ({ user, onProfileUpdate }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleEditProfile = () => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
-  const handleSaveProfile = (updatedProfile) => {
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleProfileUpdate = (updatedProfile) => {
     onProfileUpdate(updatedProfile);
-    setIsModalOpen(false);
   };
 
   return (
@@ -31,11 +35,6 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
             src={user.profileImage || "https://placehold.co/150x150"}
             alt={user.name || "User"}
             className="profile-avatar"
-            onError={(e) => {
-              e.target.onerror = null; // Prevent infinite loop
-              e.target.src =
-                "https://placehold.co/150x150/gray/white?text=User";
-            }}
           />
         </div>
         <div className="user-actions">
@@ -55,32 +54,33 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
             {user.bio || user.about || "No bio available"}
           </p>
           <div className="user-metadata">
-            <p className="location">
-              <i className="icon-location"></i>{" "}
-              {user.location || user.hometown || "Unknown location"}
+            <p>
+              <i className="fas fa-map-marker-alt"></i>{" "}
+              {user.location || "Earth"}
             </p>
-            <p className="join-date">
-              <i className="icon-calendar"></i> Joined{" "}
-              {user.joinDate || new Date().toLocaleDateString()}
+            <p>
+              <i className="fas fa-calendar-alt"></i> Joined {user.joinDate}
             </p>
           </div>
           <div className="follow-stats">
-            <span>
-              <strong>{user.following || 0}</strong> Following
-            </span>
-            <span>
-              <strong>{user.followers || 0}</strong> Followers
-            </span>
+            <p>
+              <strong>{user.following}</strong> <span>Following</span>
+            </p>
+            <p>
+              <strong>{user.followers}</strong> <span>Followers</span>
+            </p>
           </div>
         </div>
       </div>
 
-      <ProfileEditModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        user={user}
-        onSave={handleSaveProfile}
-      />
+      {isEditModalOpen && (
+        <ProfileEditModal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          user={user}
+          onSave={handleProfileUpdate}
+        />
+      )}
     </div>
   );
 };

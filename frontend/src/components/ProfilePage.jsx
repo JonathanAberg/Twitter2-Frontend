@@ -207,11 +207,15 @@ const ProfilePage = ({ id: propId }) => {
   if (!userData) return <div className="error">User not found</div>;
 
   return (
-    <div className="profile-page">
+    <div className="twitter-profile">
       <ProfileHeader user={userData} onProfileUpdate={handleProfileUpdate} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="tweets-container">
-        {filteredTweets && filteredTweets.length > 0 ? (
+        {loading ? (
+          <div className="loading">Loading profile...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : filteredTweets && filteredTweets.length > 0 ? (
           filteredTweets.map((tweet) => <Tweet key={tweet.id} tweet={tweet} />)
         ) : (
           <div className="no-tweets">
