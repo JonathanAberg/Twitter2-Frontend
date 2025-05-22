@@ -65,6 +65,11 @@ export function InfoCompelettion() {
         </label>
         <input type="submit" value={"Submit"} />
       </form>
+      <input
+        type="button"
+        onClick={() => navigate(`/home/${id}`)}
+        value={"Skip"}
+      />
     </>
   );
 }
