@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 const ProfileHeader = ({ user, onProfileUpdate }) => {
   const { id: viewedUserId } = useParams();
-  const cuurentUserId = localStorage.getItem("userId");
+  const currentUserId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
@@ -83,12 +83,15 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           />
         </div>
         <div className="user-actions">
-          <button className="edit-profile-btn" onClick={handleEditProfile}>
-            Edit profile
-          </button>
-          <button type="button" onClick={handleFollow}>
-            {isfollowing ? "Unfollow" : "Follow"}
-          </button>
+          {viewedUserId === currentUserId ? (
+            <button className="edit-profile-btn" onClick={handleEditProfile}>
+              Edit profile
+            </button>
+          ) : (
+            <button type="button" onClick={handleFollow}>
+              {isfollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
         </div>
         <div className="user-details">
           <h2 className="user-name">{user.name || "User"}</h2>
