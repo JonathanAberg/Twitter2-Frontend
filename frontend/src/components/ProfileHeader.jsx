@@ -1,9 +1,54 @@
 import React, { useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import "../styles/ProfileHeader.css";
+import { useParams } from "react-router-dom";
 
 const ProfileHeader = ({ user, onProfileUpdate }) => {
+  const { id: viewedUserId } = useParams();
+  const cuurentUserId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isfollowing, setIsfollowing] = useState(false);
+  useEffect(() => {
+    const fetchFollowStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5001/api/users/${viewedUserId}/isfollowing`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setIsFollowing(data.isFollowing);
+        }
+      } catch (err) {
+        console.error("Failed to fetch follow status:", err);
+      }
+    };
+
+    if (viewedUserId !== currentUserId) {
+      fetchFollowStatus();
+    }
+  }, [viewedUserId, currentUserId, token]);
+  const handleFollow = async () => {
+    const newFollow = isfollowing
+      ? `http://localhost:5001/api/users/${viewedUserId}/unfollow`
+      : `http://localhost:5001/api/users/${viewedUserId}/follow`;
+    try {
+      const response = await fetch(newFollow, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        setIsfollowing(!isfollowing);
+      }
+    } catch (err) {
+      console.error("failed to follow", err);
+    }
+  };
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
@@ -40,6 +85,9 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
         <div className="user-actions">
           <button className="edit-profile-btn" onClick={handleEditProfile}>
             Edit profile
+          </button>
+          <button type="button" onClick={handleFollow}>
+            {isfollowing ? "Unfollow" : "Follow"}
           </button>
         </div>
         <div className="user-details">
