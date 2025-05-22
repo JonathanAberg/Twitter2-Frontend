@@ -1,5 +1,3 @@
-// import { useEffect } from "react";
-// import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
@@ -12,12 +10,6 @@ import Register from "./components/Register";
 import "./styles/general.css";
 import { InfoCompelettion } from "./components/infoCompelettion";
 
-// const [data, setData] = useState([]);
-// useEffect(() => {
-//   fetch("http://localhost:5001/User")
-//     .then((res) => res.json())
-//     .then((data) => setData(data));
-// }, []);
 function App() {
   return (
     <>
