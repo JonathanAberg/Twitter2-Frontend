@@ -10,6 +10,7 @@ import LoginSelect from "./components/LoginSelect";
 import Register from "./components/Register";
 
 import "./styles/general.css";
+import { InfoCompelettion } from "./components/infoCompelettion";
 
 // const [data, setData] = useState([]);
 // useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/home/:id" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/infoCompletion/:id" element={<InfoCompelettion />} />
           </Route>
         </Routes>
       </BrowserRouter>
