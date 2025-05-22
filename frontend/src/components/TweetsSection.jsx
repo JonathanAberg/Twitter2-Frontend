@@ -46,7 +46,7 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
   return (
     <div className="tweets-container">
       {tweets.length > 0 ? (
-        tweets.map((tweet) => (
+        tweets.map((tweet, index) => (
           <Tweet
             key={tweet._id || index}
             tweet={{
