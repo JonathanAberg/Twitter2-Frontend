@@ -43,7 +43,7 @@ const Register = () => {
       setName("");
       setPassword("");
       setConfirmPassword("");
-      navigate("/login");
+      navigate(`/infoCompletion/${data._id}`);
     } catch (_err) {
       setError("Registration failed. Please try again.");
     }
