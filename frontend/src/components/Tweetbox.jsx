@@ -1,8 +1,8 @@
 import "../styles/tweetbox.css";
-import profilePlaceholder from "../assets/profile-placeholder.jpg";
 import { useState } from "react";
+import profilePlaceholder from "../assets/profile-placeholder.jpg";
 
-export function Tweetbox({ user, setUser, id }) {
+export function Tweetbox({ user, setUser, id, onTweetPosted }) {
   const [post, setPost] = useState("");
   const [isPosting, setIsPosting] = useState(false);
 
@@ -24,7 +24,7 @@ export function Tweetbox({ user, setUser, id }) {
 
       if (response.ok) {
         setPost("");
-        // if the Home component has a function to refresh the tweets, call it here @Linus
+        if (onTweetPosted) onTweetPosted();
       } else {
         console.error("Failed to post tweet:", await response.text());
       }

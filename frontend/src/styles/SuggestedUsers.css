@@ -1,0 +1,72 @@
+.suggested-users {
+  background-color: #f7f9fa;
+  border-radius: 15px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.suggested-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.suggested-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px 0;
+}
+
+.user-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.user-handle {
+  color: #657786;
+  font-size: 12px;
+}
+
+.follow-button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 5px 15px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.follow-button:hover {
+  background-color: #333;
+}
+
+.no-suggestions {
+  color: #657786;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px 0;
+}

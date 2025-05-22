@@ -1,40 +1,63 @@
+import { useState, useEffect } from "react";
 import "../styles/tweetssection.css";
+import Tweet from "./Tweet";
 
-export function TweetsSection({ children }) {
+export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
+  const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTweets = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+
+        const response = await fetch("http://localhost:5001/api/tweets", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch tweets: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTweets(data);
+
+        if (shouldRefresh) {
+          setShouldRefresh(false);
+        }
+      } catch (err) {
+        console.error("Error fetching tweets:", err);
+        setError("Failed to load tweets");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTweets();
+  }, [shouldRefresh]);
+
+  if (loading) return <div className="loading">Loading tweets...</div>;
+  if (error) return <div className="error">{error}</div>;
+
   return (
-    <div className="tweetsection-wrapper">
-      <div className="profile-pic">
-        <img src="https://picsum.photos/200/300" alt="Profile Picture" />
-      </div>
-      <div className="profile-info">
-        <div className="column-content">
-          <div className="profile-label">
-            <p>
-              <strong>Dixie</strong>
-            </p>
-            <p className="user-desc">@Dixie1234 &#x2022; 44m</p>
-          </div>
-          <p>{children}</p>
-          <div className="messages-stats">
-            <svg
-              className="messages-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              class="lucide lucide-message-square-icon lucide-message-square"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            <p>12</p>
-          </div>
-        </div>
-      </div>
+    <div className="tweets-container">
+      {tweets.length > 0 ? (
+        tweets.map((tweet) => (
+          <Tweet
+            key={tweet._id || index}
+            tweet={{
+              ...tweet,
+              user: tweet.user || tweet.author || { name: "Unknown User" },
+            }}
+          />
+        ))
+      ) : (
+        <div className="no-tweets">No tweets to display. Start tweeting!</div>
+      )}
     </div>
   );
 }

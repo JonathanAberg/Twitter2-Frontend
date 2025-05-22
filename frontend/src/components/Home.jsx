@@ -13,6 +13,7 @@ export function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const [shouldRefreshTweets, setShouldRefreshTweets] = useState(false);
 
   const fetchTweets = () => {
     fetch(`http://localhost:5001/api/tweets`)
@@ -99,15 +100,16 @@ export function Home() {
       <div className="content-frame">
         <Sidebar />
         <div className="content-column">
-          <Tweetbox user={user} />
-          {tweets && tweets.length > 0 ? (
-            tweets.map((tweet) => (
-              <TweetsSection key={tweet._id}>{tweet.content}</TweetsSection>
-            ))
-          ) : (
-            <p>No tweets found</p>
-          )}
-          <TweetsSection>Hej hopp, kaffekopp!</TweetsSection>
+          <Tweetbox
+            user={user}
+            setUser={setUser}
+            id={id}
+            onTweetPosted={() => setShouldRefreshTweets(true)}
+          />
+          <TweetsSection
+            shouldRefresh={shouldRefreshTweets}
+            setShouldRefresh={setShouldRefreshTweets}
+          />
         </div>
         <Aside />
       </div>
