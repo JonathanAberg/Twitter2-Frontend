@@ -1,5 +1,6 @@
 import "../styles/aside.css";
 import { FiSearch, FiMoreHorizontal } from "react-icons/fi";
+import SuggestedUsers from "./SuggestedUsers";
 
 export function Aside() {
   return (
@@ -17,7 +18,7 @@ export function Aside() {
         />
         <TrendTopic
           title="China"
-          description="Politics • Trending"
+          description="Politics Treding"
           tweets="527K"
         />
         <TrendTopic
@@ -36,6 +37,7 @@ export function Aside() {
           tweets="60.4K"
         />
       </div>
+      <SuggestedUsers />
     </div>
   );
 }
