@@ -198,7 +198,6 @@ exports.unfollowUser = async (req, res) => {
   }
 };
 
-// This should be a SEPARATE function, not nested inside unfollowUser
 exports.isFollowing = async (req, res) => {
   try {
     const targetUserId = req.params.id;
