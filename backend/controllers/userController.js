@@ -176,32 +176,6 @@ exports.unfollowUser = async (req, res) => {
       return res.status(400).json({ message: "Användare hittades inte" });
     }
 
-    exports.isFollowing = async (req, res) => {
-      try {
-        const targetUserId = req.params.id;
-        const currentUser = await User.findById(req.user._id);
-
-        if (!currentUser) {
-          return res.status(404).json({ message: "Current user not found" });
-        }
-
-        const targetUser = await User.findById(targetUserId);
-        if (!targetUser) {
-          return res.status(404).json({ message: "Target user not found" });
-        }
-
-        const isFollowing = currentUser.following.includes(targetUserId);
-
-        return res.json({
-          isFollowing,
-          userId: req.user._id,
-          targetUserId,
-        });
-      } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
-      }
-    };
-
     const currentUser = await User.findById(req.user._id);
 
     if (!currentUser.following.includes(req.params.id)) {
@@ -219,6 +193,32 @@ exports.unfollowUser = async (req, res) => {
     });
 
     res.json({ message: "Du följer inte längre denna användare" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+exports.isFollowing = async (req, res) => {
+  try {
+    const targetUserId = req.params.id;
+    const currentUser = await User.findById(req.user._id);
+
+    if (!currentUser) {
+      return res.status(404).json({ message: "Current user not found" });
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+      return res.status(404).json({ message: "Target user not found" });
+    }
+
+    const isFollowing = currentUser.following.includes(targetUserId);
+
+    return res.json({
+      isFollowing,
+      userId: req.user._id,
+      targetUserId,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
