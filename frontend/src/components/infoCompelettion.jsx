@@ -10,7 +10,7 @@ export function InfoCompelettion() {
   const { id } = useParams();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formdata = new formdata();
+    const formdata = new FormData();
     formdata.append("profilepicture", profilepicture);
     formdata.append("coverpicture", coverpicture);
     formdata.append("hometown", hometown);
