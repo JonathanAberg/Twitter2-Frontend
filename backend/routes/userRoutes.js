@@ -21,6 +21,6 @@ router.get("/:id", protect, getUserProfile);
 router.put("/:id", protect, updateUserProfile);
 router.post("/:id/follow", protect, followUser);
 router.post("/:id/unfollow", protect, unfollowUser);
-router.post("/:id/isFollowing", protect, isFollowing);
+router.get("/:id/isFollowing", protect, isFollowing);
 
 module.exports = router;
