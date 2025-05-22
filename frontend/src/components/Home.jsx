@@ -75,6 +75,9 @@ export function Home() {
       .then((data) => setUser(data))
       .catch((err) => console.error("Failed to load user:", err));
   }, [id]);
+  useEffect(() => {
+    fetchTweets();
+  }, []);
 
   return (
     <>
