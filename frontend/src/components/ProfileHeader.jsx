@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import "../styles/ProfileHeader.css";
 import { useParams } from "react-router-dom";
@@ -20,7 +20,7 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
         );
         if (response.ok) {
           const data = await response.json();
-          setIsFollowing(data.isFollowing);
+          setIsfollowing(data.isFollowing);
         }
       } catch (err) {
         console.error("Failed to fetch follow status:", err);
