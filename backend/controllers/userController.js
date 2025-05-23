@@ -19,6 +19,8 @@ exports.registerUser = async (req, res) => {
       hometown,
       website,
     } = req.body;
+    const profilePicturePath = req.files?.profilepicture?.[0]?.path;
+    const coverPicturePath = req.files?.coverpicture?.[0]?.path;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -34,6 +36,8 @@ exports.registerUser = async (req, res) => {
       occupation,
       hometown,
       website,
+      profilepicture: profilePicturePath,
+      coverpicture: coverPicturePath,
     });
 
     if (user) {
@@ -103,8 +107,8 @@ exports.updateUserProfile = async (req, res) => {
       hometown,
       occupation,
       website,
-      profileImage,
-      coverImage,
+      profilepicture,
+      coverpicture,
     } = req.body;
 
     const updateData = {};
@@ -113,8 +117,8 @@ exports.updateUserProfile = async (req, res) => {
     if (hometown) updateData.hometown = hometown;
     if (occupation) updateData.occupation = occupation;
     if (website) updateData.website = website;
-    if (profileImage) updateData.profileImage = profileImage;
-    if (coverImage) updateData.coverImage = coverImage;
+    if (profilepicture) updateData.profilepicture = profilepicture;
+    if (coverpicture) updateData.coverpicture = coverpicture;
 
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
