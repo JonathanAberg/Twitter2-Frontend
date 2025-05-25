@@ -49,6 +49,8 @@ exports.registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     }
+    console.log("Files:", req.files);
+    console.log("Body:", req.body);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -225,5 +227,31 @@ exports.isFollowing = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+exports.updateUserInfo = async (req, res) => {
+  try {
+    const { hometown, about } = req.body;
+    const { id } = req.params;
+
+    const profilePic = req.files["profilepicture"]?.[0]?.path;
+    const coverPic = req.files["coverpicture"]?.[0]?.path;
+
+    const updatedFields = {
+      hometown,
+      about,
+    };
+
+    if (profilePic) updatedFields.profilepicture = profilePic;
+    if (coverPic) updatedFields.coverpicture = coverPic;
+
+    const user = await User.findByIdAndUpdate(id, updatedFields, { new: true });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({ message: "User updated", user });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
   }
 };
