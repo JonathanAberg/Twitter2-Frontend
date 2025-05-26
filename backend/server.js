@@ -1,22 +1,31 @@
+const Tweet = require("./models/tweetModel");
+const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const tweetRoutes = require("./routes/tweetRoutes");
 
-require("dotenv").config();
+dotenv.config();
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
 app.use(express.urlencoded({ extended: true }));
+
 app.use(
   cors({
-    originf: "*",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.get("/api/alltweets", async (req, res) => {
+  const tweets = await Tweet.find().populate("user");
+  res.json(tweets);
+});
 
 app.use(express.json());
 
@@ -44,9 +53,12 @@ const connectDB = async () => {
 };
 
 connectDB();
+
 app.use("/uploads", express.static("uploads"));
 app.use("/api/users", userRoutes);
 app.use("/api/tweets", tweetRoutes);
+
+// Viktigt från main – CORS fallback
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
