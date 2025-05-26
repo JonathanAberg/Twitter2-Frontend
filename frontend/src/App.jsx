@@ -8,7 +8,7 @@ import LoginSelect from "./components/LoginSelect";
 import Register from "./components/Register";
 
 import "./styles/general.css";
-import { InfoCompelettion } from "./components/infoCompelettion";
+import { InfoCompletion } from "./components/infoCompletion";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
             <Route path="/home/:id" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
-            <Route path="/infoCompletion/:id" element={<InfoCompelettion />} />
+            <Route path="/infoCompletion/:id" element={<InfoCompletion />} />
           </Route>
         </Routes>
       </BrowserRouter>
