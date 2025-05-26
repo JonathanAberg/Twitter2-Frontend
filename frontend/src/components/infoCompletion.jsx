@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-export function InfoCompelettion() {
+export function InfoCompletion() {
   const [profilepicture, setProfilepicture] = useState(null);
   const [coverpicture, setCoverPicture] = useState(null);
   const [hometown, setHometown] = useState("");

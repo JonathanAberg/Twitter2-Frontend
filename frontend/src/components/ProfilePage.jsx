@@ -34,20 +34,17 @@ const ProfilePage = ({ id: propId }) => {
           setLoading(false);
           return;
         }
-        const token = localStorage.getItem("token");
 
+        const token = localStorage.getItem("token");
         if (!token) {
-          setError("Authentication required. Please log in.");
+          setError("Vänligen logga in igen"); // "Please log in again"
           setLoading(false);
+
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
           return;
         }
-
-        console.log(
-          "Fetching user data for ID:",
-          userId,
-          "with token:",
-          token.substring(0, 10) + "..."
-        );
 
         const response = await fetch(
           `http://localhost:5001/api/users/${userId}`,
@@ -59,10 +56,10 @@ const ProfilePage = ({ id: propId }) => {
         );
 
         if (response.status === 401) {
-          console.log("Auth token ogiltig, omdirigerar till inloggning");
+          console.log("Auth token invalid, redirecting to login page");
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          setError("Din session har gått ut. Vänligen logga in igen.");
+          setError("Din session har gått ut. Vänligen logga in igen."); // "Your session has expired. Please log in again."
 
           setTimeout(() => {
             window.location.href = "/login";
@@ -222,7 +219,9 @@ const ProfilePage = ({ id: propId }) => {
         ) : error ? (
           <div className="error">{error}</div>
         ) : filteredTweets && filteredTweets.length > 0 ? (
-          filteredTweets.map((tweet) => <Tweet key={tweet.id} tweet={tweet} />)
+          filteredTweets.map((tweet) => (
+            <Tweet key={tweet._id || tweet.id} tweet={tweet} />
+          ))
         ) : (
           <div className="no-tweets">
             No tweets to display for the "{activeTab}" section.
