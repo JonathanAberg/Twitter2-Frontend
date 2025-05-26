@@ -1,8 +1,31 @@
+import { useState, useEffect } from "react";
+
 import "../styles/aside.css";
 import { FiSearch, FiMoreHorizontal } from "react-icons/fi";
 import SuggestedUsers from "./SuggestedUsers";
 
 export function Aside() {
+  const [tweets, setTweets] = useState([]);
+  
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:5001/api/tweets", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Fel vid hämtning: " + res.status);
+      return res.json();
+    })
+    .then((data) => {
+      console.log("Tweets:", data);
+      setTweets(data);
+    })
+    .catch((err) => console.error(err));
+}, []);
+
   return (
     <div className="trends-aside-wrapper">
       <div className="search-wrapper">

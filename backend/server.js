@@ -1,3 +1,4 @@
+const Tweet = require("./models/Tweet");
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -9,15 +10,20 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-
 app.use(
   cors({
-    originf: "*",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+const PORT = process.env.PORT || 5000;
+app.get("/api/alltweets", async (req, res) => {
+  const tweets = await Tweet.find().populate("user");
+  res.json(tweets);
+
+});
 
 app.use(express.json());
 
