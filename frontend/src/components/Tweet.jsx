@@ -44,7 +44,7 @@ const Tweet = ({ tweet }) => {
       <div className="tweet-avatar">
         <img
           src={
-            tweet.user
+            tweet.user.profilepicture
               ? `http://localhost:5001/${tweet.user.profilepicture}`
               : profilePlaceholder
           }

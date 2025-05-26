@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import "../styles/ProfileHeader.css";
 import { useParams } from "react-router-dom";
-
+import profilePlaceholder from "../assets/profile-placeholder.jpg";
+import coverdefault from "../assets/coverdefault.jpg";
 const ProfileHeader = ({ user, onProfileUpdate }) => {
   const { id: viewedUserId } = useParams();
   const currentUserId = localStorage.getItem("userId");
@@ -11,12 +12,12 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
-  const profilepic = user?.profilepicture
+  const profilepic = user?.profilepicture.trim()
     ? `http://localhost:5001/${user.profilepicture}`
     : null;
-  const coverpic = user?.coverpicture
+  const coverpic = user?.coverpicture.trim()
     ? `http://localhost:5001/${user.coverpicture}`
-    : null;
+    : coverdefault;
   console.log("Profile pic:", user?.profilepicture);
 
   useEffect(() => {
@@ -84,9 +85,15 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       )}
       <div className="profile-info">
         <div className="avatar-container">
-          {profilepic && (
-            <img src={profilepic} alt={"User"} className="profile-avatar" />
-          )}
+          <img
+            src={profilepic}
+            alt="User"
+            className="profile-avatar"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = profilePlaceholder;
+            }}
+          />
         </div>
         <div className="user-actions">
           {viewedUserId === currentUserId ? (
