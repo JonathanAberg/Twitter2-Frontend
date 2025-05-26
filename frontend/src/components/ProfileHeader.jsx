@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 const ProfileHeader = ({ user, onProfileUpdate }) => {
   const { id: viewedUserId } = useParams();
   const currentUserId = localStorage.getItem("userId");
+  console.log("viewedUserId:", viewedUserId);
+  console.log("currentUserId:", currentUserId);
   const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
@@ -111,7 +113,7 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           <div className="user-metadata">
             <p>
               <i className="fas fa-map-marker-alt"></i>{" "}
-              {user.location || "Earth"}
+              {user.hometown ? user.hometown : "Earth"}
             </p>
             <p>
               <i className="fas fa-calendar-alt"></i> Joined {user.joinDate}
