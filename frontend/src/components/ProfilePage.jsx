@@ -78,7 +78,8 @@ const ProfilePage = ({ id: propId }) => {
           name: data.name,
           username: data.nickname || data.name,
           bio: data.about || "",
-          profileImage: data.profileImage || "https://placehold.co/150x150",
+          profileImage:
+            data.profileImage || "/src/assets/profile-placeholder.jpg",
           coverImage: data.coverImage || "/src/assets/default-cover.jpg",
           following: data.following?.length || 0,
           followers: data.followers?.length || 0,
@@ -130,38 +131,67 @@ const ProfilePage = ({ id: propId }) => {
   }, [userData?.id]);
 
   useEffect(() => {
-    if (!tweets.length) {
-      setFilteredTweets([]);
-      return;
-    }
+    const fetchLikedTweets = async () => {
+      if (activeTab !== "likes") return;
 
-    try {
-      switch (activeTab) {
-        case "tweets":
-          setFilteredTweets(tweets.filter((tweet) => !tweet.isReply));
-          break;
-        case "replies":
-          setFilteredTweets(tweets.filter((tweet) => tweet.isReply));
-          break;
-        case "media":
-          setFilteredTweets(tweets.filter((tweet) => tweet.hasMedia));
-          break;
-        case "likes":
-          setFilteredTweets(
-            tweets.filter(
-              (tweet) => userData?.likes && userData.likes.includes(tweet.id)
-            )
-          );
-          break;
-        default:
-          setFilteredTweets([]);
-          break;
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+
+        if (!token || !userData?.id) return;
+
+        const response = await fetch(
+          `http://localhost:5001/api/tweets/liked/${userData.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch liked tweets");
+        }
+
+        const data = await response.json();
+        setFilteredTweets(data);
+      } catch (err) {
+        console.error("Error fetching liked tweets:", err);
+        setError("Failed to load liked tweets");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error filtering tweets:", error);
-      setFilteredTweets([]);
+    };
+
+    if (activeTab === "likes") {
+      fetchLikedTweets();
+    } else {
+      if (!tweets.length) {
+        setFilteredTweets([]);
+        return;
+      }
+
+      try {
+        switch (activeTab) {
+          case "tweets":
+            setFilteredTweets(tweets.filter((tweet) => !tweet.isReply));
+            break;
+          case "replies":
+            setFilteredTweets(tweets.filter((tweet) => tweet.isReply));
+            break;
+          case "media":
+            setFilteredTweets(tweets.filter((tweet) => tweet.hasMedia));
+            break;
+          default:
+            setFilteredTweets([]);
+            break;
+        }
+      } catch (error) {
+        console.error("Error filtering tweets:", error);
+        setFilteredTweets([]);
+      }
     }
-  }, [activeTab, tweets, userData.likes]);
+  }, [activeTab, tweets, userData.id]);
 
   const handleProfileUpdate = async (updatedProfile) => {
     try {

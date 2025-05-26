@@ -1,14 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/ProfileEditModal.css";
+
+const defaultProfileImage = "/src/assets/profile-placeholder.jpg";
+const defaultCoverImage = "/src/assets/default-cover.jpg";
 
 const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
   const [formData, setFormData] = useState({
     name: user.name || "",
-    bio: user.bio || "",
-    location: user.location || "",
-    profileImage: user.profileImage || "",
-    coverPhoto: user.coverImage || "",
+    bio: user.bio || user.about || "",
+    location: user.location || user.hometown || "",
   });
+
+  const [profileFile, setProfileFile] = useState(null);
+  const [coverFile, setCoverFile] = useState(null);
+
+  const [profilePreview, setProfilePreview] = useState(
+    user.profileImage || defaultProfileImage
+  );
+  const [coverPreview, setCoverPreview] = useState(
+    user.coverPhoto || user.coverImage || defaultCoverImage
+  );
+
+  useEffect(() => {
+    setFormData({
+      name: user.name || "",
+      bio: user.bio || user.about || "",
+      location: user.location || user.hometown || "",
+    });
+
+    setProfilePreview(user.profileImage || defaultProfileImage);
+    setCoverPreview(user.coverPhoto || user.coverImage || defaultCoverImage);
+  }, [user]);
 
   if (!isOpen) return null;
 
@@ -20,10 +42,57 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      const file = files[0];
+      const previewUrl = URL.createObjectURL(file);
+
+      if (name === "profileImage") {
+        setProfileFile(file);
+        setProfilePreview(previewUrl);
+      } else if (name === "coverPhoto") {
+        setCoverFile(file);
+        setCoverPreview(previewUrl);
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
-    onClose();
+
+    const formDataToSubmit = new FormData();
+
+    formDataToSubmit.append("name", formData.name);
+    formDataToSubmit.append("about", formData.bio);
+    formDataToSubmit.append("hometown", formData.location);
+
+    if (profileFile) {
+      formDataToSubmit.append("profileImage", profileFile);
+    }
+
+    if (coverFile) {
+      formDataToSubmit.append("coverImage", coverFile);
+    }
+
+    await onSave(formDataToSubmit, { isFormData: true });
+
+    if (
+      profilePreview &&
+      profilePreview !== user.profileImage &&
+      profilePreview !== defaultProfileImage
+    ) {
+      URL.revokeObjectURL(profilePreview);
+    }
+
+    if (
+      coverPreview &&
+      coverPreview !== user.coverImage &&
+      coverPreview !== user.coverPhoto &&
+      coverPreview !== defaultCoverImage
+    ) {
+      URL.revokeObjectURL(coverPreview);
+    }
   };
 
   return (
@@ -35,29 +104,51 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
             &times;
           </button>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="form-group">
-            <label htmlFor="coverPhoto">Cover Photo URL</label>
+            <label htmlFor="coverPhoto">Cover Photo</label>
+            <div className="image-preview-container">
+              <img
+                src={coverPreview}
+                alt="Cover preview"
+                className="image-preview cover-preview"
+              />
+            </div>
             <input
-              type="text"
+              type="file"
               id="coverPhoto"
               name="coverPhoto"
-              value={formData.coverPhoto}
-              onChange={handleChange}
-              placeholder="Cover photo URL"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="file-input"
             />
+            <label htmlFor="coverPhoto" className="file-label">
+              Choose new cover photo
+            </label>
           </div>
+
           <div className="form-group">
-            <label htmlFor="profileImage">Profile Image URL</label>
+            <label htmlFor="profileImage">Profile Image</label>
+            <div className="image-preview-container">
+              <img
+                src={profilePreview}
+                alt="Profile preview"
+                className="image-preview profile-preview"
+              />
+            </div>
             <input
-              type="text"
+              type="file"
               id="profileImage"
               name="profileImage"
-              value={formData.profileImage}
-              onChange={handleChange}
-              placeholder="Profile image URL"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="file-input"
             />
+            <label htmlFor="profileImage" className="file-label">
+              Choose new profile picture
+            </label>
           </div>
+
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
@@ -70,6 +161,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
               maxLength="50"
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="bio">Bio</label>
             <textarea
@@ -82,6 +174,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
               rows="3"
             ></textarea>
           </div>
+
           <div className="form-group">
             <label htmlFor="location">Location</label>
             <input
@@ -94,6 +187,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
               maxLength="30"
             />
           </div>
+
           <div className="form-actions">
             <button type="button" className="cancel-button" onClick={onClose}>
               Cancel

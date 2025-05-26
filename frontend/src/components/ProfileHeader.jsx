@@ -50,16 +50,83 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
     }
   };
 
-  const handleEditProfile = () => {
-    setIsEditModalOpen(true);
+  const handleProfileUpdate = async (updatedProfile, options = {}) => {
+    try {
+      const token = localStorage.getItem("token");
+      const userId = user.id;
+
+      console.log(
+        "Updating profile with:",
+        options.isFormData ? "FormData" : "JSON"
+      );
+
+      let response;
+
+      if (options.isFormData) {
+        for (let pair of updatedProfile.entries()) {
+          console.log(pair[0] + ": " + pair[1]);
+        }
+
+        response = await fetch(`http://localhost:5001/api/users/${userId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: updatedProfile,
+        });
+      } else {
+        response = await fetch(`http://localhost:5001/api/users/${userId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: updatedProfile.name,
+            about: updatedProfile.bio,
+            hometown: updatedProfile.location,
+            profileImage: updatedProfile.profileImage,
+            coverImage: updatedProfile.coverPhoto,
+          }),
+        });
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Update failed:", response.status, errorData);
+        throw new Error("Failed to update profile");
+      }
+
+      const updatedUserData = await response.json();
+      console.log("Profile updated successfully:", updatedUserData);
+
+      const mappedUserData = {
+        id: updatedUserData._id,
+        name: updatedUserData.name,
+        username: updatedUserData.nickname,
+        bio: updatedUserData.about,
+        profileImage: updatedUserData.profileImage,
+        coverImage: updatedUserData.coverImage || updatedUserData.coverPhoto,
+        location: updatedUserData.hometown,
+        followers: updatedUserData.followers?.length || 0,
+        following: updatedUserData.following?.length || 0,
+        joinDate: user.joinDate,
+      };
+
+      setIsEditModalOpen(false);
+
+      onProfileUpdate(mappedUserData);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
   };
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleProfileUpdate = (updatedProfile) => {
-    onProfileUpdate(updatedProfile);
+  const handleEditProfile = () => {
+    setIsEditModalOpen(true);
   };
 
   return (
