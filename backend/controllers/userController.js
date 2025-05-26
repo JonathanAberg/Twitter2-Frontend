@@ -231,27 +231,28 @@ exports.isFollowing = async (req, res) => {
 };
 exports.updateUserInfo = async (req, res) => {
   try {
-    const { hometown, about } = req.body;
     const { id } = req.params;
+    const { hometown, about } = req.body;
 
-    const profilePic = req.files["profilepicture"]?.[0]?.path;
-    const coverPic = req.files["coverpicture"]?.[0]?.path;
-
-    const updatedFields = {
-      hometown,
-      about,
+    const updateData = {
+      ...(hometown && { hometown }),
+      ...(about && { about }),
     };
 
-    if (profilePic) updatedFields.profilepicture = profilePic;
-    if (coverPic) updatedFields.coverpicture = coverPic;
+    if (req.files?.profilepicture) {
+      updateData.profilepicture = req.files.profilepicture[0].filename;
+    }
 
-    const user = await User.findByIdAndUpdate(id, updatedFields, { new: true });
+    if (req.files?.coverpicture) {
+      updateData.coverpicture = req.files.coverpicture[0].filename;
+    }
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
 
-    res.status(200).json({ message: "User updated", user });
+    res.json(updatedUser);
   } catch (error) {
-    console.error("Update error:", error);
     res.status(500).json({ message: "Update failed", error: error.message });
   }
 };
