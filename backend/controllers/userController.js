@@ -19,6 +19,8 @@ exports.registerUser = async (req, res) => {
       hometown,
       website,
     } = req.body;
+    const profilePicturePath = req.files?.profilepicture?.[0]?.path;
+    const coverPicturePath = req.files?.coverpicture?.[0]?.path;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -34,6 +36,8 @@ exports.registerUser = async (req, res) => {
       occupation,
       hometown,
       website,
+      profilepicture: profilePicturePath,
+      coverpicture: coverPicturePath,
     });
 
     if (user) {
@@ -45,6 +49,8 @@ exports.registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     }
+    console.log("Files:", req.files);
+    console.log("Body:", req.body);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -103,8 +109,8 @@ exports.updateUserProfile = async (req, res) => {
       hometown,
       occupation,
       website,
-      profileImage,
-      coverImage,
+      profilepicture,
+      coverpicture,
     } = req.body;
 
     const updateData = {};
@@ -113,8 +119,8 @@ exports.updateUserProfile = async (req, res) => {
     if (hometown) updateData.hometown = hometown;
     if (occupation) updateData.occupation = occupation;
     if (website) updateData.website = website;
-    if (profileImage) updateData.profileImage = profileImage;
-    if (coverImage) updateData.coverImage = coverImage;
+    if (profilepicture) updateData.profilepicture = profilepicture;
+    if (coverpicture) updateData.coverpicture = coverpicture;
 
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
@@ -221,5 +227,32 @@ exports.isFollowing = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+exports.updateUserInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { hometown, about } = req.body;
+
+    const updateData = {
+      ...(hometown && { hometown }),
+      ...(about && { about }),
+    };
+
+    if (req.files?.profilepicture) {
+      updateData.profilepicture = req.files.profilepicture[0].filename;
+    }
+
+    if (req.files?.coverpicture) {
+      updateData.coverpicture = req.files.coverpicture[0].filename;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Update failed", error: error.message });
   }
 };

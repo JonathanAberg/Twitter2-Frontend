@@ -4,7 +4,7 @@ export function InfoCompletion() {
   const [profilepicture, setProfilepicture] = useState(null);
   const [coverpicture, setCoverPicture] = useState(null);
   const [hometown, setHometown] = useState("");
-  const [bio, setBio] = useState("");
+  const [about, setAbout] = useState("");
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -14,12 +14,19 @@ export function InfoCompletion() {
     formdata.append("profilepicture", profilepicture);
     formdata.append("coverpicture", coverpicture);
     formdata.append("hometown", hometown);
-    formdata.append("bio", bio);
+    formdata.append("about", about);
     try {
-      const response = await fetch("http://localhost:5001/api/users", {
-        method: "POST",
-        body: formdata,
-      });
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5001/api/users/${id}/fillInfo`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formdata,
+        }
+      );
       if (response.ok) {
         navigate(`/home/${id}`);
       }
@@ -55,12 +62,12 @@ export function InfoCompletion() {
             onChange={(e) => setHometown(e.target.value)}
           />
         </label>
-        <label htmlFor="bio">
-          Bio
+        <label htmlFor="about">
+          About
           <textarea
-            name="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            name="about"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
           ></textarea>
         </label>
         <input type="submit" value={"Submit"} />
