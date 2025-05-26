@@ -35,7 +35,7 @@ const createTweet = async (req, res) => {
       hashtags,
     });
 
-    await tweet.populate("user", "name nickname");
+    await tweet.populate("user", "name nickname profilepicture");
 
     res.status(201).json(tweet);
   } catch (error) {
@@ -52,7 +52,7 @@ const getTweets = async (req, res) => {
 
     const tweets = await Tweet.find({ user: { $in: following } })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname")
+      .populate("user", "name nickname profilepicture")
       .limit(50);
 
     res.json(tweets);
