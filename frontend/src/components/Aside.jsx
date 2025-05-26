@@ -62,7 +62,7 @@ function TrendTopic({ title, description, tweets }) {
       <div className="topic-container">
         <p className="trend-description">{description}</p>
         <strong className="topic">{title}</strong>
-        {tweets && <p className="tweets-amount">{tweets} Tweets</p>}
+        {tweets && <p className="tweets-amount">{tweets}</p>}
       </div>
       <FiMoreHorizontal className="lucide-ellipsis-icon" />
     </div>
