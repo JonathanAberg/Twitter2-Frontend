@@ -6,11 +6,11 @@ import SuggestedUsers from "./SuggestedUsers";
 
 export function Aside() {
   const [tweets, setTweets] = useState([]);
-  
+
 useEffect(() => {
   const token = localStorage.getItem("token");
 
-  fetch("http://localhost:5001/api/tweets", {
+  fetch("http://localhost:5001/api/alltweets", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
