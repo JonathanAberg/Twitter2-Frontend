@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import "../styles/ProfileEditModal.css";
 
-const defaultProfileImage = "/src/assets/profile-placeholder.jpg";
-const defaultCoverImage = "/src/assets/default-cover.jpg";
+import defaultProfileImageSrc from "../assets/profile-placeholder.jpg";
+import defaultCoverImageSrc from "../assets/default-cover.jpg";
+
+const defaultProfileImage = defaultProfileImageSrc;
+const defaultCoverImage = defaultCoverImageSrc;
 
 const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
   const [formData, setFormData] = useState({
@@ -15,10 +18,15 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
   const [coverFile, setCoverFile] = useState(null);
 
   const [profilePreview, setProfilePreview] = useState(
-    user.profileImage || defaultProfileImage
+    user.profilepicture
+      ? `http://localhost:5001/${user.profilepicture}`
+      : defaultProfileImage
   );
+
   const [coverPreview, setCoverPreview] = useState(
-    user.coverPhoto || user.coverImage || defaultCoverImage
+    user.coverpicture
+      ? `http://localhost:5001/${user.coverpicture}`
+      : defaultCoverImage
   );
 
   useEffect(() => {
@@ -28,8 +36,17 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
       location: user.location || user.hometown || "",
     });
 
-    setProfilePreview(user.profileImage || defaultProfileImage);
-    setCoverPreview(user.coverPhoto || user.coverImage || defaultCoverImage);
+    setProfilePreview(
+      user.profilepicture
+        ? `http://localhost:5001/${user.profilepicture}`
+        : defaultProfileImage
+    );
+
+    setCoverPreview(
+      user.coverpicture
+        ? `http://localhost:5001/${user.coverpicture}`
+        : defaultCoverImage
+    );
   }, [user]);
 
   if (!isOpen) return null;
@@ -44,6 +61,8 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
+    console.log("File input changed:", name);
+
     if (files && files[0]) {
       const file = files[0];
       const previewUrl = URL.createObjectURL(file);
@@ -51,15 +70,19 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
       if (name === "profileImage") {
         setProfileFile(file);
         setProfilePreview(previewUrl);
+        console.log("Profile image selected:", file.name);
       } else if (name === "coverPhoto") {
         setCoverFile(file);
         setCoverPreview(previewUrl);
+        console.log("Cover photo selected:", file.name);
       }
     }
   };
 
+  // Keep the handleSubmit function as it is, it's already correct:
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form data");
 
     const formDataToSubmit = new FormData();
 
@@ -68,30 +91,30 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
     formDataToSubmit.append("hometown", formData.location);
 
     if (profileFile) {
-      formDataToSubmit.append("profileImage", profileFile);
+      console.log("Adding profile picture to form data");
+      formDataToSubmit.append("profilepicture", profileFile);
     }
 
     if (coverFile) {
-      formDataToSubmit.append("coverImage", coverFile);
+      console.log("Adding cover picture to form data");
+      formDataToSubmit.append("coverpicture", coverFile);
     }
 
-    await onSave(formDataToSubmit, { isFormData: true });
+    try {
+      await onSave(formDataToSubmit, {
+        isFormData: true,
+        useUpdateInfoEndpoint: false,
+      });
 
-    if (
-      profilePreview &&
-      profilePreview !== user.profileImage &&
-      profilePreview !== defaultProfileImage
-    ) {
-      URL.revokeObjectURL(profilePreview);
-    }
+      if (profilePreview !== defaultProfileImage && profileFile) {
+        URL.revokeObjectURL(profilePreview);
+      }
 
-    if (
-      coverPreview &&
-      coverPreview !== user.coverImage &&
-      coverPreview !== user.coverPhoto &&
-      coverPreview !== defaultCoverImage
-    ) {
-      URL.revokeObjectURL(coverPreview);
+      if (coverPreview !== defaultCoverImage && coverFile) {
+        URL.revokeObjectURL(coverPreview);
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
     }
   };
 

@@ -63,19 +63,20 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       const token = localStorage.getItem("token");
       const userId = user.id;
 
+      let response;
+      let endpoint = `http://localhost:5001/api/users/${userId}`;
+
       console.log(
         "Updating profile with:",
         options.isFormData ? "FormData" : "JSON"
       );
-
-      let response;
 
       if (options.isFormData) {
         for (let pair of updatedProfile.entries()) {
           console.log(pair[0] + ": " + pair[1]);
         }
 
-        response = await fetch(`http://localhost:5001/api/users/${userId}`, {
+        response = await fetch(endpoint, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,7 +84,7 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           body: updatedProfile,
         });
       } else {
-        response = await fetch(`http://localhost:5001/api/users/${userId}`, {
+        response = await fetch(endpoint, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,14 +94,14 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
             name: updatedProfile.name,
             about: updatedProfile.bio,
             hometown: updatedProfile.location,
-            profileImage: updatedProfile.profileImage,
-            coverImage: updatedProfile.coverPhoto,
+            profilepicture: updatedProfile.profilepicture,
+            coverpicture: updatedProfile.coverpicture,
           }),
         });
       }
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.text();
         console.error("Update failed:", response.status, errorData);
         throw new Error("Failed to update profile");
       }
@@ -113,8 +114,8 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
         name: updatedUserData.name,
         username: updatedUserData.nickname,
         bio: updatedUserData.about,
-        profileImage: updatedUserData.profileImage,
-        coverImage: updatedUserData.coverImage || updatedUserData.coverPhoto,
+        profilepicture: updatedUserData.profilepicture,
+        coverpicture: updatedUserData.coverpicture,
         location: updatedUserData.hometown,
         followers: updatedUserData.followers?.length || 0,
         following: updatedUserData.following?.length || 0,
@@ -122,7 +123,6 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       };
 
       setIsEditModalOpen(false);
-
       onProfileUpdate(mappedUserData);
     } catch (err) {
       console.error("Error updating profile:", err);
