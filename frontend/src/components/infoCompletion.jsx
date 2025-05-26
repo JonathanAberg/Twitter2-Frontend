@@ -28,7 +28,7 @@ export function InfoCompletion() {
         }
       );
       if (response.ok) {
-        navigate(`/home/${id}`);
+        navigate(`/home/${id}`, { replace: true });
       }
     } catch (err) {
       console.error("failed to submit", err);
