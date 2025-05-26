@@ -103,15 +103,7 @@ exports.getUserProfile = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
   try {
-    const {
-      name,
-      about,
-      hometown,
-      occupation,
-      website,
-      profilepicture,
-      coverpicture,
-    } = req.body;
+    const { name, about, hometown, occupation, website } = req.body;
 
     const updateData = {};
     if (name) updateData.name = name;
@@ -119,19 +111,38 @@ exports.updateUserProfile = async (req, res) => {
     if (hometown) updateData.hometown = hometown;
     if (occupation) updateData.occupation = occupation;
     if (website) updateData.website = website;
-    if (profilepicture) updateData.profilepicture = profilepicture;
-    if (coverpicture) updateData.coverpicture = coverpicture;
+
+    if (req.files) {
+      console.log("Files received:", req.files);
+
+      if (req.files.profile) {
+        updateData.profilepicture = req.files.profile[0].path;
+      }
+
+      if (req.files.cover) {
+        updateData.coverpicture = req.files.cover[0].path;
+      }
+    } else if (req.file) {
+      console.log("Single file received:", req.file);
+
+      if (req.file.fieldname === "profilepicture") {
+        updateData.profilepicture = req.file.filename;
+      } else if (req.file.fieldname === "coverpicture") {
+        updateData.coverpicture = req.file.filename;
+      }
+    }
 
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     }).select("-password");
 
     if (!user) {
-      return res.status(404).json({ message: "Användare hittades inte" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.json(user);
   } catch (error) {
+    console.error("Error updating user profile:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

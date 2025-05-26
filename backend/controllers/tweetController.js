@@ -149,6 +149,19 @@ const unlikeTweet = async (req, res) => {
   }
 };
 
+const getLikedTweets = async (req, res) => {
+  try {
+    const userId = req.params.userId || req.user._id;
+    const likedTweets = await Tweet.find({ likes: userId })
+      .sort({ createdAt: -1 })
+      .populate("user", "name nickname profileImage");
+
+    res.json(likedTweets);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createTweet,
   getTweets,
@@ -157,4 +170,5 @@ module.exports = {
   getHashtagTweets,
   likeTweet,
   unlikeTweet,
+  getLikedTweets,
 };
