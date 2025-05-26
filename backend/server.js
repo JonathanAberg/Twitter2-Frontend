@@ -1,16 +1,15 @@
-const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const tweetRoutes = require("./routes/tweetRoutes");
 
-dotenv.config();
+require("dotenv").config();
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
-
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     originf: "*",
@@ -45,9 +44,13 @@ const connectDB = async () => {
 };
 
 connectDB();
-
+app.use("/uploads", express.static("uploads"));
 app.use("/api/users", userRoutes);
 app.use("/api/tweets", tweetRoutes);
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // or restrict it to frontend origin
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("Twitter API is running");
