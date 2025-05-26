@@ -11,6 +11,8 @@ import {
 } from "react-icons/fa";
 
 const Tweet = ({ tweet }) => {
+  console.log("tweet.user =", tweet.user);
+
   const [isLiked, setIsLiked] = useState(
     tweet.likes?.includes(localStorage.getItem("userId")) || false
   );
@@ -88,7 +90,11 @@ const Tweet = ({ tweet }) => {
     <div className="tweet">
       <div className="tweet-avatar">
         <img
-          src={tweet.user?.profileImage || profilePlaceholder}
+          src={
+            tweet.user
+              ? `http://localhost:5001/${tweet.user.profilepicture}`
+              : profilePlaceholder
+          }
           alt={`${tweet.user?.name}'s avatar`}
         />
       </div>

@@ -9,6 +9,14 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
+  const profilepic = user?.profilepicture
+    ? `http://localhost:5001/${user.profilepicture}`
+    : null;
+  const coverpic = user?.coverpicture
+    ? `http://localhost:5001/${user.coverpicture}`
+    : null;
+  console.log("Profile pic:", user?.profilepicture);
+
   useEffect(() => {
     const fetchFollowStatus = async () => {
       try {
@@ -131,23 +139,19 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
 
   return (
     <div className="profile-header">
-      <div
-        className="cover-photo"
-        style={{
-          backgroundImage: `url(${
-            user.coverPhoto ||
-            user.coverImage ||
-            "/src/assets/default-cover.jpg"
-          })`,
-        }}
-      ></div>
+      {coverpic && (
+        <div
+          className="cover-photo"
+          style={{
+            backgroundImage: `url(${coverpic})`,
+          }}
+        ></div>
+      )}
       <div className="profile-info">
         <div className="avatar-container">
-          <img
-            src={user.profileImage || "https://placehold.co/150x150"}
-            alt={user.name || "User"}
-            className="profile-avatar"
-          />
+          {profilepic && (
+            <img src={profilepic} alt={"User"} className="profile-avatar" />
+          )}
         </div>
         <div className="user-actions">
           {viewedUserId === currentUserId ? (

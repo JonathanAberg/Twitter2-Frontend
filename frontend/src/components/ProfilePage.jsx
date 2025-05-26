@@ -15,8 +15,8 @@ const ProfilePage = ({ id: propId }) => {
     name: "",
     username: "",
     bio: "",
-    profileImage: "",
-    coverImage: "",
+    profilepicture: "",
+    coverpicture: "",
     following: 0,
     followers: 0,
     joinDate: "",
@@ -78,9 +78,10 @@ const ProfilePage = ({ id: propId }) => {
           name: data.name,
           username: data.nickname || data.name,
           bio: data.about || "",
-          profileImage:
-            data.profileImage || "/src/assets/profile-placeholder.jpg",
-          coverImage: data.coverImage || "/src/assets/default-cover.jpg",
+
+          profilepicture: data.profilepicture || "https://placehold.co/150x150",
+          coverpicture: data.coverpicture || "/src/assets/default-cover.jpg",
+
           following: data.following?.length || 0,
           followers: data.followers?.length || 0,
           joinDate: new Date(data.createdAt).toLocaleDateString("en-US", {
@@ -210,8 +211,8 @@ const ProfilePage = ({ id: propId }) => {
             name: updatedProfile.name,
             about: updatedProfile.bio,
             hometown: updatedProfile.location,
-            profileImage: updatedProfile.profileImage,
-            coverImage: updatedProfile.coverPhoto,
+            profilepicture: updatedProfile.profilepicture,
+            coverpicture: updatedProfile.coverpicture,
           }),
         }
       );
@@ -225,8 +226,8 @@ const ProfilePage = ({ id: propId }) => {
         name: updatedProfile.name,
         bio: updatedProfile.bio,
         location: updatedProfile.location,
-        profileImage: updatedProfile.profileImage,
-        coverImage: updatedProfile.coverPhoto,
+        profilepicture: updatedProfile.profileImage,
+        coverpicture: updatedProfile.coverpicture,
       });
 
       console.log("ProfilePage: Profile updated successfully");
