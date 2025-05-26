@@ -6,6 +6,7 @@ import SuggestedUsers from "./SuggestedUsers";
 
 export function Aside() {
   const [tweets, setTweets] = useState([]);
+  const [trending, setTrending] = useState([]);
 
 useEffect(() => {
   const token = localStorage.getItem("token");
@@ -21,7 +22,21 @@ useEffect(() => {
     })
 .then((data) => {
   const sorted = [...data].sort((a, b) => b.likes.length - a.likes.length);
-  setTweets(sorted.slice(0, 5));
+  setTweets(sorted.slice(0, 4));
+
+  const hashtagCounts = {};
+
+sorted.forEach((tweet) => {
+  tweet.hashtags.forEach((tag) => {
+    hashtagCounts[tag] = (hashtagCounts[tag] || 0) + 1;
+  });
+});
+
+const trendingHashtags = Object.entries(hashtagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 4);
+
+setTrending(trendingHashtags);
 })
     .catch((err) => console.error(err));
 }, []);
@@ -33,27 +48,31 @@ return (
       <input id="search-field" type="text" placeholder="Search Twitter" />
     </div>
 
-    <div className="trends">
-      <h2 className="trends-aside-title">Trends for you</h2>
+<div className="trends">
+  <h2 className="trends-aside-title">Trending Tweets</h2>
 
-      {tweets.map((tweet) => (
-        <TrendTopic
-          key={tweet._id}
-          title={
-            tweet.content.length > 5
-              ? tweet.content.slice(0, 5) + "..."
-              : tweet.content
-          }
-          description={tweet.user?.nickname || "Unknown user"}
-          tweets={`${tweet.likes.length} likes`}
-        />
-      ))}
-    </div>
+  {tweets.map((tweet) => (
+    <TrendTopic
+      key={tweet._id}
+      title={tweet.content.length > 20 ? tweet.content.slice(0, 4) + "..." : tweet.content}
+      description={tweet.user?.nickname || "Unknown user"}
+      tweets={`${tweet.likes.length} likes`}
+    />
+  ))}
 
+  <h2 className="trends-aside-title">Trending Hashtags</h2>
+  {trending.map(([tag, count]) => (
+    <TrendTopic
+      key={tag}
+      title={`#${tag}`}
+      description="Trending hashtag"
+      tweets={`${count} tweets`}
+    />
+  ))}
+</div>
     <SuggestedUsers />
   </div>
 );
-
 }
 
 function TrendTopic({ title, description, tweets }) {
