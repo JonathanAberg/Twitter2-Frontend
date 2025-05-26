@@ -3,33 +3,110 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Login from "../../components/Login";
 
+global.fetch = vi.fn();
+global.localstorage = {
+  setItem: vi.fn(),
+  getItem: vi.fn(),
+};
+
 describe("Login Component", () => {
-  it("renders login form correctly", () => {
+  const renderLogin = () => {
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
+  };
 
-    expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /login/i })), toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it("handles form input changes", () => {
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
+  it("renders login form correctly", () => {
+    renderLogin();
+
+    expect(screen.getByAltText("Twitter Logo")).toBeInTheDocument();
+
+    expect(screen.getByText("Log in to Twitter ")).toBeInTheDocument();
+
+    expect(
+      screen.getByPlaceholderText("Enter your E-mail adress..")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByPlaceholderText("Enter your password details..")
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole("button", { name: "Login" })).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("Button", { name: "Forgot your password?" })
+    ).toBeInTheDocument();
+  });
+
+  it("handles successful login", async () => {
+    const mockUser = { _id: "123", token: "fake-token" };
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockUser),
+    });
+
+    renderLogin();
+
+    const emailInput = screen.getByPlaceholderText(
+      "Enter your E-mail adress.."
     );
+    const passwordInput = screen.getByPlaceholderText(
+      "Enter your password details.."
+    );
+    const submitButton = screen.getByRole("button", { name: "Login" });
 
-    const usernameInput = screen.getByPlaceholderText(/username/i);
-    const passwordInput = screen.getByPlaceholderText(/password/i);
-
-    fireEvent.change(usernameInput, { target: { value: "testuser" } });
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
+    fireEvent.click(submitButton);
 
-    expect(usernameInput.value).toBe("testuser");
-    expect(passwordInput.value).toBe("password123");
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCallWith(
+        "http://localhost:5001/api/users/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: "test@example.com",
+            password: "password123",
+          }),
+        }
+      );
+      expect(localStorage.setItem).toHaveBeenCalledWith("token", "fake-token");
+      expect(localStorage.setItem).toHaveBeenCalledWith("userId", "123");
+    });
+  });
+
+  it("handles failed login", async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: false,
+    });
+
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    renderLogin();
+
+    const emailInput = screen.getByPlaceholderText(
+      "Enter your E-mail adress.."
+    );
+    const passwordInput = screen.getByPlaceholderText(
+      "Enter your password details.."
+    );
+    const submitButton = screen.getByRole("button", { name: "Login" });
+
+    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "wrong-password" } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith("incorrect email or password");
+    });
+
+    alertSpy.mockRestore();
   });
 });
