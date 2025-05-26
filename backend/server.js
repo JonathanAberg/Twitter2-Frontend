@@ -48,7 +48,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/users", userRoutes);
 app.use("/api/tweets", tweetRoutes);
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // or restrict it to frontend origin
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 
