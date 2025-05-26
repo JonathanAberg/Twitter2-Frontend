@@ -65,7 +65,7 @@ const getTweetById = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id).populate(
       "user",
-      "name nickname"
+      "name nickname profilepicture"
     );
 
     if (!tweet) {
@@ -82,7 +82,7 @@ const getUserTweets = async (req, res) => {
   try {
     const tweets = await Tweet.find({ user: req.params.userId })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname");
+      .populate("user", "name nickname profilepicture");
 
     res.json(tweets);
   } catch (error) {
@@ -96,7 +96,7 @@ const getHashtagTweets = async (req, res) => {
 
     const tweets = await Tweet.find({ hashtags: hashtag })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname")
+      .populate("user", "name nickname profilepicture")
       .limit(50);
 
     res.json(tweets);
