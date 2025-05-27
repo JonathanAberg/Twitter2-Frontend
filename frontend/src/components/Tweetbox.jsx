@@ -5,7 +5,9 @@ import profilePlaceholder from "../assets/profile-placeholder.jpg";
 export function Tweetbox({ user, setUser, id, onTweetPosted }) {
   const [post, setPost] = useState("");
   const [isPosting, setIsPosting] = useState(false);
-
+  const profilepic = user?.profilepicture
+    ? `http://localhost:5001/uploads/${user.profilepicture}`
+    : null;
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!post.trim()) return;
@@ -39,10 +41,7 @@ export function Tweetbox({ user, setUser, id, onTweetPosted }) {
     <form className="tweetbox-wrapper" onSubmit={handleSubmit}>
       <div className="tweetbox-top-layer">
         <div className="user-pic">
-          <img
-            src={user?.profileImage || profilePlaceholder}
-            alt="Profile Picture"
-          />
+          {profilepic && <img src={profilepic} alt="Profile" />}
         </div>
         <input
           id="post-tweet-text-field"

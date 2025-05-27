@@ -11,6 +11,8 @@ router.get("/:id", tweetController.getTweetById);
 
 router.get("/user/:userId", tweetController.getUserTweets);
 
+router.get("/liked/:userId", tweetController.getLikedTweets);
+
 router.get("/hashtag/:tag", tweetController.getHashtagTweets);
 
 router.post("/:id/like", protect, tweetController.likeTweet);

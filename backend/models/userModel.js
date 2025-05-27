@@ -38,6 +38,8 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  profilepicture: { type: String, required: false },
+  coverpicture: { type: String, required: false },
 });
 
 userSchema.pre("save", async function (next) {

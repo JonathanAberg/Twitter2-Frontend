@@ -6,7 +6,7 @@ import TwitterLogo from "../assets/twitter-logo.svg";
 const Login = () => {
   const navigate = useNavigate();
   const goHome = (id) => {
-    navigate(`/home/${id}`);
+    navigate(`/home/${id}`, { replace: true });
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,9 +25,10 @@ const Login = () => {
       const user = await res.json();
       localStorage.setItem("token", user.token);
       localStorage.setItem("userId", user._id);
+      console.log("Login successfull for user:", user.name || user.email);
       goHome(user._id);
-      console.log("good ");
     } catch (err) {
+      console.error("Login error:", err);
       alert("Login failed. Try again.", err);
     }
   };

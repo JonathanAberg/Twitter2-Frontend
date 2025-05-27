@@ -35,7 +35,7 @@ const createTweet = async (req, res) => {
       hashtags,
     });
 
-    await tweet.populate("user", "name nickname");
+    await tweet.populate("user", "name nickname profilepicture");
 
     res.status(201).json(tweet);
   } catch (error) {
@@ -52,7 +52,7 @@ const getTweets = async (req, res) => {
 
     const tweets = await Tweet.find({ user: { $in: following } })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname")
+      .populate("user", "name nickname profilepicture")
       .limit(50);
 
     res.json(tweets);
@@ -65,7 +65,7 @@ const getTweetById = async (req, res) => {
   try {
     const tweet = await Tweet.findById(req.params.id).populate(
       "user",
-      "name nickname"
+      "name nickname profilepicture"
     );
 
     if (!tweet) {
@@ -82,7 +82,7 @@ const getUserTweets = async (req, res) => {
   try {
     const tweets = await Tweet.find({ user: req.params.userId })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname");
+      .populate("user", "name nickname profilepicture");
 
     res.json(tweets);
   } catch (error) {
@@ -96,7 +96,7 @@ const getHashtagTweets = async (req, res) => {
 
     const tweets = await Tweet.find({ hashtags: hashtag })
       .sort({ createdAt: -1 })
-      .populate("user", "name nickname")
+      .populate("user", "name nickname profilepicture")
       .limit(50);
 
     res.json(tweets);
@@ -149,6 +149,19 @@ const unlikeTweet = async (req, res) => {
   }
 };
 
+const getLikedTweets = async (req, res) => {
+  try {
+    const userId = req.params.userId || req.user._id;
+    const likedTweets = await Tweet.find({ likes: userId })
+      .sort({ createdAt: -1 })
+      .populate("user", "name nickname profileImage");
+
+    res.json(likedTweets);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createTweet,
   getTweets,
@@ -157,4 +170,5 @@ module.exports = {
   getHashtagTweets,
   likeTweet,
   unlikeTweet,
+  getLikedTweets,
 };

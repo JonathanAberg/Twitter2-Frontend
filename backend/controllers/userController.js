@@ -19,6 +19,8 @@ exports.registerUser = async (req, res) => {
       hometown,
       website,
     } = req.body;
+    const profilePicturePath = req.files?.profilepicture?.[0]?.path;
+    const coverPicturePath = req.files?.coverpicture?.[0]?.path;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -34,6 +36,8 @@ exports.registerUser = async (req, res) => {
       occupation,
       hometown,
       website,
+      profilepicture: profilePicturePath,
+      coverpicture: coverPicturePath,
     });
 
     if (user) {
@@ -45,6 +49,8 @@ exports.registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     }
+    console.log("Files:", req.files);
+    console.log("Body:", req.body);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -97,15 +103,7 @@ exports.getUserProfile = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
   try {
-    const {
-      name,
-      about,
-      hometown,
-      occupation,
-      website,
-      profileImage,
-      coverImage,
-    } = req.body;
+    const { name, about, hometown, occupation, website } = req.body;
 
     const updateData = {};
     if (name) updateData.name = name;
@@ -113,19 +111,38 @@ exports.updateUserProfile = async (req, res) => {
     if (hometown) updateData.hometown = hometown;
     if (occupation) updateData.occupation = occupation;
     if (website) updateData.website = website;
-    if (profileImage) updateData.profileImage = profileImage;
-    if (coverImage) updateData.coverImage = coverImage;
+
+    if (req.files) {
+      console.log("Files received:", req.files);
+
+      if (req.files.profile) {
+        updateData.profilepicture = req.files.profile[0].path;
+      }
+
+      if (req.files.cover) {
+        updateData.coverpicture = req.files.cover[0].path;
+      }
+    } else if (req.file) {
+      console.log("Single file received:", req.file);
+
+      if (req.file.fieldname === "profilepicture") {
+        updateData.profilepicture = req.file.filename;
+      } else if (req.file.fieldname === "coverpicture") {
+        updateData.coverpicture = req.file.filename;
+      }
+    }
 
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     }).select("-password");
 
     if (!user) {
-      return res.status(404).json({ message: "Användare hittades inte" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.json(user);
   } catch (error) {
+    console.error("Error updating user profile:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -221,5 +238,32 @@ exports.isFollowing = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+exports.updateUserInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { hometown, about } = req.body;
+
+    const updateData = {
+      ...(hometown && { hometown }),
+      ...(about && { about }),
+    };
+
+    if (req.files?.profilepicture) {
+      updateData.profilepicture = req.files.profilepicture[0].filename;
+    }
+
+    if (req.files?.coverpicture) {
+      updateData.coverpicture = req.files.coverpicture[0].filename;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Update failed", error: error.message });
   }
 };

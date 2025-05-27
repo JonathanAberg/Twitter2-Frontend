@@ -15,8 +15,9 @@ const ProfilePage = ({ id: propId }) => {
     name: "",
     username: "",
     bio: "",
-    profileImage: "",
-    coverImage: "",
+    hometown: "",
+    profilepicture: "",
+    coverpicture: "",
     following: 0,
     followers: 0,
     joinDate: "",
@@ -34,20 +35,17 @@ const ProfilePage = ({ id: propId }) => {
           setLoading(false);
           return;
         }
-        const token = localStorage.getItem("token");
 
+        const token = localStorage.getItem("token");
         if (!token) {
-          setError("Authentication required. Please log in.");
+          setError("Vänligen logga in igen"); // "Please log in again"
           setLoading(false);
+
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
           return;
         }
-
-        console.log(
-          "Fetching user data for ID:",
-          userId,
-          "with token:",
-          token.substring(0, 10) + "..."
-        );
 
         const response = await fetch(
           `http://localhost:5001/api/users/${userId}`,
@@ -59,10 +57,10 @@ const ProfilePage = ({ id: propId }) => {
         );
 
         if (response.status === 401) {
-          console.log("Auth token ogiltig, omdirigerar till inloggning");
+          console.log("Auth token invalid, redirecting to login page");
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          setError("Din session har gått ut. Vänligen logga in igen.");
+          setError("Din session har gått ut. Vänligen logga in igen."); // "Your session has expired. Please log in again."
 
           setTimeout(() => {
             window.location.href = "/login";
@@ -81,8 +79,12 @@ const ProfilePage = ({ id: propId }) => {
           name: data.name,
           username: data.nickname || data.name,
           bio: data.about || "",
-          profileImage: data.profileImage || "https://placehold.co/150x150",
-          coverImage: data.coverImage || "/src/assets/default-cover.jpg",
+
+          hometown: data.hometown,
+
+          profilepicture: data.profilepicture || "https://placehold.co/150x150",
+          coverpicture: data.coverpicture || "/src/assets/default-cover.jpg",
+
           following: data.following?.length || 0,
           followers: data.followers?.length || 0,
           joinDate: new Date(data.createdAt).toLocaleDateString("en-US", {
@@ -133,38 +135,67 @@ const ProfilePage = ({ id: propId }) => {
   }, [userData?.id]);
 
   useEffect(() => {
-    if (!tweets.length) {
-      setFilteredTweets([]);
-      return;
-    }
+    const fetchLikedTweets = async () => {
+      if (activeTab !== "likes") return;
 
-    try {
-      switch (activeTab) {
-        case "tweets":
-          setFilteredTweets(tweets.filter((tweet) => !tweet.isReply));
-          break;
-        case "replies":
-          setFilteredTweets(tweets.filter((tweet) => tweet.isReply));
-          break;
-        case "media":
-          setFilteredTweets(tweets.filter((tweet) => tweet.hasMedia));
-          break;
-        case "likes":
-          setFilteredTweets(
-            tweets.filter(
-              (tweet) => userData?.likes && userData.likes.includes(tweet.id)
-            )
-          );
-          break;
-        default:
-          setFilteredTweets([]);
-          break;
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+
+        if (!token || !userData?.id) return;
+
+        const response = await fetch(
+          `http://localhost:5001/api/tweets/liked/${userData.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch liked tweets");
+        }
+
+        const data = await response.json();
+        setFilteredTweets(data);
+      } catch (err) {
+        console.error("Error fetching liked tweets:", err);
+        setError("Failed to load liked tweets");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error filtering tweets:", error);
-      setFilteredTweets([]);
+    };
+
+    if (activeTab === "likes") {
+      fetchLikedTweets();
+    } else {
+      if (!tweets.length) {
+        setFilteredTweets([]);
+        return;
+      }
+
+      try {
+        switch (activeTab) {
+          case "tweets":
+            setFilteredTweets(tweets.filter((tweet) => !tweet.isReply));
+            break;
+          case "replies":
+            setFilteredTweets(tweets.filter((tweet) => tweet.isReply));
+            break;
+          case "media":
+            setFilteredTweets(tweets.filter((tweet) => tweet.hasMedia));
+            break;
+          default:
+            setFilteredTweets([]);
+            break;
+        }
+      } catch (error) {
+        console.error("Error filtering tweets:", error);
+        setFilteredTweets([]);
+      }
     }
-  }, [activeTab, tweets, userData.likes]);
+  }, [activeTab, tweets, userData.id]);
 
   const handleProfileUpdate = async (updatedProfile) => {
     try {
@@ -183,8 +214,9 @@ const ProfilePage = ({ id: propId }) => {
             name: updatedProfile.name,
             about: updatedProfile.bio,
             hometown: updatedProfile.location,
-            profileImage: updatedProfile.profileImage,
-            coverImage: updatedProfile.coverPhoto,
+            profilepicture: updatedProfile.profilepicture,
+            coverpicture: updatedProfile.coverpicture,
+            hometown: updatedProfile.hometown,
           }),
         }
       );
@@ -198,8 +230,9 @@ const ProfilePage = ({ id: propId }) => {
         name: updatedProfile.name,
         bio: updatedProfile.bio,
         location: updatedProfile.location,
-        profileImage: updatedProfile.profileImage,
-        coverImage: updatedProfile.coverPhoto,
+        profilepicture: updatedProfile.profileImage,
+        coverpicture: updatedProfile.coverpicture,
+        hometown: updatedProfile.hometown,
       });
 
       console.log("ProfilePage: Profile updated successfully");
@@ -222,7 +255,9 @@ const ProfilePage = ({ id: propId }) => {
         ) : error ? (
           <div className="error">{error}</div>
         ) : filteredTweets && filteredTweets.length > 0 ? (
-          filteredTweets.map((tweet) => <Tweet key={tweet.id} tweet={tweet} />)
+          filteredTweets.map((tweet) => (
+            <Tweet key={tweet._id || tweet.id} tweet={tweet} />
+          ))
         ) : (
           <div className="no-tweets">
             No tweets to display for the "{activeTab}" section.

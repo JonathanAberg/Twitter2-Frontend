@@ -111,3 +111,53 @@ textarea {
 .cancel-button:hover {
   background-color: var(--hover-bg-color);
 }
+
+.image-preview-container {
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.image-preview {
+  max-width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+  overflow: hidden;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: var(--primary-color, #1da1f2);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.file-label:hover {
+  background-color: #0c85d0;
+}

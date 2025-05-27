@@ -1,5 +1,4 @@
-jonathanaberg/Developer/Grupparbete/Twitter2-Frontend/frontend/src/styles/auth-forms.css
-  .auth-form {
+.auth-form {
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -34,5 +33,3 @@ jonathanaberg/Developer/Grupparbete/Twitter2-Frontend/frontend/src/styles/auth-f
   border-radius: 4px;
   text-align: center;
 }
-
-/* Use Twitter-style buttons that are already defined in loginselect.css */
