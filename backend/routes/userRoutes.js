@@ -19,17 +19,16 @@ router.post("/", registerUser);
 router.post("/login", loginUser);
 
 router.put(
-  "/:id/fillInfo",
+  "/:id",
+  protect,
   upload.fields([
     { name: "profilepicture", maxCount: 1 },
     { name: "coverpicture", maxCount: 1 },
   ]),
-  updateUserInfo
+  updateUserProfile
 );
 router.get("/", protect, getUsers);
 router.get("/:id", protect, getUserProfile);
-
-router.put("/:id", protect, updateUserProfile);
 router.post("/:id/follow", protect, followUser);
 router.post("/:id/unfollow", protect, unfollowUser);
 router.get("/:id/isFollowing", protect, isFollowing);

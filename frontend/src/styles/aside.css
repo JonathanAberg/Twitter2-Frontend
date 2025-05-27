@@ -1,5 +1,5 @@
 .search-wrapper {
-padding: 1rem;
+padding: 0.5rem 1rem;
 background-color: #f1f1f1;
 border-radius: 24px;
 border: none;
@@ -13,6 +13,12 @@ display: flex;
     border: none;
     outline: none;
     }
+
+    .lucide-search-icon {
+        margin: auto;
+        height: 24px;
+        width: 24px;
+        }
 
 .tweets-amount {
     color: rgba(0, 0, 0, 0.6) 

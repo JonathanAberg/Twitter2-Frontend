@@ -1,45 +1,78 @@
+import { useState, useEffect } from "react";
+
 import "../styles/aside.css";
 import { FiSearch, FiMoreHorizontal } from "react-icons/fi";
 import SuggestedUsers from "./SuggestedUsers";
 
 export function Aside() {
-  return (
-    <div className="trends-aside-wrapper">
-      <div className="search-wrapper">
-        <FiSearch className="lucide-search-icon" />
-        <input id="search-field" type="text" placeholder="Search Twitter" />
-      </div>
-      <div className="trends">
-        <h2 className="trends-aside-title">Trends for you</h2>
-        <TrendTopic
-          title="Samt"
-          description="Trending in Sweden"
-          tweets="2,640"
-        />
-        <TrendTopic
-          title="China"
-          description="Politics Treding"
-          tweets="527K"
-        />
-        <TrendTopic
-          title="#Israel"
-          description="Trending in Sweden"
-          tweets="10.4K"
-        />
-        <TrendTopic
-          title="#babygirl"
-          description="Trending in Sweden"
-          tweets=""
-        />
-        <TrendTopic
-          title="Newroz"
-          description="Trending in Sweden"
-          tweets="60.4K"
-        />
-      </div>
-      <SuggestedUsers />
+  const [tweets, setTweets] = useState([]);
+  const [trending, setTrending] = useState([]);
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:5001/api/alltweets", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Fel vid hämtning: " + res.status);
+      return res.json();
+    })
+.then((data) => {
+  const sorted = [...data].sort((a, b) => b.likes.length - a.likes.length);
+  setTweets(sorted.slice(0, 4));
+
+  const hashtagCounts = {};
+
+sorted.forEach((tweet) => {
+  tweet.hashtags.forEach((tag) => {
+    hashtagCounts[tag] = (hashtagCounts[tag] || 0) + 1;
+  });
+});
+
+const trendingHashtags = Object.entries(hashtagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 4);
+
+setTrending(trendingHashtags);
+})
+    .catch((err) => console.error(err));
+}, []);
+
+return (
+  <div className="trends-aside-wrapper">
+    <div className="search-wrapper">
+      <FiSearch className="lucide-search-icon" />
+      <input id="search-field" type="text" placeholder="Search Twitter" />
     </div>
-  );
+
+<div className="trends">
+  <h2 className="trends-aside-title">Trending Tweets</h2>
+
+  {tweets.map((tweet) => (
+    <TrendTopic
+      key={tweet._id}
+      title={tweet.content.length > 20 ? tweet.content.slice(0, 4) + "..." : tweet.content}
+      description={tweet.user?.nickname || "Unknown user"}
+      tweets={`${tweet.likes.length} likes`}
+    />
+  ))}
+
+  <h2 className="trends-aside-title">Trending Hashtags</h2>
+  {trending.map(([tag, count]) => (
+    <TrendTopic
+      key={tag}
+      title={`#${tag}`}
+      description="Trending hashtag"
+      tweets={`${count} tweets`}
+    />
+  ))}
+</div>
+    <SuggestedUsers />
+  </div>
+);
 }
 
 function TrendTopic({ title, description, tweets }) {
@@ -48,7 +81,7 @@ function TrendTopic({ title, description, tweets }) {
       <div className="topic-container">
         <p className="trend-description">{description}</p>
         <strong className="topic">{title}</strong>
-        {tweets && <p className="tweets-amount">{tweets} Tweets</p>}
+        {tweets && <p className="tweets-amount">{tweets}</p>}
       </div>
       <FiMoreHorizontal className="lucide-ellipsis-icon" />
     </div>
