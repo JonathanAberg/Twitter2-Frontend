@@ -15,6 +15,7 @@ const ProfilePage = ({ id: propId }) => {
     name: "",
     username: "",
     bio: "",
+    hometown: "",
     profilepicture: "",
     coverpicture: "",
     following: 0,
@@ -78,6 +79,8 @@ const ProfilePage = ({ id: propId }) => {
           name: data.name,
           username: data.nickname || data.name,
           bio: data.about || "",
+
+          hometown: data.hometown,
 
           profilepicture: data.profilepicture || "https://placehold.co/150x150",
           coverpicture: data.coverpicture || "/src/assets/default-cover.jpg",
@@ -213,6 +216,7 @@ const ProfilePage = ({ id: propId }) => {
             hometown: updatedProfile.location,
             profilepicture: updatedProfile.profilepicture,
             coverpicture: updatedProfile.coverpicture,
+            hometown: updatedProfile.hometown,
           }),
         }
       );
@@ -228,6 +232,7 @@ const ProfilePage = ({ id: propId }) => {
         location: updatedProfile.location,
         profilepicture: updatedProfile.profileImage,
         coverpicture: updatedProfile.coverpicture,
+        hometown: updatedProfile.hometown,
       });
 
       console.log("ProfilePage: Profile updated successfully");

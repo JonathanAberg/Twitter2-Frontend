@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/ProfileEditModal.css";
 
 import defaultProfileImageSrc from "../assets/profile-placeholder.jpg";
-import defaultCoverImageSrc from "../assets/default-cover.jpg";
+import defaultCoverImageSrc from "../assets/coverdefault.jpg";
 
 const defaultProfileImage = defaultProfileImageSrc;
 const defaultCoverImage = defaultCoverImageSrc;

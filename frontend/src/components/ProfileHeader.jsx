@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import "../styles/ProfileHeader.css";
 import { useParams } from "react-router-dom";
-
+import profilePlaceholder from "../assets/profile-placeholder.jpg";
+import coverdefault from "../assets/coverdefault.jpg";
 const ProfileHeader = ({ user, onProfileUpdate }) => {
   const { id: viewedUserId } = useParams();
   const currentUserId = localStorage.getItem("userId");
+  console.log("viewedUserId:", viewedUserId);
+  console.log("currentUserId:", currentUserId);
   const token = localStorage.getItem("token");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
-  const profilepic = user?.profilepicture
-    ? `http://localhost:5001/${user.profilepicture}`
+  const profilepic = user?.profilepicture.trim()
+    ? `http://localhost:5001/uploads/${user.profilepicture}`
     : null;
-  const coverpic = user?.coverpicture
-    ? `http://localhost:5001/${user.coverpicture}`
-    : null;
+  const coverpic = user?.coverpicture.trim()
+    ? `http://localhost:5001/uploads/${user.coverpicture}`
+    : coverdefault;
   console.log("Profile pic:", user?.profilepicture);
 
   useEffect(() => {
@@ -149,9 +152,15 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       )}
       <div className="profile-info">
         <div className="avatar-container">
-          {profilepic && (
-            <img src={profilepic} alt={"User"} className="profile-avatar" />
-          )}
+          <img
+            src={profilepic}
+            alt="User"
+            className="profile-avatar"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = profilePlaceholder;
+            }}
+          />
         </div>
         <div className="user-actions">
           {viewedUserId === currentUserId ? (
@@ -178,7 +187,7 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           <div className="user-metadata">
             <p>
               <i className="fas fa-map-marker-alt"></i>{" "}
-              {user.location || "Earth"}
+              {user.hometown ? user.hometown : "Earth"}
             </p>
             <p>
               <i className="fas fa-calendar-alt"></i> Joined {user.joinDate}

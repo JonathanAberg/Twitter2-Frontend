@@ -37,7 +37,7 @@ const Register = () => {
         setError(data.message || "Registration failed");
         return;
       }
-
+      localStorage.setItem("userId", data._id || data.id);
       localStorage.setItem("token", data.token);
       setEmail("");
       setName("");

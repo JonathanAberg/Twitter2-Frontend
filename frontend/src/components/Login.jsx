@@ -6,7 +6,7 @@ import TwitterLogo from "../assets/twitter-logo.svg";
 const Login = () => {
   const navigate = useNavigate();
   const goHome = (id) => {
-    navigate(`/home/${id}`);
+    navigate(`/home/${id}`, { replace: true });
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

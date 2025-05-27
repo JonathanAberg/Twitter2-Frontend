@@ -91,8 +91,8 @@ const Tweet = ({ tweet }) => {
       <div className="tweet-avatar">
         <img
           src={
-            tweet.user
-              ? `http://localhost:5001/${tweet.user.profilepicture}`
+            tweet.user.profilepicture
+              ? `http://localhost:5001/uploads/${tweet.user.profilepicture}`
               : profilePlaceholder
           }
           alt={`${tweet.user?.name}'s avatar`}

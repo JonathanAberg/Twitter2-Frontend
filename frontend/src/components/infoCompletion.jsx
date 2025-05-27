@@ -17,18 +17,15 @@ export function InfoCompletion() {
     formdata.append("about", about);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5001/api/users/${id}/fillInfo`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formdata,
-        }
-      );
+      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formdata,
+      });
       if (response.ok) {
-        navigate(`/home/${id}`);
+        navigate(`/home/${id}`, { replace: true });
       }
     } catch (err) {
       console.error("failed to submit", err);

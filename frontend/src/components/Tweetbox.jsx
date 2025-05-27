@@ -6,7 +6,7 @@ export function Tweetbox({ user, setUser, id, onTweetPosted }) {
   const [post, setPost] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const profilepic = user?.profilepicture
-    ? `http://localhost:5001/${user.profilepicture}`
+    ? `http://localhost:5001/uploads/${user.profilepicture}`
     : null;
   const handleSubmit = async (e) => {
     e.preventDefault();
