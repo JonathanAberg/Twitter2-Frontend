@@ -1,36 +1,31 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import App from "../../App";
-import { MemoryRouter } from "react-router-dom";
-
-vi.mock("../../components/Login", () => ({
-  default: () => <div data-testid="login-component">Login Component</div>,
-}));
-
-vi.mock("../../components/LoginSelect", () => ({
-  default: () => (
-    <div data-testid="login-select-component">Login Select Component</div>
-  ),
-}));
 
 describe("App Component", () => {
-  it("navigates to login page correctly", () => {
-    render(
-      <MemoryRouter initialEntries={["/login"]}>
-        <App />
-      </MemoryRouter>
-    );
+  it("redirects to loginselect page on root path", () => {
+    render(<App />);
 
-    expect(screen.getByTestId("login-component")).toBeInTheDocument();
+    expect(window.location.pathname).toBe("/loginselect");
   });
 
-  it("redirects to login select page from root", () => {
-    render(
-      <MemoryRouter initialEntries={["/"]}>
-        <App />
-      </MemoryRouter>
-    );
+  it("contains all required routes", () => {
+    const { container } = render(<App />);
 
-    expect(screen.getByTestId("login-select-component")).toBeInTheDocument();
+    expect(container.innerHTML).toBeTruthy();
+
+    const routes = [
+      "/login",
+      "/loginselect",
+      "/register",
+      "/home/:id",
+      "/profile",
+      "/profile/:id",
+      "/infoCompletion/:id",
+    ];
+
+    routes.forEach((route) => {
+      expect(document.querySelector(`[path="${route}"]`)).toBeTruthy();
+    });
   });
 });
