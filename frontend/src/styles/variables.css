@@ -1,13 +1,23 @@
 :root {
-  --primary-color: #1da1f2;
-  --primary-hover-color: rgba(29, 161, 242, 0.1);
+  --primary-color: #1d9bf0;
   --secondary-color: #657786;
+  --background-color: #ffffff;
   --text-color: #14171a;
   --secondary-text-color: #657786;
-  --border-color: #e1e8ed;
-  --card-bg-color: #ffffff;
+  --border-color: #eff3f4;
   --hover-bg-color: rgba(0, 0, 0, 0.03);
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --like-color: #e0245e;
-  --retweet-color: #17bf63;
+  --bg-color: #ffffff;
+  --card-bg-color: #f7f9fa;
+}
+
+.dark {
+  --primary-color: #1d9bf0;
+  --secondary-color: #8899a6;
+  --background-color: #000000;
+  --text-color: #e7e9ea;
+  --secondary-text-color: #71767b;
+  --border-color: #2f3336;
+  --hover-bg-color: rgba(239, 243, 244, 0.1);
+  --bg-color: #000000;
+  --card-bg-color: #16181c;
 }

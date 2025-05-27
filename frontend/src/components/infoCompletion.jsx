@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "../styles/infoCompletion.css";
+
 export function InfoCompletion() {
   const [profilepicture, setProfilepicture] = useState(null);
   const [coverpicture, setCoverPicture] = useState(null);
@@ -32,8 +34,9 @@ export function InfoCompletion() {
     }
   };
   return (
-    <>
-      <form onSubmit={handleSubmit}>
+    <div className="info-completion-container">
+      <h2 className="info-completion-title">Complete Your Profile</h2>
+      <form className="info-completion-form" onSubmit={handleSubmit}>
         <label htmlFor="profilepicture">
           Profile Picture
           <input
@@ -67,13 +70,16 @@ export function InfoCompletion() {
             onChange={(e) => setAbout(e.target.value)}
           ></textarea>
         </label>
-        <input type="submit" value={"Submit"} />
+        <div className="info-completion-buttons">
+          <input
+            type="button"
+            onClick={() => navigate(`/home/${id}`)}
+            value="Skip"
+            className="skip-button"
+          />
+          <input type="submit" value="Submit" className="submit-button" />
+        </div>
       </form>
-      <input
-        type="button"
-        onClick={() => navigate(`/home/${id}`)}
-        value={"Skip"}
-      />
-    </>
+    </div>
   );
 }
