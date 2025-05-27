@@ -13,10 +13,10 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isfollowing, setIsfollowing] = useState(false);
   const profilepic = user?.profilepicture.trim()
-    ? `http://localhost:5001/${user.profilepicture}`
+    ? `http://localhost:5001/uploads/${user.profilepicture}`
     : null;
   const coverpic = user?.coverpicture.trim()
-    ? `http://localhost:5001/${user.coverpicture}`
+    ? `http://localhost:5001/uploads/${user.coverpicture}`
     : coverdefault;
   console.log("Profile pic:", user?.profilepicture);
 
