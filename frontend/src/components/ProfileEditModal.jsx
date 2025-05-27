@@ -21,7 +21,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
       setAbout(user.about || "");
       setHometown(user.hometown || "");
 
-      setProfilepicture(null); // reset file inputs
+      setProfilepicture(null);
       setCoverPicture(null);
 
       setProfilePreview(
@@ -83,7 +83,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
 
       if (response.ok) {
         console.log("Profile updated successfully");
-        onSave && onSave(); // trigger optional callback
+        onSave && onSave();
         onClose();
       }
     } catch (err) {
