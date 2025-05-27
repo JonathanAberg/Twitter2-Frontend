@@ -78,7 +78,7 @@ const ProfilePage = ({ id: propId }) => {
           id: data._id,
           name: data.name,
           username: data.nickname || data.name,
-          bio: data.about || "",
+          about: data.about || "",
 
           hometown: data.hometown,
 
@@ -212,7 +212,7 @@ const ProfilePage = ({ id: propId }) => {
           },
           body: JSON.stringify({
             name: updatedProfile.name,
-            about: updatedProfile.bio,
+            about: updatedProfile.about,
             hometown: updatedProfile.location,
             profilepicture: updatedProfile.profilepicture,
             coverpicture: updatedProfile.coverpicture,
@@ -228,7 +228,7 @@ const ProfilePage = ({ id: propId }) => {
       setUserData({
         ...userData,
         name: updatedProfile.name,
-        bio: updatedProfile.bio,
+        about: updatedProfile.about,
         location: updatedProfile.location,
         profilepicture: updatedProfile.profileImage,
         coverpicture: updatedProfile.coverpicture,

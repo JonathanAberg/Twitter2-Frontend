@@ -1,120 +1,93 @@
 import { useState, useEffect } from "react";
 import "../styles/ProfileEditModal.css";
-
 import defaultProfileImageSrc from "../assets/profile-placeholder.jpg";
 import defaultCoverImageSrc from "../assets/coverdefault.jpg";
-
-const defaultProfileImage = defaultProfileImageSrc;
-const defaultCoverImage = defaultCoverImageSrc;
+import { useParams } from "react-router-dom";
 
 const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
-  const [formData, setFormData] = useState({
-    name: user.name || "",
-    bio: user.bio || user.about || "",
-    location: user.location || user.hometown || "",
-  });
+  const [profilepicture, setProfilepicture] = useState(null);
+  const [coverpicture, setCoverPicture] = useState(null);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
+  const [hometown, setHometown] = useState("");
+  const [about, setAbout] = useState("");
+  const [name, setName] = useState("");
 
-  const [profileFile, setProfileFile] = useState(null);
-  const [coverFile, setCoverFile] = useState(null);
-
-  const [profilePreview, setProfilePreview] = useState(
-    user.profilepicture
-      ? `http://localhost:5001/${user.profilepicture}`
-      : defaultProfileImage
-  );
-
-  const [coverPreview, setCoverPreview] = useState(
-    user.coverpicture
-      ? `http://localhost:5001/${user.coverpicture}`
-      : defaultCoverImage
-  );
+  const { id } = useParams();
 
   useEffect(() => {
-    setFormData({
-      name: user.name || "",
-      bio: user.bio || user.about || "",
-      location: user.location || user.hometown || "",
-    });
+    if (user && isOpen) {
+      setName(user.name || "");
+      setAbout(user.about || "");
+      setHometown(user.hometown || "");
 
-    setProfilePreview(
-      user.profilepicture
-        ? `http://localhost:5001/${user.profilepicture}`
-        : defaultProfileImage
-    );
+      setProfilepicture(null);
+      setCoverPicture(null);
 
-    setCoverPreview(
-      user.coverpicture
-        ? `http://localhost:5001/${user.coverpicture}`
-        : defaultCoverImage
-    );
-  }, [user]);
+      setProfilePreview(
+        user.profilepicture
+          ? `http://localhost:5001/uploads/${user.profilepicture}`
+          : defaultProfileImageSrc
+      );
+
+      setCoverPreview(
+        user.coverpicture
+          ? `http://localhost:5001/uploads/${user.coverpicture}`
+          : defaultCoverImageSrc
+      );
+    }
+  }, [user, isOpen]);
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    console.log("File input changed:", name);
-
     if (files && files[0]) {
       const file = files[0];
       const previewUrl = URL.createObjectURL(file);
-
-      if (name === "profileImage") {
-        setProfileFile(file);
+      if (name === "profilepicture") {
+        setProfilepicture(file);
         setProfilePreview(previewUrl);
-        console.log("Profile image selected:", file.name);
-      } else if (name === "coverPhoto") {
-        setCoverFile(file);
+      } else if (name === "coverpicture") {
+        setCoverPicture(file);
         setCoverPreview(previewUrl);
-        console.log("Cover photo selected:", file.name);
       }
     }
   };
 
-  // Keep the handleSubmit function as it is, it's already correct:
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form data");
-
     const formDataToSubmit = new FormData();
 
-    formDataToSubmit.append("name", formData.name);
-    formDataToSubmit.append("about", formData.bio);
-    formDataToSubmit.append("hometown", formData.location);
+    formDataToSubmit.append("name", name);
+    formDataToSubmit.append("about", about);
+    formDataToSubmit.append("hometown", hometown);
 
-    if (profileFile) {
-      console.log("Adding profile picture to form data");
-      formDataToSubmit.append("profilepicture", profileFile);
+    if (profilepicture) {
+      formDataToSubmit.append("profilepicture", profilepicture);
     }
 
-    if (coverFile) {
-      console.log("Adding cover picture to form data");
-      formDataToSubmit.append("coverpicture", coverFile);
+    if (coverpicture) {
+      formDataToSubmit.append("coverpicture", coverpicture);
     }
 
     try {
-      await onSave(formDataToSubmit, {
-        isFormData: true,
-        useUpdateInfoEndpoint: false,
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formDataToSubmit,
       });
 
-      if (profilePreview !== defaultProfileImage && profileFile) {
-        URL.revokeObjectURL(profilePreview);
+      if (response.ok) {
+        console.log("Profile updated successfully");
+        onSave && onSave();
+        onClose();
       }
-
-      if (coverPreview !== defaultCoverImage && coverFile) {
-        URL.revokeObjectURL(coverPreview);
-      }
-    } catch (error) {
-      console.error("Error saving profile:", error);
+    } catch (err) {
+      console.error("Failed to submit", err);
     }
   };
 
@@ -140,7 +113,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
             <input
               type="file"
               id="coverPhoto"
-              name="coverPhoto"
+              name="coverpicture"
               accept="image/*"
               onChange={handleFileChange}
               className="file-input"
@@ -162,7 +135,7 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
             <input
               type="file"
               id="profileImage"
-              name="profileImage"
+              name="profilepicture"
               accept="image/*"
               onChange={handleFileChange}
               className="file-input"
@@ -178,20 +151,20 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
               type="text"
               id="name"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               maxLength="50"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="bio">Bio</label>
+            <label htmlFor="about">Bio</label>
             <textarea
               id="bio"
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
+              name="about"
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
               placeholder="Your bio"
               maxLength="160"
               rows="3"
@@ -199,13 +172,13 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="location">Location</label>
+            <label htmlFor="hometown">Location</label>
             <input
               type="text"
               id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
+              name="hometown"
+              value={hometown}
+              onChange={(e) => setHometown(e.target.value)}
               placeholder="Your location"
               maxLength="30"
             />
