@@ -6,6 +6,7 @@ export function SearchResult({ search }) {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [filterdusers, setFilterdusers] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     fetch("http://localhost:5001/api/users", {
@@ -18,9 +19,9 @@ export function SearchResult({ search }) {
     const searchUser = users.filter((user) =>
       user.name.toLowerCase().includes(search.toLowerCase())
     );
-
     setFilterdusers(searchUser);
   }, [search]);
+
   return (
     <>
       <ul className="searchlist">
