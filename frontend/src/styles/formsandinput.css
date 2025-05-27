@@ -40,6 +40,12 @@
     border: none;
     margin: 0 auto;
     font-weight: 700;
+    transition: 0.15s ease-in;
+}
+
+.login-btn:hover {
+    cursor: pointer;
+    background-color: #1d6ff2;;
 }
 
 .login-column {
