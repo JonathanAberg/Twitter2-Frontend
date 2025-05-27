@@ -162,6 +162,27 @@ const getLikedTweets = async (req, res) => {
   }
 };
 
+const deleteTweet = async (req, res) => {
+  try {
+    const tweetId = req.params.id;
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+    if (tweet.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this tweet" });
+    }
+
+    await Tweet.findByIdAndDelete(tweetId);
+    res.status(200).json({ message: "Tweet deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createTweet,
   getTweets,
@@ -171,4 +192,5 @@ module.exports = {
   likeTweet,
   unlikeTweet,
   getLikedTweets,
+  deleteTweet,
 };

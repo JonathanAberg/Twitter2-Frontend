@@ -27,6 +27,16 @@ const ProfilePage = ({ id: propId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleTweetDeleted = (deletedTweetId) => {
+    // Filter out the deleted tweet from both arrays
+    setTweets((prevTweets) =>
+      prevTweets.filter((tweet) => tweet._id !== deletedTweetId)
+    );
+    setFilteredTweets((prevTweets) =>
+      prevTweets.filter((tweet) => tweet._id !== deletedTweetId)
+    );
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -256,7 +266,11 @@ const ProfilePage = ({ id: propId }) => {
           <div className="error">{error}</div>
         ) : filteredTweets && filteredTweets.length > 0 ? (
           filteredTweets.map((tweet) => (
-            <Tweet key={tweet._id || tweet.id} tweet={tweet} />
+            <Tweet
+              key={tweet._id || tweet.id}
+              tweet={tweet}
+              onTweetDeleted={handleTweetDeleted}
+            />
           ))
         ) : (
           <div className="no-tweets">

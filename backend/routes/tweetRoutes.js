@@ -4,6 +4,7 @@ const tweetController = require("../controllers/tweetController");
 const { protect } = require("../middleware/authMiddleware");
 
 router.post("/", protect, tweetController.createTweet);
+router.delete("/:id", protect, tweetController.deleteTweet);
 
 router.get("/", protect, tweetController.getTweets);
 
