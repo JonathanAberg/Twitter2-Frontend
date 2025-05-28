@@ -15,7 +15,9 @@ const Footer = () => {
     <footer>
       <ShowCurrentProfile />
       <div className="theme-toggle-container">
-        <ThemeToggle />
+        <ThemeToggle>
+          Switch to dark/light mode
+        </ThemeToggle>
       </div>
       <div className="logout-select-box">
         <button className="logout-select" onClick={togglePopup}>
