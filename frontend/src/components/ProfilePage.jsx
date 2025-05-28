@@ -28,7 +28,7 @@ const ProfilePage = ({ id: propId }) => {
   const [error, setError] = useState(null);
 
   const handleTweetDeleted = (deletedTweetId) => {
-    // Filter out the deleted tweet from both arrays
+    
     setTweets((prevTweets) =>
       prevTweets.filter((tweet) => tweet._id !== deletedTweetId)
     );
@@ -48,7 +48,7 @@ const ProfilePage = ({ id: propId }) => {
 
         const token = localStorage.getItem("token");
         if (!token) {
-          setError("Vänligen logga in igen"); // "Please log in again"
+          setError("Vänligen logga in igen");
           setLoading(false);
 
           setTimeout(() => {
