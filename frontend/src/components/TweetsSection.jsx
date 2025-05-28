@@ -43,6 +43,23 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
   if (loading) return <div className="loading">Loading tweets...</div>;
   if (error) return <div className="error">{error}</div>;
 
+  const handleTweetDeleted = (deletedTweetId) => {
+    console.log("Removing tweet with ID:", deletedTweetId);
+
+    setTweets((prevTweets) => {
+      const updatedTweets = prevTweets.filter(
+        (tweet) => tweet._id !== deletedTweetId
+      );
+      console.log(
+        "Tweets before:",
+        prevTweets.length,
+        "Tweets after:",
+        updatedTweets.length
+      );
+      return updatedTweets;
+    });
+  };
+
   return (
     <div className="tweets-container">
       {tweets.length > 0 ? (
@@ -53,6 +70,7 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
               ...tweet,
               user: tweet.user || tweet.author || { name: "Unknown User" },
             }}
+            onTweetDeleted={handleTweetDeleted}
           />
         ))
       ) : (

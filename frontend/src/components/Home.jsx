@@ -1,11 +1,9 @@
 import { Tweetbox } from "./Tweetbox";
 import { TweetsSection } from "./TweetsSection";
 import Footer from "./Footer.jsx";
-import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Sidebar } from "../components/Sidebar.jsx";
 
 export function Home() {
   const [tweets, setTweets] = useState([]);
@@ -80,15 +78,8 @@ export function Home() {
   }, []);
 
   return (
-    <>
-      <h1
-        className="welcome-header"
-        style={{
-          padding: "10px 20px",
-          borderBottom: "1px solid #e6ecf0",
-          fontSize: "20px",
-        }}
-      >
+    <div className="home-content">
+      <h1 className="welcome-header">
         {loading
           ? "Loading..."
           : error
@@ -97,23 +88,17 @@ export function Home() {
           ? `Welcome, ${user.name}!`
           : "Welcome!"}
       </h1>
-      <div className="content-frame">
-        <Sidebar />
-        <div className="content-column">
-          <Tweetbox
-            user={user}
-            setUser={setUser}
-            id={id}
-            onTweetPosted={() => setShouldRefreshTweets(true)}
-          />
-          <TweetsSection
-            shouldRefresh={shouldRefreshTweets}
-            setShouldRefresh={setShouldRefreshTweets}
-          />
-        </div>
-        <Aside />
-      </div>
+      <Tweetbox
+        user={user}
+        setUser={setUser}
+        id={id}
+        onTweetPosted={() => setShouldRefreshTweets(true)}
+      />
+      <TweetsSection
+        shouldRefresh={shouldRefreshTweets}
+        setShouldRefresh={setShouldRefreshTweets}
+      />
       <Footer />
-    </>
+    </div>
   );
 }

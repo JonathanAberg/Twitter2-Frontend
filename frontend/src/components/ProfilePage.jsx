@@ -27,6 +27,16 @@ const ProfilePage = ({ id: propId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleTweetDeleted = (deletedTweetId) => {
+    // Filter out the deleted tweet from both arrays
+    setTweets((prevTweets) =>
+      prevTweets.filter((tweet) => tweet._id !== deletedTweetId)
+    );
+    setFilteredTweets((prevTweets) =>
+      prevTweets.filter((tweet) => tweet._id !== deletedTweetId)
+    );
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -78,7 +88,7 @@ const ProfilePage = ({ id: propId }) => {
           id: data._id,
           name: data.name,
           username: data.nickname || data.name,
-          bio: data.about || "",
+          about: data.about || "",
 
           hometown: data.hometown,
 
@@ -212,7 +222,7 @@ const ProfilePage = ({ id: propId }) => {
           },
           body: JSON.stringify({
             name: updatedProfile.name,
-            about: updatedProfile.bio,
+            about: updatedProfile.about,
             hometown: updatedProfile.location,
             profilepicture: updatedProfile.profilepicture,
             coverpicture: updatedProfile.coverpicture,
@@ -228,7 +238,7 @@ const ProfilePage = ({ id: propId }) => {
       setUserData({
         ...userData,
         name: updatedProfile.name,
-        bio: updatedProfile.bio,
+        about: updatedProfile.about,
         location: updatedProfile.location,
         profilepicture: updatedProfile.profileImage,
         coverpicture: updatedProfile.coverpicture,
@@ -256,7 +266,11 @@ const ProfilePage = ({ id: propId }) => {
           <div className="error">{error}</div>
         ) : filteredTweets && filteredTweets.length > 0 ? (
           filteredTweets.map((tweet) => (
-            <Tweet key={tweet._id || tweet.id} tweet={tweet} />
+            <Tweet
+              key={tweet._id || tweet.id}
+              tweet={tweet}
+              onTweetDeleted={handleTweetDeleted}
+            />
           ))
         ) : (
           <div className="no-tweets">
