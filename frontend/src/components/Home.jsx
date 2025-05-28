@@ -1,13 +1,9 @@
 import { Tweetbox } from "./Tweetbox";
 import { TweetsSection } from "./TweetsSection";
-import Footer from "./Footer.jsx";
+
 import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Aside } from "./Aside.jsx";
-import { Sidebar } from "../components/Sidebar.jsx";
-import { ShowCurrentProfile } from "./ShowCurrentProfile.jsx";
-
 
 export function Home() {
   const [tweets, setTweets] = useState([]);
@@ -94,7 +90,6 @@ export function Home() {
           : "Welcome!"}
       </h1>
       <div className="content-frame">
-        <Sidebar />
         <div className="content-column">
           <Tweetbox
             user={user}
