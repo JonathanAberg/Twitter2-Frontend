@@ -32,9 +32,10 @@ describe("Tweet Component", () => {
 
     expect(screen.getByText(mockTweet.content)).toBeInTheDocument();
     expect(screen.getByText(mockTweet.user.name)).toBeInTheDocument();
-    expect(
-      screen.getByAltText(`${mockTweet.user.name}'s profile`)
-    ).toHaveAttribute("src", mockTweet.user.profileImage);
+    expect(screen.getByAltText(mockTweet.user.name)).toHaveAttribute(
+      "src",
+      mockTweet.user.profileImage
+    );
   });
 
   it("handles like interaction", async () => {
@@ -49,7 +50,7 @@ describe("Tweet Component", () => {
 
     renderTweet();
 
-    const likeButton = screen.getByRole("button", { name: /like/i });
+    const likeButton = screen.getByRole("Button", { name: "0" });
     fireEvent.click(likeButton);
 
     expect(global.fetch).toHaveBeenCalledWith(

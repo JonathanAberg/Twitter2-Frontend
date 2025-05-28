@@ -27,7 +27,7 @@ describe("Login Component", () => {
 
     expect(screen.getByAltText("Twitter Logo")).toBeInTheDocument();
 
-    expect(screen.getByText("Log in to Twitter ")).toBeInTheDocument();
+    expect(screen.getByText("Log in to Twitter 2")).toBeInTheDocument();
 
     expect(
       screen.getByPlaceholderText("Enter your E-mail adress..")

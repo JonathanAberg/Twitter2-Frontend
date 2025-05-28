@@ -25,7 +25,7 @@ describe("App Component", () => {
     ];
 
     routes.forEach((route) => {
-      expect(document.querySelector(`[path="${route}"]`)).toBeTruthy();
+      expect(screen.getByTestId(`route-${route}`)).toBeInTheDocument();
     });
   });
 });
