@@ -10,7 +10,7 @@ export function ShowCurrentProfile({ user }) {
                         <img src={profilePlaceholder} alt="Profile Picture" />
                     </div>
                     <div className="profileinfo-text">
-                    <strong><p>{user.name}</p></strong>
+                    <strong>UserName</strong>
                     <p className="user-desc">@useruser1234</p>
                     </div>
                     </div>
