@@ -13,8 +13,8 @@ export function LogoutPopup({ onCancel }) {
     <div className="logout-wrapper">
       <div className="logo-container">
         <img src={TwitterLogo} alt="Twitter Logo" />
-        <h3>Log out of Twitter</h3>
       </div>
+        <h3>Log out of Twitter</h3>
       <div className="btn-wrapper">
         <button className="logout-btn" onClick={logout}>
           Log out
