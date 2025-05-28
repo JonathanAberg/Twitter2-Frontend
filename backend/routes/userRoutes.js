@@ -25,7 +25,7 @@ router.put(
     { name: "profilepicture", maxCount: 1 },
     { name: "coverpicture", maxCount: 1 },
   ]),
-  updateUserProfile
+  updateUserInfo
 );
 router.get("/", protect, getUsers);
 router.get("/:id", protect, getUserProfile);

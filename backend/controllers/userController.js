@@ -243,11 +243,12 @@ exports.isFollowing = async (req, res) => {
 exports.updateUserInfo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { hometown, about } = req.body;
+    const { hometown, about, name } = req.body;
 
     const updateData = {
       ...(hometown && { hometown }),
       ...(about && { about }),
+      ...(name && { name }),
     };
 
     if (req.files?.profilepicture) {

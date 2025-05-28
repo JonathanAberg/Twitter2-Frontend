@@ -1,201 +1,188 @@
 import { useState, useEffect } from "react";
 import "../styles/ProfileEditModal.css";
-
 import defaultProfileImageSrc from "../assets/profile-placeholder.jpg";
 import defaultCoverImageSrc from "../assets/coverdefault.jpg";
-
-const defaultProfileImage = defaultProfileImageSrc;
-const defaultCoverImage = defaultCoverImageSrc;
+import { useParams } from "react-router-dom";
+import { FaTimes, FaCamera } from "react-icons/fa";
 
 const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
-  const [formData, setFormData] = useState({
-    name: user.name || "",
-    bio: user.bio || user.about || "",
-    location: user.location || user.hometown || "",
-  });
+  const [profilepicture, setProfilepicture] = useState(null);
+  const [coverpicture, setCoverPicture] = useState(null);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
+  const [hometown, setHometown] = useState("");
+  const [about, setAbout] = useState("");
+  const [name, setName] = useState("");
 
-  const [profileFile, setProfileFile] = useState(null);
-  const [coverFile, setCoverFile] = useState(null);
+  const { id } = useParams();
 
-  const [profilePreview, setProfilePreview] = useState(
-    user.profilepicture
-      ? `http://localhost:5001/${user.profilepicture}`
-      : defaultProfileImage
-  );
-
-  const [coverPreview, setCoverPreview] = useState(
-    user.coverpicture
-      ? `http://localhost:5001/${user.coverpicture}`
-      : defaultCoverImage
-  );
+  const MAX_NAME_LENGTH = 50;
+  const MAX_BIO_LENGTH = 160;
+  const MAX_LOCATION_LENGTH = 30;
 
   useEffect(() => {
-    setFormData({
-      name: user.name || "",
-      bio: user.bio || user.about || "",
-      location: user.location || user.hometown || "",
-    });
+    if (user && isOpen) {
+      setName(user.name || "");
+      setAbout(user.about || "");
+      setHometown(user.hometown || "");
 
-    setProfilePreview(
-      user.profilepicture
-        ? `http://localhost:5001/${user.profilepicture}`
-        : defaultProfileImage
-    );
+      setProfilepicture(null);
+      setCoverPicture(null);
 
-    setCoverPreview(
-      user.coverpicture
-        ? `http://localhost:5001/${user.coverpicture}`
-        : defaultCoverImage
-    );
-  }, [user]);
+      setProfilePreview(
+        user.profilepicture
+          ? `http://localhost:5001/uploads/${user.profilepicture}`
+          : defaultProfileImageSrc
+      );
 
-  if (!isOpen) return null;
+      setCoverPreview(
+        user.coverpicture
+          ? `http://localhost:5001/uploads/${user.coverpicture}`
+          : defaultCoverImageSrc
+      );
+    }
+  }, [user, isOpen]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted with profile picture:", profilepicture);
+    console.log("Form submitted with cover picture:", coverpicture);
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("about", about);
+      formData.append("hometown", hometown);
+
+      if (profilepicture) {
+        formData.append("profilepicture", profilepicture);
+        console.log("Appending profilepicture:", profilepicture.name);
+      }
+
+      if (coverpicture) {
+        formData.append("coverpicture", coverpicture);
+        console.log("Appending coverpicture:", coverpicture.name);
+      }
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const updatedUserData = await response.json();
+        console.log("Server response:", updatedUserData);
+        const timestamp = new Date().getTime();
+
+        onSave({
+          name,
+          about,
+          hometown,
+          profilepicture: profilepicture,
+          coverpicture: coverpicture,
+        });
+
+        onClose();
+      } else {
+        const errorText = await response.text();
+        console.error("Server error:", response.status, errorText);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    console.log("File input changed:", name);
+    const file = files[0];
 
-    if (files && files[0]) {
-      const file = files[0];
-      const previewUrl = URL.createObjectURL(file);
-
-      if (name === "profileImage") {
-        setProfileFile(file);
-        setProfilePreview(previewUrl);
-        console.log("Profile image selected:", file.name);
-      } else if (name === "coverPhoto") {
-        setCoverFile(file);
-        setCoverPreview(previewUrl);
-        console.log("Cover photo selected:", file.name);
+    if (file) {
+      console.log(`Selected ${name} file:`, file.name);
+      const reader = new FileReader();
+      if (name === "profilepicture") {
+        setProfilepicture(file);
+        reader.onload = (e) => setProfilePreview(e.target.result);
+      } else if (name === "coverpicture") {
+        setCoverPicture(file);
+        reader.onload = (e) => setCoverPreview(e.target.result);
       }
+      reader.readAsDataURL(file);
     }
   };
 
-  // Keep the handleSubmit function as it is, it's already correct:
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Submitting form data");
-
-    const formDataToSubmit = new FormData();
-
-    formDataToSubmit.append("name", formData.name);
-    formDataToSubmit.append("about", formData.bio);
-    formDataToSubmit.append("hometown", formData.location);
-
-    if (profileFile) {
-      console.log("Adding profile picture to form data");
-      formDataToSubmit.append("profilepicture", profileFile);
-    }
-
-    if (coverFile) {
-      console.log("Adding cover picture to form data");
-      formDataToSubmit.append("coverpicture", coverFile);
-    }
-
-    try {
-      await onSave(formDataToSubmit, {
-        isFormData: true,
-        useUpdateInfoEndpoint: false,
-      });
-
-      if (profilePreview !== defaultProfileImage && profileFile) {
-        URL.revokeObjectURL(profilePreview);
-      }
-
-      if (coverPreview !== defaultCoverImage && coverFile) {
-        URL.revokeObjectURL(coverPreview);
-      }
-    } catch (error) {
-      console.error("Error saving profile:", error);
-    }
-  };
+  if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Edit Profile</h2>
-          <button className="close-button" onClick={onClose}>
-            &times;
+          <button onClick={onClose} className="close-button" aria-label="Close">
+            <FaTimes />
+          </button>
+          <h3 className="modal-title">Edit profile</h3>
+          <button
+            type="submit"
+            form="edit-profile-form"
+            className="header-save-button"
+          >
+            Save
           </button>
         </div>
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div className="form-group">
-            <label htmlFor="coverPhoto">Cover Photo</label>
-            <div className="image-preview-container">
-              <img
-                src={coverPreview}
-                alt="Cover preview"
-                className="image-preview cover-preview"
-              />
-            </div>
-            <input
-              type="file"
-              id="coverPhoto"
-              name="coverPhoto"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="file-input"
-            />
-            <label htmlFor="coverPhoto" className="file-label">
-              Choose new cover photo
+
+        <div className="cover-image-container">
+          <img src={coverPreview} alt="Cover" className="cover-image" />
+          <div className="image-upload-overlay">
+            <label htmlFor="coverPhoto" className="image-upload-button">
+              <FaCamera className="camera-icon" />
             </label>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="profileImage">Profile Image</label>
-            <div className="image-preview-container">
-              <img
-                src={profilePreview}
-                alt="Profile preview"
-                className="image-preview profile-preview"
-              />
-            </div>
-            <input
-              type="file"
-              id="profileImage"
-              name="profileImage"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="file-input"
-            />
-            <label htmlFor="profileImage" className="file-label">
-              Choose new profile picture
+        <div className="profile-image-container">
+          <img src={profilePreview} alt="Profile" className="profile-image" />
+          <div className="image-upload-overlay">
+            <label htmlFor="profileImage" className="image-upload-button">
+              <FaCamera className="camera-icon" />
             </label>
           </div>
+        </div>
 
+        <form id="edit-profile-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
               type="text"
               id="name"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value.slice(0, MAX_NAME_LENGTH))
+              }
               placeholder="Your name"
-              maxLength="50"
             />
+            <span className="character-count">
+              {name.length}/{MAX_NAME_LENGTH}
+            </span>
           </div>
 
           <div className="form-group">
             <label htmlFor="bio">Bio</label>
             <textarea
               id="bio"
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
+              name="about"
+              value={about}
+              onChange={(e) =>
+                setAbout(e.target.value.slice(0, MAX_BIO_LENGTH))
+              }
               placeholder="Your bio"
-              maxLength="160"
               rows="3"
             ></textarea>
+            <span className="character-count">
+              {about.length}/{MAX_BIO_LENGTH}
+            </span>
           </div>
 
           <div className="form-group">
@@ -203,22 +190,35 @@ const ProfileEditModal = ({ isOpen, onClose, user, onSave }) => {
             <input
               type="text"
               id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
+              name="hometown"
+              value={hometown}
+              onChange={(e) =>
+                setHometown(e.target.value.slice(0, MAX_LOCATION_LENGTH))
+              }
               placeholder="Your location"
-              maxLength="30"
             />
+            <span className="character-count">
+              {hometown.length}/{MAX_LOCATION_LENGTH}
+            </span>
           </div>
 
-          <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-button">
-              Save
-            </button>
-          </div>
+          <input
+            type="file"
+            id="profileImage"
+            name="profilepicture"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+
+          <input
+            type="file"
+            id="coverPhoto"
+            name="coverpicture"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
         </form>
       </div>
     </div>

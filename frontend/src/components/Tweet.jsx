@@ -8,9 +8,48 @@ import {
   FaRetweet,
   FaHeart,
   FaRegHeart,
+  FaTrash,
 } from "react-icons/fa";
 
-const Tweet = ({ tweet }) => {
+const Tweet = ({ tweet, onTweetDeleted }) => {
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this tweet?")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5001/api/tweets/${tweet._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("Tweet deleted successfully, updating UI...");
+
+        // This is the key part - call the callback to update the UI immediately
+        if (typeof onTweetDeleted === "function") {
+          onTweetDeleted(tweet._id);
+        } else {
+          console.warn("onTweetDeleted callback not provided");
+          window.location.reload(); // Fallback
+        }
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to delete tweet:", errorText);
+        alert("Failed to delete tweet. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting tweet:", error);
+      alert("An error occurred while deleting the tweet.");
+    }
+  };
+
   console.log("tweet.user =", tweet.user);
 
   const [isLiked, setIsLiked] = useState(
@@ -86,8 +125,12 @@ const Tweet = ({ tweet }) => {
     }
   };
 
+  const currentUserId = localStorage.getItem("userId");
+  const isAuthor = tweet.user?._id === currentUserId;
+
   return (
     <div className="tweet">
+      <small style={{ display: "none" }}>Tweet ID: {tweet._id}</small>
       <div className="tweet-avatar">
         <img
           src={
@@ -95,7 +138,7 @@ const Tweet = ({ tweet }) => {
               ? `http://localhost:5001/uploads/${tweet.user.profilepicture}`
               : profilePlaceholder
           }
-          alt={`${tweet.user?.name}'s avatar`}
+          alt={`${tweet.user?.name}`}
         />
       </div>
       <div className="tweet-content">
@@ -114,6 +157,15 @@ const Tweet = ({ tweet }) => {
               {formatDate(tweet.createdAt).exactTime}
             </div>
           </div>
+          {isAuthor && (
+            <button
+              className="tweet-delete-btn"
+              onClick={handleDelete}
+              title="Delete tweet"
+            >
+              <FaTrash />
+            </button>
+          )}
         </div>
         <div className="tweet-text">{tweet.content}</div>
         <div className="tweet-actions">

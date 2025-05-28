@@ -130,3 +130,22 @@
 .tweet-action.retweeted {
   color: var(--retweet-color);
 }
+
+.tweet-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tweet-delete-btn:hover {
+  color: #e0245e;
+  background-color: rgba(224, 36, 94, 0.1);
+}
