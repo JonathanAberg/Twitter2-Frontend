@@ -226,8 +226,7 @@ const ProfilePage = ({ id: propId }) => {
             hometown: updatedProfile.location,
             profilepicture: updatedProfile.profilepicture,
             coverpicture: updatedProfile.coverpicture,
-            hometown: updatedProfile.hometown,
-          }),
+            }),
         }
       );
 
