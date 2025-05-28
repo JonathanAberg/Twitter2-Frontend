@@ -8,7 +8,6 @@ import { Aside } from "./Aside.jsx";
 import { Sidebar } from "../components/Sidebar.jsx";
 import { ShowCurrentProfile } from "./ShowCurrentProfile.jsx";
 
-
 export function Home() {
   const [tweets, setTweets] = useState([]);
   const [user, setUser] = useState(null);
@@ -17,10 +16,32 @@ export function Home() {
   const { id } = useParams();
   const [shouldRefreshTweets, setShouldRefreshTweets] = useState(false);
 
-  const fetchTweets = () => {
-    fetch(`http://localhost:5001/api/tweets`)
-      .then((res) => res.json())
-      .then((data) => setTweets(data));
+  const fetchTweets = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        navigate("/login");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5001/api/tweets", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTweets(data);
+      } else {
+        console.error("Failed to fetch tweets");
+      }
+    } catch (error) {
+      console.error("Error fetching tweets:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -83,18 +104,16 @@ export function Home() {
 
   return (
     <>
-    <div className="home-content">
-      <h1 className="welcome-header">
-        {loading
-          ? "Loading..."
-          : error
-          ? error
-          : user
-          ? `Welcome, ${user.name}!`
-          : "Welcome!"}
-      </h1>
-      <div className="content-frame">
-        <Sidebar />
+      <div className="home-container">
+        <h1 className="welcome-header">
+          {loading
+            ? "Loading..."
+            : error
+            ? error
+            : user
+            ? `Welcome, ${user.name}!`
+            : "Welcome!"}
+        </h1>
         <div className="content-column">
           <Tweetbox
             user={user}
@@ -107,7 +126,10 @@ export function Home() {
             setShouldRefresh={setShouldRefreshTweets}
           />
         </div>
+<<<<<<< HEAD
       </div>
+=======
+>>>>>>> Jonathan
       </div>
     </>
   );
