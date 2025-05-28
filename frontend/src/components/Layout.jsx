@@ -24,15 +24,15 @@ useEffect(() => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        console.error("❌ Failed to fetch user:", res.status, errorData);
+        console.error("Failed to fetch user:", res.status, errorData);
         return;
       }
 
       const data = await res.json();
-      console.log("✅ Fetched user:", data);
+      console.log("Fetched user:", data);
       setUser(data);
     } catch (err) {
-      console.error("❌ Network or parsing error:", err);
+      console.error("Network or parsing error:", err);
     }
   };
 
