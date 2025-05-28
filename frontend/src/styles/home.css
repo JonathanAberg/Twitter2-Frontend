@@ -22,11 +22,11 @@
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.9); /* Dark background with opacity */
+  background-color: var(--bg-color); /* Changed from rgba(0, 0, 0, 0.9) */
   backdrop-filter: blur(12px);
   z-index: 10;
 }
 
 .dark .welcome-header {
-  background-color: rgba(0, 0, 0, 0.9); /* Updated for dark mode */
+  background-color: var(--bg-color); /* Updated for dark mode */
 }
