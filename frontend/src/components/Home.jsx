@@ -126,10 +126,6 @@ export function Home() {
             setShouldRefresh={setShouldRefreshTweets}
           />
         </div>
-<<<<<<< HEAD
-      </div>
-=======
->>>>>>> Jonathan
       </div>
     </>
   );
