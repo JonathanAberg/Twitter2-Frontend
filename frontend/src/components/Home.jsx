@@ -107,7 +107,6 @@ export function Home() {
             setShouldRefresh={setShouldRefreshTweets}
           />
         </div>
-        <Aside />
       </div>
       </div>
     </>

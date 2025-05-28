@@ -2,7 +2,7 @@
   margin: 0 auto;
   display: flex;
   min-height: 100vh;
-  width: 60%;
+  width: 50%;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
@@ -37,7 +37,7 @@
 
 .layout-footer {
   width: 100%;
-  height: 80px;
+  height: 70px;
 }
 
 @media (max-width: 1200px) {
