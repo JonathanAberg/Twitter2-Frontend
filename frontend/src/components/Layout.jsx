@@ -1,6 +1,8 @@
 import { Sidebar } from "./Sidebar.jsx";
 import { Aside } from "./Aside.jsx";
 import { Outlet } from "react-router-dom";
+import Footer from "./Footer.jsx"
+
 import "../styles/layout.css";
 
 const Layout = ({ children }) => {
@@ -17,6 +19,10 @@ const Layout = ({ children }) => {
 
       <div className="layout-aside">
         <Aside />
+      </div>
+
+      <div className="layout-footer">
+        <Footer />
       </div>
     </div>
   );

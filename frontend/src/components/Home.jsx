@@ -109,9 +109,6 @@ export function Home() {
         </div>
         <Aside />
       </div>
-      <Footer>
-        <ShowCurrentProfile user={user}/>
-      </Footer>
       </div>
     </>
   );
