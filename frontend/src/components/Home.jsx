@@ -94,7 +94,8 @@ export function Home() {
           : "Welcome!"}
       </h1>
       <div className="content-frame">
-                <div className="content-column">
+        <Sidebar />
+        <div className="content-column">
           <Tweetbox
             user={user}
             setUser={setUser}
@@ -106,9 +107,8 @@ export function Home() {
             setShouldRefresh={setShouldRefreshTweets}
           />
         </div>
-        <Aside />
       </div>
-     </div>
+      </div>
     </>
   );
 }
