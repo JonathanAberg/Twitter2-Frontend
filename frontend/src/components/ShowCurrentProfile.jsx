@@ -2,8 +2,7 @@ import profilePlaceholder from '../assets/profile-placeholder.jpg'
 
 import '../styles/showcurrentprofile.css'
 
-export function ShowCurrentProfile({ user }) {
-    console.log(user);
+export function ShowCurrentProfile() {
     return (
                     <div className="profileinfo-wrapper">
                     <div className="user-pic">

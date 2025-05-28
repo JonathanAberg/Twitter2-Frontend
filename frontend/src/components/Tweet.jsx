@@ -50,9 +50,7 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     }
   };
 
-  console.log("tweet.user =", tweet.user);
-
-  const [isLiked, setIsLiked] = useState(
+    const [isLiked, setIsLiked] = useState(
     tweet.likes?.includes(localStorage.getItem("userId")) || false
   );
   const [likesCount, setLikesCount] = useState(tweet.likes?.length || 0);

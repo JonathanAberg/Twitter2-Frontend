@@ -69,13 +69,14 @@ export function Home() {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => setUser(data))
-      .catch((err) => console.error("Failed to load user:", err));
-  }, [id]);
+    .then((res) => res.json())
+    .then((data) => setUser(data))
+    .catch((err) => console.error("Failed to load user:", err));
+      }, [id]);
   useEffect(() => {
     fetchTweets();
   }, []);
+
 
   return (
     <>
