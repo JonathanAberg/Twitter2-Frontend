@@ -27,6 +27,7 @@
 }
 
 .layout-aside {
+  margin-top: 1rem;
   width: 350px;
   position: sticky;
   top: 0;
