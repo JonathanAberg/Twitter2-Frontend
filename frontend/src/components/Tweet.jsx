@@ -32,12 +32,11 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
       if (response.ok) {
         console.log("Tweet deleted successfully, updating UI...");
 
-        // This is the key part - call the callback to update the UI immediately
-        if (typeof onTweetDeleted === "function") {
+                if (typeof onTweetDeleted === "function") {
           onTweetDeleted(tweet._id);
         } else {
           console.warn("onTweetDeleted callback not provided");
-          window.location.reload(); // Fallback
+          window.location.reload();
         }
       } else {
         const errorText = await response.text();
@@ -50,9 +49,7 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     }
   };
 
-  console.log("tweet.user =", tweet.user);
-
-  const [isLiked, setIsLiked] = useState(
+    const [isLiked, setIsLiked] = useState(
     tweet.likes?.includes(localStorage.getItem("userId")) || false
   );
   const [likesCount, setLikesCount] = useState(tweet.likes?.length || 0);
