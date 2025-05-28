@@ -1,0 +1,93 @@
+.info-completion-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info-completion-title {
+  font-size: 24px;
+  color: #1da1f2;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.info-completion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-completion-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.info-completion-form input[type="file"] {
+  margin-top: 8px;
+  padding: 8px;
+  border: 1px solid #e1e8ed;
+  border-radius: 5px;
+}
+
+.info-completion-form input[type="text"] {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #e1e8ed;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.info-completion-form textarea {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #e1e8ed;
+  border-radius: 5px;
+  min-height: 100px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.info-completion-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background-color: #1da1f2;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #1a91da;
+}
+
+.skip-button {
+  background-color: transparent;
+  color: #1da1f2;
+  border: 1px solid #1da1f2;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.skip-button:hover {
+  background-color: rgba(29, 161, 242, 0.1);
+}

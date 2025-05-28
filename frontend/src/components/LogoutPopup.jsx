@@ -4,6 +4,11 @@ import "../styles/logoutPopup.css";
 
 export function LogoutPopup({ onCancel }) {
   const navigate = useNavigate();
+  const logout = () => {
+    navigate("/login", { replace: true });
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+  };
   return (
     <div className="logout-wrapper">
       <div className="logo-container">
@@ -11,10 +16,7 @@ export function LogoutPopup({ onCancel }) {
         <h3>Log out of Twitter</h3>
       </div>
       <div className="btn-wrapper">
-        <button
-          className="logout-btn"
-          onClick={() => navigate("/", { replace: true })}
-        >
+        <button className="logout-btn" onClick={logout}>
           Log out
         </button>
         <button onClick={onCancel} className="cancel-btn">

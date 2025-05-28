@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout } from "./components/Layout";
+import Layout from "./components/Layout.jsx";
 import { Home } from "./components/Home";
 import ProfilePage from "./components/ProfilePage";
 import Login from "./components/Login";
@@ -15,11 +15,14 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Auth routes without layout */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/loginselect" element={<LoginSelect />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Routes with layout */}
           <Route path="/" element={<Layout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/loginselect" replace />} />
-            <Route path="/loginselect" index element={<LoginSelect />} />
-            <Route path="/register" element={<Register />} />
+            <Route index element={<Navigate to="/loginselect" replace />} />
             <Route path="/home/:id" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />

@@ -1,13 +1,25 @@
-import { Outlet } from 'react-router-dom'
+import { Sidebar } from "./Sidebar.jsx";
+import { Aside } from "./Aside.jsx";
+import { Outlet } from "react-router-dom";
+import "../styles/layout.css";
 
-import '../styles/layout.css'
+const Layout = ({ children }) => {
+  return (
+    <div className="layout-container">
+      <div className="layout-sidebar">
+        <Sidebar />
+      </div>
 
-export function Layout() {
-return (
-    <>
-    <main>
+      <main className="layout-main">
         <Outlet />
-    </main>
-    </>
-)
-}
+        {children}
+      </main>
+
+      <div className="layout-aside">
+        <Aside />
+      </div>
+    </div>
+  );
+};
+
+export default Layout;

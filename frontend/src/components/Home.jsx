@@ -1,12 +1,13 @@
 import { Tweetbox } from "./Tweetbox";
 import { TweetsSection } from "./TweetsSection";
 import Footer from "./Footer.jsx";
-import { Aside } from "../components/Aside.jsx";
 import "../styles/home.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import { Sidebar } from "../components/Sidebar.jsx";
 import { ShowCurrentProfile } from "./ShowCurrentProfile.jsx";
+
 
 export function Home() {
   const [tweets, setTweets] = useState([]);
@@ -82,14 +83,8 @@ export function Home() {
 
   return (
     <>
-      <h1
-        className="welcome-header"
-        style={{
-          padding: "10px 20px",
-          borderBottom: "1px solid #e6ecf0",
-          fontSize: "20px",
-        }}
-      >
+    <div className="home-content">
+      <h1 className="welcome-header">
         {loading
           ? "Loading..."
           : error
@@ -117,6 +112,7 @@ export function Home() {
       <Footer>
         <ShowCurrentProfile user={user}/>
       </Footer>
+      </div>
     </>
   );
 }
