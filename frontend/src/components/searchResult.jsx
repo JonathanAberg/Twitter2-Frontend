@@ -18,48 +18,59 @@ export function SearchResult({ search, allhashtags, trending }) {
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
+useEffect(() => {
+  if (trending && search.length > 0) {
+    const matched = trending
+      .map((tag) => tag[0])
+      .filter((tagName) =>
+        tagName.toLowerCase().includes(search.replace("#", "").toLowerCase())
+      );
+    setFilteredHashtags(matched);
+  } else {
+    setFilteredHashtags([]);
+  }
+}, [search, trending]);
+
   useEffect(() => {
     const searchUser = users.filter((user) =>
       user.name.toLowerCase().includes(search.toLowerCase())
     );
     setFilterdusers(searchUser);
   }, [search, users]);
-  
-  useEffect(() => {
-  if (!trending) return;
 
-  const searchTags = trending.filter((tag) =>
-    tag.toLowerCase().includes(search.toLowerCase())
-  );
-
-  setFilteredHashtags(searchTags);
-}, [search, trending]);
-
-  return (
-    <>
-      <ul className="searchlist">
-        {filterdusers.map((user) => (
-          <li
-            key={user._id}
-            className="searchresult"
-            onClick={() => navigate(`/profile/${user._id}`)}
-          >
-            <img
-          src={
-  user.profilepicture
-    ? `http://localhost:5001/uploads/${user.profilepicture}`
-    : profilePlaceholder
-}
-              alt="Profile"
-              onError={(e) => {
-                e.target.src = profilePlaceholder;
-              }}
-            />
-
-            <h2>{user.name}</h2>
+return (
+  <>
+      {filteredHashtags.length > 0 && (
+      <ul className="hashtaglist">
+        {filteredHashtags.map((tag, index) => (
+          <li key={index} className="hashtagresult">
+            #{tag}
           </li>
         ))}
       </ul>
-    </>
-  );
+    )}
+    <ul className="searchlist">
+      {filterdusers.map((user) => (
+        <li
+          key={user._id}
+          className="searchresult"
+          onClick={() => navigate(`/profile/${user._id}`)}
+        >
+          <img
+            src={
+              user.profilepicture
+                ? `http://localhost:5001/uploads/${user.profilepicture}`
+                : profilePlaceholder
+            }
+            alt="Profile"
+            onError={(e) => {
+              e.target.src = profilePlaceholder;
+            }}
+          />
+          <h2>{user.name}</h2>
+        </li>
+      ))}
+    </ul>
+  </>
+);
 }
