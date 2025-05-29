@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/searchresult.css";
 
-export function SearchResult({ search, allhashtags, trending }) {
+export function SearchResult({ search, allhashtags }) {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [filterdusers, setFilterdusers] = useState([]);
@@ -19,17 +19,16 @@ export function SearchResult({ search, allhashtags, trending }) {
       .then((data) => setUsers(data));
   }, []);
 useEffect(() => {
-  if (trending && search.length > 0) {
-    const matched = trending
-      .map((tag) => tag[0])
-      .filter((tagName) =>
-        tagName.toLowerCase().includes(search.replace("#", "").toLowerCase())
-      );
+  if (allhashtags && search.length > 0) {
+const matched = Object.keys(allhashtags)
+  .filter((tagName) =>
+    tagName.toLowerCase().includes(search.replace("#", "").toLowerCase())
+  );
     setFilteredHashtags(matched);
   } else {
     setFilteredHashtags([]);
   }
-}, [search, trending]);
+}, [search, allhashtags]);
 
   useEffect(() => {
     const searchUser = users.filter((user) =>
@@ -38,7 +37,7 @@ useEffect(() => {
     setFilterdusers(searchUser);
   }, [search, users]);
 
-return (
+  return (
   <>
       {filteredHashtags.length > 0 && (
       <ul className="hashtaglist">
