@@ -167,7 +167,18 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
             </button>
           )}
         </div>
-        <div className="tweet-text">{tweet.content}</div>
+        <div className="tweet-text">
+          {tweet.content.split(/(\s+)/).map((word, index) => {
+            if (word.startsWith("#")) {
+              return (
+                <Link key={index} to={`/hashtag/${word.slice(1)}`}>
+                  {word}
+                </Link>
+              );
+            }
+            return word;
+          })}
+        </div>
         <div className="tweet-actions">
           <button className="tweet-action reply">
             {tweet.replies?.length > 0 ? <FaComment /> : <FaRegComment />}
@@ -181,6 +192,7 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
           <button
             className={`tweet-action like ${isLiked ? "liked" : ""}`}
             onClick={handleLike}
+            data-testid="like-button"
           >
             {isLiked ? <FaHeart /> : <FaRegHeart />}
             <span>{likesCount}</span>

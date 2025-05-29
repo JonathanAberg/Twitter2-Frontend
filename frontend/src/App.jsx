@@ -15,18 +15,40 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          {/* Auth routes without layout */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/loginselect" element={<LoginSelect />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} data-testid="route-/login" />
+          <Route
+            path="/loginselect"
+            element={<LoginSelect />}
+            data-testid="route-/loginselect"
+          />
+          <Route
+            path="/register"
+            element={<Register />}
+            data-testid="route-/register"
+          />
 
-          {/* Routes with layout */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/loginselect" replace />} />
-            <Route path="/home/:id" element={<Home />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/:id" element={<ProfilePage />} />
-            <Route path="/infoCompletion/:id" element={<InfoCompletion />} />
+            <Route
+              path="/home/:id"
+              element={<Home />}
+              data-testid="route-/home/:id"
+            />
+            <Route
+              path="/profile"
+              element={<ProfilePage />}
+              data-testid="route-/profile"
+            />
+            <Route
+              path="/profile/:id"
+              element={<ProfilePage />}
+              data-testid="route-/profile/:id"
+            />
+            <Route
+              path="/infoCompletion/:id"
+              element={<InfoCompletion />}
+              data-testid="route-/infoCompletion/:id"
+            />
           </Route>
         </Routes>
       </BrowserRouter>

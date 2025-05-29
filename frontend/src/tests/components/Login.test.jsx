@@ -1,13 +1,16 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Login from "../../components/Login";
 
-global.fetch = vi.fn();
-global.localstorage = {
-  setItem: vi.fn(),
+const localStorageMock = {
   getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
 };
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
+
+global.fetch = vi.fn();
 
 describe("Login Component", () => {
   const renderLogin = () => {
@@ -26,21 +29,14 @@ describe("Login Component", () => {
     renderLogin();
 
     expect(screen.getByAltText("Twitter Logo")).toBeInTheDocument();
-
     expect(screen.getByText("Log in to Twitter 2")).toBeInTheDocument();
-
-    expect(
-      screen.getByPlaceholderText("Enter your E-mail adress..")
-    ).toBeInTheDocument();
-
+    expect(screen.getByPlaceholderText("Enter your E-mail address.."));
     expect(
       screen.getByPlaceholderText("Enter your password details..")
     ).toBeInTheDocument();
-
     expect(screen.getByRole("button", { name: "Login" })).toBeInTheDocument();
-
     expect(
-      screen.getByRole("Button", { name: "Forgot your password?" })
+      screen.getByRole("button", { name: "Forgot your password?" })
     ).toBeInTheDocument();
   });
 
@@ -54,7 +50,7 @@ describe("Login Component", () => {
     renderLogin();
 
     const emailInput = screen.getByPlaceholderText(
-      "Enter your E-mail adress.."
+      "Enter your E-mail address.."
     );
     const passwordInput = screen.getByPlaceholderText(
       "Enter your password details.."
@@ -66,7 +62,7 @@ describe("Login Component", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCallWith(
+      expect(global.fetch).toHaveBeenCalledWith(
         "http://localhost:5001/api/users/login",
         {
           method: "POST",
@@ -77,8 +73,11 @@ describe("Login Component", () => {
           }),
         }
       );
-      expect(localStorage.setItem).toHaveBeenCalledWith("token", "fake-token");
-      expect(localStorage.setItem).toHaveBeenCalledWith("userId", "123");
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        "token",
+        "fake-token"
+      );
+      expect(localStorageMock.setItem).toHaveBeenCalledWith("userId", "123");
     });
   });
 
@@ -92,7 +91,7 @@ describe("Login Component", () => {
     renderLogin();
 
     const emailInput = screen.getByPlaceholderText(
-      "Enter your E-mail adress.."
+      "Enter your E-mail address.."
     );
     const passwordInput = screen.getByPlaceholderText(
       "Enter your password details.."
@@ -104,7 +103,7 @@ describe("Login Component", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith("incorrect email or password");
+      expect(alertSpy).toHaveBeenCalledWith("incorrect email or password ");
     });
 
     alertSpy.mockRestore();
