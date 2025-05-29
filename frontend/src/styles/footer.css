@@ -1,12 +1,11 @@
 footer {
   display: flex;
-  width: 100%;
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-color);
   color: var(--text-color);
   padding: 1rem;
   align-items: center;
-  justify-content: space-between;
+  gap: 38%;
 }
 
 .hide {
@@ -23,10 +22,6 @@ footer {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.profileinfo-text {
-  margin-left: 5px;
 }
 
 .user-pic {
