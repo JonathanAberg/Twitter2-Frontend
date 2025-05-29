@@ -20,22 +20,23 @@ export function SearchResult({ search }) {
       user.name.toLowerCase().includes(search.toLowerCase())
     );
     setFilterdusers(searchUser);
-  }, [search]);
+  }, [search, users]);
 
   return (
     <>
       <ul className="searchlist">
         {filterdusers.map((user) => (
-          <div
+          <li
             key={user._id}
             className="searchresult"
             onClick={() => navigate(`/profile/${user._id}`)}
           >
             <img
-              src={
-                `http://localhost:5001/uploads/${user.profilepicture}` ||
-                `http://localhost:5001/${user.profilepicture}`
-              }
+          src={
+  user.profilepicture
+    ? `http://localhost:5001/uploads/${user.profilepicture}`
+    : profilePlaceholder
+}
               alt="Profile"
               onError={(e) => {
                 e.target.src = profilePlaceholder;
@@ -43,7 +44,7 @@ export function SearchResult({ search }) {
             />
 
             <h2>{user.name}</h2>
-          </div>
+          </li>
         ))}
       </ul>
     </>
