@@ -7,8 +7,7 @@ export function Tweetbox({ user, setUser, id, onTweetPosted }) {
   const [post, setPost] = useState("");
   const [isPosting, setIsPosting] = useState(false);
 
-  // Fix: Use the placeholder directly if no profile picture
-  const profilepic = user?.profilepicture
+    const profilepic = user?.profilepicture
     ? `http://localhost:5001/uploads/${user.profilepicture}`
     : profilePlaceholder;
 
