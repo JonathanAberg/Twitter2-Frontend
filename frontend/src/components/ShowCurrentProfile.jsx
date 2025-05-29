@@ -1,17 +1,24 @@
 import profilePlaceholder from '../assets/profile-placeholder.jpg'
-
 import '../styles/showcurrentprofile.css'
 
-export function ShowCurrentProfile() {
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
+
+export function ShowCurrentProfile({ children }) {
+const { user } = useContext(UserContext);
+
+  if (!user) return null;
+    
     return (
-                    <div className="profileinfo-wrapper">
-                    <div className="user-pic">
-                        <img src={profilePlaceholder} alt="Profile Picture" />
-                    </div>
-                    <div className="profileinfo-text">
-                    <strong>Username Svensson</strong>
-                    <p className="user-desc">@useruser1234</p>
-                    </div>
-                    </div>
-                    )
+        <div className="profileinfo-wrapper">
+        <div className="user-pic">
+        <img src={profilePlaceholder} alt="Profile Picture" />
+        </div>
+        <div className="profileinfo-text">
+        <strong>{user.name}</strong>
+        <p className="user-desc">@{user.nickname}</p>
+        </div>
+        {children}
+        </div>
+        )
 }

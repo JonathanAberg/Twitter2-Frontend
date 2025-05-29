@@ -4,7 +4,7 @@ import { ShowCurrentProfile } from "./ShowCurrentProfile";
 import { ThemeToggle } from "./ThemeToggle";
 import "../styles/footer.css";
 
-const Footer = () => {
+const Footer = ({ user, setUser }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const togglePopup = () => {
@@ -13,17 +13,20 @@ const Footer = () => {
 
   return (
     <footer>
-      <ShowCurrentProfile />
-      <div className="theme-toggle-container">
-        <ThemeToggle />
-      </div>
       <div className="logout-select-box">
-        <button className="logout-select" onClick={togglePopup}>
-          ...
-        </button>
+      <ShowCurrentProfile user={user} setUser={setUser}>
         <div className={showPopup ? "popup" : "hide"}>
           <LogoutPopup onCancel={() => setShowPopup(false)} />
         </div>
+        <button className="logout-select" onClick={togglePopup}>
+          ...
+        </button>
+        </ShowCurrentProfile>
+        </div>
+      <div className="theme-toggle-container">
+        <ThemeToggle>
+          Switch to dark/light mode
+        </ThemeToggle>
       </div>
     </footer>
   );

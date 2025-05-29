@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import "../styles/ThemeToggle.css";
 
-export function ThemeToggle() {
+export function ThemeToggle({ children }) {
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return (
@@ -23,12 +23,15 @@ export function ThemeToggle() {
   }, [darkMode]);
 
   return (
+    <>
     <button
-      onClick={() => setDarkMode(!darkMode)}
-      className="theme-toggle-btn"
-      title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+    onClick={() => setDarkMode(!darkMode)}
+    className="theme-toggle-btn"
+    title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       {darkMode ? <FaSun /> : <FaMoon />}
     </button>
+      {children}
+    </>
   );
 }
