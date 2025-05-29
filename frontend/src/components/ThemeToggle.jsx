@@ -24,13 +24,13 @@ export function ThemeToggle({ children }) {
 
   return (
     <>
-    <button
-    onClick={() => setDarkMode(!darkMode)}
-    className="theme-toggle-btn"
-    title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-    >
-      {darkMode ? <FaSun /> : <FaMoon />}
-    </button>
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="theme-toggle-btn"
+        title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+      >
+        {darkMode ? <FaSun /> : <FaMoon />}
+      </button>
       {children}
     </>
   );
