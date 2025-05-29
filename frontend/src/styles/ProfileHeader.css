@@ -1,6 +1,7 @@
 .twitter-profile .profile-header {
   position: relative;
   border-bottom: 1px solid var(--border-color, #e1e8ed);
+  width: 100%;
 }
 
 .twitter-profile .cover-photo {
@@ -19,6 +20,7 @@
   position: relative;
   background-color: #ffffff;
   color: #14171a;
+  width: 94.75%;
 }
 
 .twitter-profile .avatar-container {

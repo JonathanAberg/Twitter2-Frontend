@@ -59,7 +59,6 @@ export function Aside() {
         />
       </div>
       <div>
-        {" "}
         {search.length > 0 && (
           <SearchResult allhashtags={allhashtags} search={search} />
         )}
