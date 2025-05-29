@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import "../styles/searchresult.css";
 import profilePlaceholder from "../assets/profile-placeholder.jpg";
 import { useNavigate } from "react-router-dom";
-export function SearchResult({ search }) {
+
+import "../styles/searchresult.css";
+
+export function SearchResult({ search, allhashtags, trending }) {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [filterdusers, setFilterdusers] = useState([]);
+  const [filteredHashtags, setFilteredHashtags] = useState([]);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -21,6 +24,16 @@ export function SearchResult({ search }) {
     );
     setFilterdusers(searchUser);
   }, [search, users]);
+  
+  useEffect(() => {
+  if (!trending) return;
+
+  const searchTags = trending.filter((tag) =>
+    tag.toLowerCase().includes(search.toLowerCase())
+  );
+
+  setFilteredHashtags(searchTags);
+}, [search, trending]);
 
   return (
     <>

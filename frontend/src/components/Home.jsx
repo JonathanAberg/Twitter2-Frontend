@@ -1,7 +1,7 @@
 import { Tweetbox } from "./Tweetbox";
 import { TweetsSection } from "./TweetsSection";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "./UserContext";
 
 import "../styles/home.css";
