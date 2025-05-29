@@ -10,7 +10,7 @@ export function Aside() {
   const [trending, setTrending] = useState([]);
   const [allhashtags, setAllhashtags] = useState([]);
   const [search, setSearch] = useState("");
-  
+   
   useEffect(() => {
     const token = localStorage.getItem("token");
 
