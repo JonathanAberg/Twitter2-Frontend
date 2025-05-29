@@ -72,12 +72,12 @@ export function Sidebar() {
 
   const menuItems = [
     { icon: <FaHome />, text: "Home", path: `/home/${userId}` },
-    { icon: <FaSearch />, text: "Explore", path: "/explore" },
-    { icon: <FaBell />, text: "Notifications", path: "/notifications" },
-    { icon: <FaEnvelope />, text: "Messages", path: "/messages" },
-    { icon: <FaBookmark />, text: "Bookmarks", path: "/bookmarks" },
+    { icon: <FaSearch />, text: "Explore", path: "#" },
+    { icon: <FaBell />, text: "Notifications", path: "#" },
+    { icon: <FaEnvelope />, text: "Messages", path: "#" },
+    { icon: <FaBookmark />, text: "Bookmarks", path: "#" },
     { icon: <FaUser />, text: "Profile", path: `/profile/${userId}` },
-    { icon: <FaEllipsisH />, text: "More", path: "/more" },
+    { icon: <FaEllipsisH />, text: "More", path: "#" },
   ];
 
   return (
