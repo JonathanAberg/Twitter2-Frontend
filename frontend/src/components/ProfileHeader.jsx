@@ -31,6 +31,63 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   }, [user?._timestamp]);
 
   useEffect(() => {
+    const checkFollowStatus = async () => {
+      if (!viewedUserId || !currentUserId || viewedUserId === currentUserId) {
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://localhost:5001/api/users/${viewedUserId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsfollowing(data.isFollowing);
+          console.log(
+            "Follow status:",
+            data.isFollowing ? "Following" : "Not following"
+          );
+        } else {
+          const followingResponse = await fetch(
+            `http://localhost:5001/api/users/${currentUserId}/following`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (followingResponse.ok) {
+            const userData = await followingResponse.json();
+            // Check if current user ID is in the followers array of the viewed user
+            if (userData.followers && Array.isArray(userData.followers)) {
+              setIsfollowing(userData.followers.includes(currentUserId));
+            } else {
+              setIsfollowing(false);
+            }
+          } else {
+            console.error(
+              "Failed to fetch user data:",
+              followingResponse.status
+            );
+            setIsfollowing(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking follow status:", error);
+        setIsfollowing(false);
+      }
+    };
+
+    checkFollowStatus();
+  }, [viewedUserId, currentUserId, token]);
+  useEffect(() => {
     if (user) {
       console.log(
         "Updating image sources with timestamp:",
@@ -57,21 +114,62 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   }, [user]);
 
   const handleFollow = async () => {
-    const newFollow = isfollowing
+    if (viewedUserId === currentUserId) {
+      console.log("Cannot follow yourself");
+      return;
+    }
+
+    const endpoint = isfollowing
       ? `http://localhost:5001/api/users/${viewedUserId}/unfollow`
       : `http://localhost:5001/api/users/${viewedUserId}/follow`;
+
     try {
-      const response = await fetch(newFollow, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({}),
       });
+
       if (response.ok) {
         setIsfollowing(!isfollowing);
+        onProfileUpdate({
+          ...user,
+          followers: isfollowing
+            ? user.followers > 0
+              ? user.followers - 1
+              : 0
+            : user.followers + 1,
+        });
+      } else {
+        try {
+          const errorData = await response.json();
+          console.error(
+            `Failed to ${isfollowing ? "unfollow" : "follow"} user:`,
+            response.status,
+            errorData
+          );
+
+          const alreadyFollowingError =
+            errorData.message?.includes("redan") ||
+            errorData.message?.includes("already");
+          const notFollowingError =
+            errorData.message?.includes("inte") ||
+            errorData.message?.includes("not");
+
+          if (alreadyFollowingError && !isfollowing) {
+            setIsfollowing(true);
+          } else if (notFollowingError && isfollowing) {
+            setIsfollowing(false);
+          }
+        } catch (e) {
+          console.error("Error parsing error response:", e);
+        }
       }
     } catch (err) {
-      console.error("failed to follow", err);
+      console.error("Failed to follow/unfollow:", err);
     }
   };
 
