@@ -1,4 +1,3 @@
-/* filepath: /Users/jonathanaberg/Developer/Grupparbete/Twitter2-Frontend/frontend/src/components/ThemeToggle.jsx */
 import { useState, useEffect } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import "../styles/ThemeToggle.css";

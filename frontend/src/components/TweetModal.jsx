@@ -86,7 +86,6 @@ const TweetModal = ({ isOpen, onClose, user, onTweetPosted }) => {
       console.log("Response status:", response.status);
 
       if (selectedImage) {
-        // If there's an image, upload it separately after creating the tweet
         console.log("Uploading image separately...");
         const imageFormData = new FormData();
         imageFormData.append("image", selectedImage);

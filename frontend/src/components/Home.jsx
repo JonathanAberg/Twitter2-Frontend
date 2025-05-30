@@ -1,7 +1,7 @@
 import { Tweetbox } from "./Tweetbox";
 import { TweetsSection } from "./TweetsSection";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "./UserContext";
 
 import "../styles/home.css";
@@ -13,15 +13,21 @@ export function Home() {
 
   const { user } = useUser();
 
-  const fetchTweets = () => {
-    fetch(`http://localhost:5001/api/tweets`)
-      .then((res) => res.json())
-      .then((data) => setTweets(data));
-  };
+const fetchTweets = () => {
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchTweets();
-  }, []);
+  fetch("http://localhost:5001/api/tweets", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Fel vid hämtning: " + res.status);
+      return res.json();
+    })
+    .then((data) => setTweets(data))
+    .catch((err) => console.error(err));
+};
 
   return (
     <>

@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import "../styles/searchresult.css";
 import profilePlaceholder from "../assets/profile-placeholder.jpg";
 import { useNavigate } from "react-router-dom";
-export function SearchResult({ search }) {
+
+import "../styles/searchresult.css";
+
+export function SearchResult({ search, allhashtags }) {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [filterdusers, setFilterdusers] = useState([]);
+  const [filteredHashtags, setFilteredHashtags] = useState([]);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -15,37 +18,58 @@ export function SearchResult({ search }) {
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
+useEffect(() => {
+  if (allhashtags && search.length > 0) {
+const matched = Object.keys(allhashtags)
+  .filter((tagName) =>
+    tagName.toLowerCase().includes(search.replace("#", "").toLowerCase())
+  );
+    setFilteredHashtags(matched);
+  } else {
+    setFilteredHashtags([]);
+  }
+}, [search, allhashtags]);
+
   useEffect(() => {
     const searchUser = users.filter((user) =>
       user.name.toLowerCase().includes(search.toLowerCase())
     );
     setFilterdusers(searchUser);
-  }, [search]);
+  }, [search, users]);
 
   return (
-    <>
-      <ul className="searchlist">
-        {filterdusers.map((user) => (
-          <div
-            key={user._id}
-            className="searchresult"
-            onClick={() => navigate(`/profile/${user._id}`)}
-          >
-            <img
-              src={
-                `http://localhost:5001/uploads/${user.profilepicture}` ||
-                `http://localhost:5001/${user.profilepicture}`
-              }
-              alt="Profile"
-              onError={(e) => {
-                e.target.src = profilePlaceholder;
-              }}
-            />
-
-            <h2>{user.name}</h2>
-          </div>
+  <>
+      {filteredHashtags.length > 0 && (
+      <ul className="hashtaglist">
+        {filteredHashtags.map((tag, index) => (
+          <li key={index} className="hashtagresult">
+            #{tag}
+          </li>
         ))}
       </ul>
-    </>
-  );
+    )}
+    <ul className="searchlist">
+      {filterdusers.map((user) => (
+        <li
+          key={user._id}
+          className="searchresult"
+          onClick={() => navigate(`/profile/${user._id}`)}
+        >
+          <img
+            src={
+              user.profilepicture
+                ? `http://localhost:5001/uploads/${user.profilepicture}`
+                : profilePlaceholder
+            }
+            alt="Profile"
+            onError={(e) => {
+              e.target.src = profilePlaceholder;
+            }}
+          />
+          <h2>{user.name}</h2>
+        </li>
+      ))}
+    </ul>
+  </>
+);
 }

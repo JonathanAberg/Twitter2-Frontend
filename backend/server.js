@@ -58,7 +58,6 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/users", userRoutes);
 app.use("/api/tweets", tweetRoutes);
 
-// Viktigt från main – CORS fallback
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();

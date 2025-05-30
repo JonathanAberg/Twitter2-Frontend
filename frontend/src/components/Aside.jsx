@@ -10,7 +10,7 @@ export function Aside() {
   const [trending, setTrending] = useState([]);
   const [allhashtags, setAllhashtags] = useState([]);
   const [search, setSearch] = useState("");
-
+   
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -59,9 +59,8 @@ export function Aside() {
         />
       </div>
       <div>
-        {" "}
         {search.length > 0 && (
-          <SearchResult allhashtags={allhashtags} search={search} />
+          <SearchResult trending={trending} allhashtags={allhashtags} search={search} />
         )}
       </div>
       <div className="trends">
