@@ -33,29 +33,50 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
 
   useEffect(() => {
     const checkFollowStatus = async () => {
-      if (
-        viewedUserId &&
-        currentUserId &&
-        viewedUserId !== currentUserId &&
-        token
-      ) {
-        try {
-          const response = await fetch(
-            `http://localhost:5001/api/users/${viewedUserId}/follow-status`,
+      if (!viewedUserId || !currentUserId || viewedUserId === currentUserId) {
+        return;
+      }
+
+      try {
+        // This is the correct endpoint for checking if you're following a user
+        const response = await fetch(
+          `http://localhost:5001/api/users/${viewedUserId}/is-following`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsfollowing(data.isFollowing);
+        } else {
+          // Check if the user object itself has followers data we can use
+          const userResponse = await fetch(
+            `http://localhost:5001/api/users/${viewedUserId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          if (response.ok) {
-            const data = await response.json();
-            setIsfollowing(data.isFollowing);
+
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            // Check if the followers array has the current user in it
+            setIsfollowing(
+              userData.followers &&
+                Array.isArray(userData.followers) &&
+                userData.followers.includes(currentUserId)
+            );
+          } else {
+            setIsfollowing(false);
           }
-        } catch (err) {
-          console.error("Failed to check follow status", err);
-          setIsfollowing(false);
         }
+      } catch (error) {
+        console.error("Error checking follow status:", error);
+        setIsfollowing(false);
       }
     };
 
@@ -100,16 +121,44 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({}),
       });
 
       if (response.ok) {
         setIsfollowing(!isfollowing);
-        console.log(
-          `Successfully ${isfollowing ? "unfollowed" : "followed"} user`
-        );
+
+        onProfileUpdate({
+          ...user,
+          followers: isfollowing
+            ? user.followers > 0
+              ? user.followers - 1
+              : 0
+            : user.followers + 1,
+        });
       } else {
-        const errorData = await response.json();
-        console.error("Follow/unfollow failed:", errorData);
+        try {
+          const errorData = await response.json();
+          console.error(
+            `Failed to ${isfollowing ? "unfollow" : "follow"} user:`,
+            response.status,
+            errorData
+          );
+
+          const alreadyFollowingError =
+            errorData.message?.includes("redan") ||
+            errorData.message?.includes("already");
+          const notFollowingError =
+            errorData.message?.includes("inte") ||
+            errorData.message?.includes("not");
+
+          if (alreadyFollowingError && !isfollowing) {
+            setIsfollowing(true);
+          } else if (notFollowingError && isfollowing) {
+            setIsfollowing(false);
+          }
+        } catch (e) {
+          console.error("Error parsing error response:", e);
+        }
       }
     } catch (err) {
       console.error("Failed to follow/unfollow:", err);
@@ -120,7 +169,6 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
     console.log("Profile update received:", updatedProfile);
 
     const newTimestamp = Date.now();
-
     const updatedUser = {
       ...user,
       name: updatedProfile.name || user.name,
@@ -131,8 +179,62 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       _timestamp: newTimestamp,
     };
 
-    console.log("Updated user object:", updatedUser);
+    if (updatedProfile.profilepicture) {
+      profilePicRef.current = `http://localhost:5001/uploads/${updatedProfile.profilepicture.name}?t=${newTimestamp}`;
+    }
+
+    if (updatedProfile.coverpicture) {
+      coverPicRef.current = `http://localhost:5001/uploads/${updatedProfile.coverpicture.name}?t=${newTimestamp}`;
+    }
+
+    setForceUpdate((prev) => prev + 1);
+
     onProfileUpdate(updatedUser);
+
+    setIsEditModalOpen(false);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
+  const refetchUserData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5001/api/users/${viewedUserId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const freshUserData = await response.json();
+
+        const newTimestamp = Date.now();
+        timestampRef.current = newTimestamp;
+
+        if (
+          freshUserData.profilepicture &&
+          freshUserData.profilepicture.trim()
+        ) {
+          profilePicRef.current = `http://localhost:5001/uploads/${freshUserData.profilepicture}?t=${newTimestamp}`;
+        }
+
+        if (freshUserData.coverpicture && freshUserData.coverpicture.trim()) {
+          coverPicRef.current = `http://localhost:5001/uploads/${freshUserData.coverpicture}?t=${newTimestamp}`;
+        }
+
+        setForceUpdate((prev) => prev + 1);
+
+        onProfileUpdate({
+          ...freshUserData,
+          _timestamp: newTimestamp,
+        });
+      }
+    } catch (error) {
+      console.error("Error refreshing user data:", error);
+    }
   };
 
   return (
