@@ -20,6 +20,7 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
   };
+
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
@@ -29,6 +30,37 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
       timestampRef.current = user._timestamp;
     }
   }, [user?._timestamp]);
+
+  useEffect(() => {
+    const checkFollowStatus = async () => {
+      if (
+        viewedUserId &&
+        currentUserId &&
+        viewedUserId !== currentUserId &&
+        token
+      ) {
+        try {
+          const response = await fetch(
+            `http://localhost:5001/api/users/${viewedUserId}/follow-status`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setIsfollowing(data.isFollowing);
+          }
+        } catch (err) {
+          console.error("Failed to check follow status", err);
+          setIsfollowing(false);
+        }
+      }
+    };
+
+    checkFollowStatus();
+  }, [viewedUserId, currentUserId, token]);
 
   useEffect(() => {
     if (user) {
@@ -57,21 +89,30 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   }, [user]);
 
   const handleFollow = async () => {
-    const newFollow = isfollowing
+    const endpoint = isfollowing
       ? `http://localhost:5001/api/users/${viewedUserId}/unfollow`
       : `http://localhost:5001/api/users/${viewedUserId}/follow`;
+
     try {
-      const response = await fetch(newFollow, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
+
       if (response.ok) {
         setIsfollowing(!isfollowing);
+        console.log(
+          `Successfully ${isfollowing ? "unfollowed" : "followed"} user`
+        );
+      } else {
+        const errorData = await response.json();
+        console.error("Follow/unfollow failed:", errorData);
       }
     } catch (err) {
-      console.error("failed to follow", err);
+      console.error("Failed to follow/unfollow:", err);
     }
   };
 
