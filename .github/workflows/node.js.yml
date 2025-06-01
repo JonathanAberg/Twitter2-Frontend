@@ -65,113 +65,113 @@ jobs:
           JWT_SECRET: test_secret_key_for_github_actions
           PORT: 5001
 
-e2e:
-  name: E2E Tests
-  runs-on: ubuntu-latest
-  needs: [frontend, backend]
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [frontend, backend]
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18.x
-        cache: "npm"
-        cache-dependency-path: "./e2e-tester/package-lock.json"
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: "./e2e-tester/package-lock.json"
 
-    - name: Setup MongoDB
-      uses: supercharge/mongodb-github-action@1.10.0
-      with:
-        mongodb-version: "6.0"
+      - name: Setup MongoDB
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+          mongodb-version: "6.0"
 
-    - name: Debug directory structure
-      run: |
-        ls -la
-        ls -la frontend || echo "No frontend directory"
-        ls -la backend || echo "No backend directory"
-        ls -la e2e-tester || echo "No e2e-tester directory"
+      - name: Debug directory structure
+        run: |
+          ls -la
+          ls -la frontend || echo "No frontend directory"
+          ls -la backend || echo "No backend directory" 
+          ls -la e2e-tester || echo "No e2e-tester directory"
 
-    - name: Start backend
-      working-directory: ./backend
-      run: |
-        npm ci
-        npm start &
-        echo "Waiting for backend to start..."
-        sleep 10
-      env:
-        MONGODB_URI: mongodb://localhost:27017/twitter_e2e
-        JWT_SECRET: test_secret_key_for_e2e
-        PORT: 5001
+      - name: Start backend
+        working-directory: ./backend
+        run: |
+          npm ci
+          npm start &
+          echo "Waiting for backend to start..."
+          sleep 10
+        env:
+          MONGODB_URI: mongodb://localhost:27017/twitter_e2e
+          JWT_SECRET: test_secret_key_for_e2e
+          PORT: 5001
 
-    - name: Start frontend
-      working-directory: ./frontend
-      run: |
-        npm ci
-        npm run build
+      - name: Start frontend
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
 
-        # Find the preview command in package.json
-        echo "Checking preview command in package.json"
-        cat package.json | grep preview
+          # Find the preview command in package.json
+          echo "Checking preview command in package.json"
+          cat package.json | grep preview
 
-        # Start the server and expose it publicly
-        echo "Starting frontend server..."
-        npx vite preview --host 0.0.0.0 --port 5173 &
+          # Start the server and expose it publicly
+          echo "Starting frontend server..."
+          npx vite preview --host 0.0.0.0 --port 5173 &
 
-        # Wait for server to start and verify it's running
-        echo "Waiting for frontend to start..."
-        sleep 10
-        curl -v http://localhost:5173/ || echo "Failed to connect to frontend"
-        netstat -tuln | grep 5173 || echo "No process listening on 5173"
+          # Wait for server to start and verify it's running
+          echo "Waiting for frontend to start..."
+          sleep 10
+          curl -v http://localhost:5173/ || echo "Failed to connect to frontend"
+          netstat -tuln | grep 5173 || echo "No process listening on 5173"
 
-    - name: Update Playwright config for CI
-      run: |
-        echo "Updating Playwright config for CI environment"
-        cat > ./e2e-tester/playwright.config.js << 'EOL'
-        import { defineConfig, devices } from "@playwright/test";
+      - name: Update Playwright config for CI
+        run: |
+          echo "Updating Playwright config for CI environment"
+          cat > ./e2e-tester/playwright.config.js << 'EOL'
+          import { defineConfig, devices } from "@playwright/test";
 
-        export default defineConfig({
-          testDir: "./tests",
-          fullyParallel: true,
-          forbidOnly: !!process.env.CI,
-          retries: process.env.CI ? 2 : 0,
-          workers: process.env.CI ? 1 : undefined,
-          reporter: "html",
-          use: {
-            baseURL: "http://localhost:5173",
-            trace: "on-first-retry",
-            screenshot: "only-on-failure",
-            headless: true
-          },
-          projects: [
-            {
-              name: "chromium",
-              use: { ...devices["Desktop Chrome"] },
+          export default defineConfig({
+            testDir: "./tests",
+            fullyParallel: true,
+            forbidOnly: !!process.env.CI,
+            retries: process.env.CI ? 2 : 0,
+            workers: process.env.CI ? 1 : undefined,
+            reporter: "html",
+            use: {
+              baseURL: "http://localhost:5173",
+              trace: "on-first-retry",
+              screenshot: "only-on-failure",
+              headless: true
             },
-          ],
-        });
-        EOL
+            projects: [
+              {
+                name: "chromium",
+                use: { ...devices["Desktop Chrome"] },
+              },
+            ],
+          });
+          EOL
 
-    - name: Install Playwright browsers
-      working-directory: ./e2e-tester
-      run: |
-        npm ci
-        npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        working-directory: ./e2e-tester
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
 
-    - name: Run Playwright tests
-      working-directory: ./e2e-tester
-      run: |
-        echo "Starting Playwright tests..."
-        # Add the --debug flag to see more details
-        npx playwright test --debug
-      env:
-        CI: true
-        PLAYWRIGHT_BASE_URL: http://localhost:5173
+      - name: Run Playwright tests
+        working-directory: ./e2e-tester
+        run: |
+          echo "Starting Playwright tests..."
+          # Add the --debug flag to see more details
+          npx playwright test --debug
+        env:
+          CI: true
+          PLAYWRIGHT_BASE_URL: http://localhost:5173
 
-    - name: Upload Playwright report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-report
-        path: e2e-tester/playwright-report/
-        retention-days: 30
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e-tester/playwright-report/
+          retention-days: 30
