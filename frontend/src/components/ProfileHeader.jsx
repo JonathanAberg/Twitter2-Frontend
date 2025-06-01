@@ -20,7 +20,6 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
   };
-
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
@@ -110,6 +109,11 @@ const ProfileHeader = ({ user, onProfileUpdate }) => {
   }, [user]);
 
   const handleFollow = async () => {
+    if (viewedUserId === currentUserId) {
+      console.log("Cannot follow yourself");
+      return;
+    }
+
     const endpoint = isfollowing
       ? `http://localhost:5001/api/users/${viewedUserId}/unfollow`
       : `http://localhost:5001/api/users/${viewedUserId}/follow`;
