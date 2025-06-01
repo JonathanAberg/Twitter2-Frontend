@@ -10,8 +10,11 @@ const Login = () => {
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
       const res = await fetch("http://localhost:5001/api/users/login", {
         method: "POST",
@@ -19,7 +22,8 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        alert("incorrect email or password ");
+        const errorData = await res.json();
+        setError(errorData.message || "Invalid email or password");
         return;
       }
       const user = await res.json();
@@ -29,7 +33,7 @@ const Login = () => {
       goHome(user._id);
     } catch (err) {
       console.error("Login error:", err);
-      alert("Login failed. Try again.", err);
+      setError("Login failed. Please try agian.");
     }
   };
   return (
@@ -42,6 +46,7 @@ const Login = () => {
             alt="Twitter Logo"
           />
           <h1>Log in to Twitter 2</h1>
+          {error && <div className="error-message">{error}</div>}
           <div className="input-details">
             <strong>E-mail</strong>{" "}
             <input
