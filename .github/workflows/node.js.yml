@@ -65,7 +65,7 @@ jobs:
           JWT_SECRET: test_secret_key_for_github_actions
           PORT: 5001
 
-e2e:
+e2e-tester:
   name: E2E Tests
   runs-on: ubuntu-latest
   needs: [frontend, backend]
