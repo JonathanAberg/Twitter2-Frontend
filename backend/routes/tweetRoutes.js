@@ -19,4 +19,19 @@ router.get("/hashtag/:tag", tweetController.getHashtagTweets);
 router.post("/:id/like", protect, tweetController.likeTweet);
 router.post("/:id/unlike", protect, tweetController.unlikeTweet);
 
+router.post("/:id/comments", protect, tweetController.addComment);
+router.get("/:id/comments", tweetController.getComments);
+
+router.get("/:id/comments/count", tweetController.getCommentsCount);
+
+router.delete(
+  "/:tweetId/comments/:commentId",
+  protect,
+  tweetController.deleteComment
+);
+router.post(
+  "/:tweetId/comments/:commentId/like",
+  protect,
+  tweetController.likeComment
+);
 module.exports = router;

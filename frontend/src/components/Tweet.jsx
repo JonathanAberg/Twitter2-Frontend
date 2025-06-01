@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Comment from "./Comment";
+import CommentForm from "./CommentForm";
 import { Link } from "react-router-dom";
 import "../styles/Tweet.css";
 import profilePlaceholder from "../assets/profile-placeholder.jpg";
@@ -12,6 +14,11 @@ import {
 } from "react-icons/fa";
 
 const Tweet = ({ tweet, onTweetDeleted }) => {
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [isLoadingComments, setIsLoadingComments] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this tweet?")) {
       return;
@@ -32,7 +39,7 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
       if (response.ok) {
         console.log("Tweet deleted successfully, updating UI...");
 
-                if (typeof onTweetDeleted === "function") {
+        if (typeof onTweetDeleted === "function") {
           onTweetDeleted(tweet._id);
         } else {
           console.warn("onTweetDeleted callback not provided");
@@ -49,7 +56,7 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     }
   };
 
-    const [isLiked, setIsLiked] = useState(
+  const [isLiked, setIsLiked] = useState(
     tweet.likes?.includes(localStorage.getItem("userId")) || false
   );
   const [likesCount, setLikesCount] = useState(tweet.likes?.length || 0);
@@ -122,6 +129,114 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     }
   };
 
+  const toggleComments = () => {
+    console.log("Toggling comments, current state:", showComments);
+    setShowComments(!showComments);
+  };
+
+  useEffect(() => {
+    if (showComments) {
+      fetchComments();
+    }
+  }, [showComments, tweet._id]);
+
+  // Fetch comments when showComments is toggled to true
+  const fetchComments = async () => {
+    if (!showComments || isLoadingComments) return;
+
+    console.log("Fetching comments for tweet:", tweet._id);
+    setIsLoadingComments(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5001/api/tweets/${tweet._id}/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const commentData = await response.json();
+        console.log("Comments fetched:", commentData);
+        setComments(commentData);
+      } else {
+        console.error("Failed to fetch comments:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    } finally {
+      setIsLoadingComments(false);
+    }
+  };
+
+  const handleCommentAdded = (newComment) => {
+    setComments((prevComments) => [newComment, ...prevComments]);
+  };
+
+  const handleCommentDeleted = (commentId) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment._id !== commentId)
+    );
+  };
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const userId = localStorage.getItem("userId");
+      if (!userId) return;
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:5001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Add this new effect to fetch just the comment count on initial load
+  useEffect(() => {
+    const fetchCommentsCount = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:5001/api/tweets/${tweet._id}/comments/count`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const { count } = await response.json();
+          // Just update the count without loading all comments
+          setComments(Array(count).fill(null));
+        }
+      } catch (error) {
+        console.error("Error fetching comments count:", error);
+      }
+    };
+
+    fetchCommentsCount();
+  }, [tweet._id]);
+
   const currentUserId = localStorage.getItem("userId");
   const isAuthor = tweet.user?._id === currentUserId;
 
@@ -177,10 +292,9 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
           })}
         </div>
         <div className="tweet-actions">
-          <button className="tweet-action reply">
-            {tweet.replies?.length > 0 ? <FaComment /> : <FaRegComment />}
-
-            <span>{tweet.replies?.length || 0}</span>
+          <button className="tweet-action reply" onClick={toggleComments}>
+            {comments.length > 0 ? <FaComment /> : <FaRegComment />}
+            <span>{comments.length || 0}</span>
           </button>
           <button className="tweet-action retweet">
             <FaRetweet />
@@ -195,6 +309,39 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
             <span>{likesCount}</span>
           </button>
         </div>
+
+        {showComments && (
+          <div className="tweet-comments-section">
+            {currentUser && (
+              <CommentForm
+                tweetId={tweet._id}
+                onCommentAdded={handleCommentAdded}
+                user={currentUser}
+              />
+            )}
+            {isLoadingComments ? (
+              <div className="loading-comments">Loading comments...</div>
+            ) : comments.length > 0 ? (
+              <div className="comments-list">
+                {comments.map((comment) =>
+                  // Only render if comment exists and has an _id property
+                  comment && comment._id ? (
+                    <Comment
+                      key={comment._id}
+                      comment={comment}
+                      tweetId={tweet._id}
+                      onCommentDeleted={handleCommentDeleted}
+                    />
+                  ) : null
+                )}
+              </div>
+            ) : (
+              <div className="no-comments">
+                No comments yet. Be the first to comment!
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

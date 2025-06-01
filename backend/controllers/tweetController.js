@@ -162,6 +162,142 @@ const getLikedTweets = async (req, res) => {
   }
 };
 
+const addComment = async (req, res) => {
+  try {
+    const { content } = req.body;
+    const tweetId = req.params.id;
+
+    if (!content) {
+      return res.status(400).json({ message: "Comment content is required" });
+    }
+
+    if (content.length > 140) {
+      return res
+        .status(400)
+        .json({ message: "Comments cannot exceed 140 characters" });
+    }
+
+    const tweet = await Tweet.findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    const comment = {
+      content,
+      user: req.user._id,
+      likes: [],
+    };
+
+    tweet.comments.push(comment);
+    await tweet.save();
+
+    const populatedTweet = await Tweet.findById(tweetId)
+      .populate("user", "name nickname profilepicture")
+      .populate("comments.user", "name nickname profilepicture");
+
+    const newComment =
+      populatedTweet.comments[populatedTweet.comments.length - 1];
+
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getComments = async (req, res) => {
+  try {
+    const tweetId = req.params.id;
+
+    const tweet = await Tweet.findById(tweetId).populate(
+      "comments.user",
+      "name nickname profilepicture"
+    );
+
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    res.json(tweet.comments);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const getCommentsCount = async (req, res) => {
+  try {
+    const tweetId = req.params.id;
+
+    const tweet = await Tweet.findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    const count = tweet.comments.length;
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const deleteComment = async (req, res) => {
+  try {
+    const { tweetId, commentId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    const comment = tweet.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    if (comment.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this comment" });
+    }
+
+    tweet.comments.pull({ _id: commentId });
+    await tweet.save();
+
+    res.json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const likeComment = async (req, res) => {
+  try {
+    const { tweetId, commentId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    const comment = tweet.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    const userId = req.user._id;
+    const likeIndex = comment.likes.indexOf(userId);
+
+    if (likeIndex === -1) {
+      comment.likes.push(userId);
+    } else {
+      comment.likes.splice(likeIndex, 1);
+    }
+
+    await tweet.save();
+
+    res.json({ likes: comment.likes });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 const deleteTweet = async (req, res) => {
   try {
     const tweetId = req.params.id;
@@ -193,4 +329,9 @@ module.exports = {
   unlikeTweet,
   getLikedTweets,
   deleteTweet,
+  addComment,
+  getComments,
+  deleteComment,
+  likeComment,
+  getCommentsCount,
 };
