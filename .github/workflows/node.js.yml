@@ -141,12 +141,21 @@ jobs:
               baseURL: "http://localhost:5173",
               trace: "on-first-retry",
               screenshot: "only-on-failure",
-              headless: true
+              headless: true,
+              launchOptions: {
+                headless: true
+              }
             },
             projects: [
               {
                 name: "chromium",
-                use: { ...devices["Desktop Chrome"] },
+                use: {
+                  ...devices["Desktop Chrome"],
+                  launchOptions: {
+                    headless: true,
+                    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+                  }
+                },
               },
             ],
           });
@@ -158,12 +167,13 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
-      - name: Run Playwright tests
-        working-directory: ./e2e-tester
-        run: |
-          echo "Starting Playwright tests..."
-          # Add the --debug flag to see more details
-          npx playwright test --debug
+      - name: Run Playwright tests with xvfb
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: |
+            cd ./e2e-tester
+            echo "Starting Playwright tests..."
+            npx playwright test
         env:
           CI: true
           PLAYWRIGHT_BASE_URL: http://localhost:5173
