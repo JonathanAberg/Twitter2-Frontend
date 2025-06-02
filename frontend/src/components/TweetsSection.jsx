@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../styles/tweetssection.css";
 import Tweet from "./Tweet";
 
@@ -7,41 +7,40 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchTweets = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
+  const fetchTweets = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const response = await fetch("http://localhost:5001/api/tweets", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const token = localStorage.getItem("token");
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch tweets: ${response.status}`);
-        }
+      const response = await fetch("http://localhost:5001/api/tweets", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const data = await response.json();
-        setTweets(data);
-
-        if (shouldRefresh) {
-          setShouldRefresh(false);
-        }
-      } catch (err) {
-        console.error("Error fetching tweets:", err);
-        setError("Failed to load tweets");
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch tweets: ${response.status}`);
       }
-    };
 
-    fetchTweets();
-  }, [shouldRefresh]);
+      const data = await response.json();
+      setTweets(data);
+      console.log("Tweets fetched successfully in TweetsSection:", data);
+    } catch (err) {
+      console.error("Error fetching tweets:", err);
+      setError("Failed to load tweets");
+    } finally {
+      setLoading(false);
+      setShouldRefresh(false);
+    }
+  }, [setShouldRefresh]);
 
-  if (loading) return <div className="loading">Loading tweets...</div>;
-  if (error) return <div className="error">{error}</div>;
+  useEffect(() => {
+    if (shouldRefresh || (tweets.length === 0 && !error && loading)) {
+      fetchTweets();
+    }
+  }, [shouldRefresh, fetchTweets, tweets.length, error, loading]);
 
   const handleTweetDeleted = (deletedTweetId) => {
     console.log("Removing tweet with ID:", deletedTweetId);
@@ -60,6 +59,9 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
     });
   };
 
+  if (loading) return <div className="loading">Loading tweets...</div>;
+  if (error) return <div className="error">{error}</div>;
+
   return (
     <div className="tweets-container">
       {tweets.length > 0 ? (
@@ -68,7 +70,8 @@ export function TweetsSection({ shouldRefresh, setShouldRefresh }) {
             key={tweet._id || index}
             tweet={{
               ...tweet,
-              user: tweet.user || tweet.author || { name: "Unknown User" },
+              user: tweet.user ||
+                tweet.author || { name: "Unknown User", nickname: "unknown" },
             }}
             onTweetDeleted={handleTweetDeleted}
           />

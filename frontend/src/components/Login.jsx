@@ -33,7 +33,7 @@ const Login = () => {
       goHome(user._id);
     } catch (err) {
       console.error("Login error:", err);
-      setError("Login failed. Please try agian.");
+      setError("Login failed. Please try again.");
     }
   };
   return (

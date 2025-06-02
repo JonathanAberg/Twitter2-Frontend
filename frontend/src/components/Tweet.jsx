@@ -140,7 +140,6 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     }
   }, [showComments, tweet._id]);
 
-  // Fetch comments when showComments is toggled to true
   const fetchComments = async () => {
     if (!showComments || isLoadingComments) return;
 
@@ -210,7 +209,6 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
     fetchCurrentUser();
   }, []);
 
-  // Add this new effect to fetch just the comment count on initial load
   useEffect(() => {
     const fetchCommentsCount = async () => {
       try {
@@ -226,7 +224,6 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
 
         if (response.ok) {
           const { count } = await response.json();
-          // Just update the count without loading all comments
           setComments(Array(count).fill(null));
         }
       } catch (error) {
@@ -324,7 +321,6 @@ const Tweet = ({ tweet, onTweetDeleted }) => {
             ) : comments.length > 0 ? (
               <div className="comments-list">
                 {comments.map((comment) =>
-                  // Only render if comment exists and has an _id property
                   comment && comment._id ? (
                     <Comment
                       key={comment._id}

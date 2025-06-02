@@ -12,6 +12,15 @@ Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 global.fetch = vi.fn();
 
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 describe("Login Component", () => {
   const renderLogin = () => {
     render(
@@ -30,7 +39,9 @@ describe("Login Component", () => {
 
     expect(screen.getByAltText("Twitter Logo")).toBeInTheDocument();
     expect(screen.getByText("Log in to Twitter 2")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Enter your E-mail address.."));
+    expect(
+      screen.getByPlaceholderText("Enter your E-mail address..")
+    ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("Enter your password details..")
     ).toBeInTheDocument();
@@ -41,7 +52,7 @@ describe("Login Component", () => {
   });
 
   it("handles successful login", async () => {
-    const mockUser = { _id: "123", token: "fake-token" };
+    const mockUser = { _id: "123", token: "fake-token", name: "Test User" };
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve(mockUser),
@@ -73,20 +84,21 @@ describe("Login Component", () => {
           }),
         }
       );
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        "token",
-        "fake-token"
-      );
-      expect(localStorageMock.setItem).toHaveBeenCalledWith("userId", "123");
     });
+
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      "token",
+      "fake-token"
+    );
+    expect(localStorageMock.setItem).toHaveBeenCalledWith("userId", "123");
+    expect(mockNavigate).toHaveBeenCalledWith("/home/123", { replace: true });
   });
 
   it("handles failed login", async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
+      json: () => Promise.resolve({ message: "incorrect email or password" }),
     });
-
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
 
     renderLogin();
 
@@ -103,9 +115,9 @@ describe("Login Component", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith("incorrect email or password ");
+      expect(
+        screen.getByText("incorrect email or password")
+      ).toBeInTheDocument();
     });
-
-    alertSpy.mockRestore();
   });
 });
